@@ -10,7 +10,7 @@ package br.cefetmg.staygreen.exception;
  * situações em que o valor é menor do que zero ou quando é igual a {@code null}
  * 
  * @author Daniel
- * @version 
+ * @version 1.0
  */
 public class InvalidIdException extends RuntimeException {
 

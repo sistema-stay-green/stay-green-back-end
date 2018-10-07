@@ -24,7 +24,7 @@ public class Reflection {
      * Retorna um array com os nomes dos atributos de uma classe.
      * 
      * @param classe a classe que conterá os atributos
-     * @return o conjunto de nomes dos atributos
+     * @return       o conjunto de nomes dos atributos
      */
     public static String[] getAtributos(Class<?> classe) {
         return Arrays.stream(classe.getDeclaredFields())
@@ -37,7 +37,7 @@ public class Reflection {
      * são considerados e colocados em um mapa.
      * 
      * @param objeto o objeto do qual se quer objeter os atributos
-     * @return o mapa contendo os atributos do objeto
+     * @return       o mapa contendo os atributos do objeto
      */
     public static Map<String, Object> getAtributos(Object objeto) {
         

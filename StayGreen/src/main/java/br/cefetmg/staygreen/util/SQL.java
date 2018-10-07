@@ -34,6 +34,13 @@ public final class SQL {
         connection = new SQLConnectionFactory().getConnection();
     }
     
+    /**
+     * Realiza uma simples requisição ao banco de dados.
+     * 
+     * @param query a string de requisição, que deve estar de acordo com a
+     *              implementação sendo utilizada (MySQL)
+     * @return      o conjunto de resutados da requisição
+     */
     public static ResultSet query(String query) {
         
         try {
