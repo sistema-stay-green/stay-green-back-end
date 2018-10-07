@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}</#if>
+${licensePrefix}Sistema de Agronegocio :: Stay Green
+${licensePrefix}CEFET-MG
+${licensePrefix}INF-2A 2018
+<#if licenseLast??>
+${licenseLast}
+</#if>
