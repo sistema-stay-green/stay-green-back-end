@@ -18,11 +18,17 @@ import java.lang.annotation.Target;
  * 
  * @author Daniel
  * @version 1.0
+ * @see br.cefetmg.staygreen.annotation.Id
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Tabela {
     
+    /**
+     * Retorna o nome da tabela a qual a classe anotada está relacionada.
+     * 
+     * @return o nome da tabela associada
+     */
     public String value();
     
 }

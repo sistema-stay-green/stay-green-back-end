@@ -5,9 +5,11 @@
  */
 package br.cefetmg.staygreen.util;
 
+import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.exception.InvalidIdException;
 import br.cefetmg.staygreen.exception.NotTableException;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -28,11 +30,13 @@ import java.util.Optional;
  */
 public final class SQL {
     
-    private static Connection connection;
+    private static final Connection CONNECTION;
     
     static {
-        connection = new SQLConnectionFactory().getConnection();
+        CONNECTION = new SQLConnectionFactory().getConnection();
     }
+    
+    private SQL() {}
     
     /**
      * Realiza uma simples requisição ao banco de dados.
@@ -44,7 +48,7 @@ public final class SQL {
     public static ResultSet query(String query) {
         
         try {
-            Statement stmt = connection.createStatement();
+            Statement stmt = CONNECTION.createStatement();
             stmt.execute(query);
             return stmt.getResultSet();
         } catch (SQLException sqlex) {
@@ -93,7 +97,8 @@ public final class SQL {
     public static boolean update(Object objeto) throws NotTableException {
         
         Map<String, String> campos = getCampos(objeto, false);
-        String id = campos.remove("`id`");
+        String nomeId = getNomeId(objeto.getClass());
+        String id = campos.remove(String.format("`%s`", nomeId));
         
         /* Caso o id não esteja definido, a atualização não pode ser feita: */
         if (id == null || Integer.parseInt(id) < 0)
@@ -104,7 +109,7 @@ public final class SQL {
                 .toArray(String[]::new);
         String sql = "UPDATE " + getNomeTabela(objeto.getClass())
                 + " SET " + String.join(", ", camposUpdate)
-                + " WHERE id = " + id;
+                + " WHERE " + nomeId + " = " + id;
         
         return query(sql) == null;
         
@@ -124,7 +129,7 @@ public final class SQL {
             throws NotTableException, InvalidIdException {
         
         String sql = "DELETE FROM " + getNomeTabela(classe)
-                + " WHERE id = " + id;
+                + " WHERE " + getNomeId(classe) +" = " + id;
         
         return query(sql) == null;
         
@@ -145,6 +150,9 @@ public final class SQL {
                         Calendar data = Calendar.getInstance();
                         data.setTime((Date) val);
                         val = data;
+                    } else if (classe.getDeclaredField(campo).getType()
+                            .equals(Boolean.class) && val instanceof Integer) {
+                        val = val.equals(1); // converte para Boolean
                     }
                     Reflection.setAtributo(objeto, campo, val);
                 }
@@ -172,7 +180,7 @@ public final class SQL {
      * @throws       NotTableException se a classe não for anotada com
      *               {@link br.cefetmg.staygreen.annotation.Tabela}
      */
-    private static String getNomeTabela(Class<?> classe)
+    public static String getNomeTabela(Class<?> classe)
             throws NotTableException {
         
         return Optional // resgata o nome da tabela correspondente
@@ -180,6 +188,33 @@ public final class SQL {
                 .map(a -> a.value())
                 .orElseThrow(NotTableException::new);  
         
+    }
+    
+    /**
+     * Retorna o nome do atributo de uma classe que foi definido para
+     * ser a chave primária da tabela. Qualquer nome de campo que esteja
+     * anotado com {@link br.cefetmg.staygreen.annotation.Id} representa
+     * uma chave primária. O primeiro atributo que for encontrado com essa
+     * anotação terá o seu nome retornado. Caso não haja campos anotados,
+     * uma exceção será lançada.
+     * 
+     * @param classe a classe a ser analisada
+     * @return       o nome definido na classe para o id 
+     * @throws       NotTableException se nenhum atributo estiver anotado
+     *               com {@link br.cefetmg.staygreen.annotation.Id}
+     */
+    private static String getNomeId(Class<?> classe) throws NotTableException {
+        
+        Field[] atributos = classe.getDeclaredFields();
+        
+        for (Field atributo : atributos) {
+            if (atributo.getAnnotation(Id.class) != null) {
+                return atributo.getName();
+            }
+        }
+        
+        throw new NotTableException();
+
     }
     
     /**
@@ -194,8 +229,9 @@ public final class SQL {
         
         Map<String, Object> campos = Reflection.getAtributos(objeto);
         
-        if (ignoreId) // não considera a chave primária caso necessário
-            campos.remove("id");
+        if (ignoreId) { // não considera a chave primária caso necessário
+            campos.remove(getNomeId(objeto.getClass()));
+        }
         
         /* Converte para a notação em SQL: */
         String[] nomesCampos = campos.keySet().stream()
@@ -232,7 +268,7 @@ public final class SQL {
      * @return a conexão com o banco de dados
      */
     public static Connection getConnection() {
-        return connection;
+        return CONNECTION;
     }
     
 }

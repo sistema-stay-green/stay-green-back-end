@@ -25,6 +25,8 @@ public final class JSON {
         GSON = new Gson();
     }
     
+    private JSON() {}
+    
     /**
      * Converte um objeto em uma string no formato JSON.
      * É semelhante ao método stringify do JavaScript.

@@ -18,7 +18,9 @@ import java.util.Map;
  * @author Daniel
  * @version 1.0
  */
-public class Reflection {
+public final class Reflection {
+    
+    private Reflection() {}
     
     /**
      * Retorna um array com os nomes dos atributos de uma classe.

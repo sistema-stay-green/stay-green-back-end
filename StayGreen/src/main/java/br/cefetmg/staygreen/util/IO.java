@@ -16,6 +16,8 @@ import java.util.Properties;
  */
 public final class IO {
     
+    private IO() {}
+    
     /**
      * retorna um objeto {@link Properties} com os dados extraídos de um
      * arquivo que está no caminho especificado. Como a Resources API do
