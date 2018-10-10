@@ -27,7 +27,9 @@ public class SQLConnectionFactory {
             return DriverManager.getConnection(
                     url + "?"
                     + "autoReconnect=true"
-                    + "&useSSL=false",
+                    + "&useSSL=false"
+                    + "&useTimezone=true"
+                    + "&serverTimezone=UTC",
                 usuario, senha);
         } catch (SQLException sqlex) {
             System.out.println("Erro na conexão com o banco de dados.");
