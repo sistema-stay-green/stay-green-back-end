@@ -27,17 +27,17 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `patrimonio`;
 CREATE TABLE IF NOT EXISTS `patrimonio` (
-  `Id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `Nome` varchar(30) DEFAULT NULL,
-  `Tipo` varchar(30) DEFAULT NULL,
-  `Descrição` text,
-  `Status` enum('VENDIDO','ALUGADO','EM_POSSE','DESCARTADO') DEFAULT NULL,
-  `Índice de Depreciação` double DEFAULT NULL,
-  `Valor da Compra` double DEFAULT NULL,
-  `Valor Atual` double DEFAULT NULL,
-  `Data da Compra` date DEFAULT NULL,
-  `Data da Saída` date DEFAULT NULL,
-  `Dada da Baixa` date DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(30) DEFAULT NULL,
+  `tipo` varchar(30) DEFAULT NULL,
+  `descricao` text,
+  `status` enum('VENDIDO','ALUGADO','EM_POSSE','DESCARTADO') DEFAULT NULL,
+  `indiceDepreciacao` double DEFAULT NULL,
+  `valorCompra` double DEFAULT NULL,
+  `valorAtual` double DEFAULT NULL,
+  `dataCompra` date DEFAULT NULL,
+  `dataSaida` date DEFAULT NULL,
+  `dataBaixa` date DEFAULT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 

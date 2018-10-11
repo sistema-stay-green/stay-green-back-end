@@ -38,17 +38,17 @@ public class PatrimonioAccessService {
     
     // inicialização das constantes internas.
     static {
-        ID_COLUMN = "Id";
-        NOME_COLUMN = "Nome";
-        TIPO_COLUMN = "Tipo";
-        DESCRICAO_COLUMN = "Descrição";
-        STATUS_COLUMN = "Status";
-        INDICE_DEPRECIACAO_COLUMN = "Índice de Depreciação";
-        VALOR_COMPRA_COLUMN = "Valor da Compra";
-        VALOR_ATUAL_COLUMN = "Valor Atual";
-        DATA_COMPRA_COLUMN = "Data da Compra";
-        DATA_SAIDA_COLUMN = "Data da Saída";
-        DATA_BAIXA_COLUMN = "Dada da Baixa";
+        ID_COLUMN = "id";
+        NOME_COLUMN = "nome";
+        TIPO_COLUMN = "tipo";
+        DESCRICAO_COLUMN = "descricao";
+        STATUS_COLUMN = "status";
+        INDICE_DEPRECIACAO_COLUMN = "indiceDepreciacao";
+        VALOR_COMPRA_COLUMN = "valorCompra";
+        VALOR_ATUAL_COLUMN = "valorAtual";
+        DATA_COMPRA_COLUMN = "dataCompra";
+        DATA_SAIDA_COLUMN = "dataSaida";
+        DATA_BAIXA_COLUMN = "dataBaixa";
     }
     
     /**

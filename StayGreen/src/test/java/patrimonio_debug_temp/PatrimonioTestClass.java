@@ -19,7 +19,7 @@ public class PatrimonioTestClass {
     
     public static void main(String[] args){
         
-        Patrimonio p = PatrimonioAccessService.getRowFromId("4");
+        Patrimonio p = PatrimonioAccessService.getRowFromId("1");
         
         System.out.println("Nome: " + p.getNome());
         System.out.println("Tipo: " + p.getTipo());
