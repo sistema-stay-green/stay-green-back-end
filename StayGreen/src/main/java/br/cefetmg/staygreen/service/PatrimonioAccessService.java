@@ -10,6 +10,7 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -20,7 +21,6 @@ import java.util.Calendar;
 public class PatrimonioAccessService {
     
     // Objetos de manipulação interna.
-    private static Patrimonio patrimonio;
     private static ResultSet result;
     
     // Constantes que representam os nomes das colunas na tabela do DB SQL.
@@ -52,38 +52,132 @@ public class PatrimonioAccessService {
     }
     
     /**
-     * Pesquisa e retorna uma linha da tabela patrimônio através do Id. 
+     * Pesquisa na DB 'staygreen' usando o Id recebido.
      * @param id
-     * @return Retorna um objeto patrimônio com os dados da linha pesquisada.
+     * @return Retorna um objeto Patrimonio que corresponde ao Id recebido.
      */
-    public static Patrimonio getRowFromId(String id){
+    public static Patrimonio getPatrimonioFromId(String id){
+       
+        
+        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE id=" + id);
+        
+        if (patrimonios == null)
+            System.out.println("AVISO! Nenhum patrimonio encontrado com o Id: " + id);
+        
+        return patrimonios.get(0);
+    }
+    
+    /**
+     * Pesquisa na DB 'staygreen' usando o Nome recebido.
+     * @param nome
+     * @return Retorna objetos Patrimonio que correspondam ao Nome recebido.
+     */
+    public static ArrayList<Patrimonio> getPatrimoniosFromNome(String nome){
+        
+        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE nome='" + nome + "'");
+        
+        if (patrimonios == null)
+            System.out.println("AVISO! Nenhum patrimonio encontrado com o Nome: " + nome);
+        
+        return patrimonios;
+        
+    }
+    
+    /**
+     * Pesquisa na DB 'staygreen' usando o Tipo recebido.
+     * @param tipo
+     * @return Retorna objetos Patrimonio que correspondam ao Tipo recebido. 
+     */
+    public static ArrayList<Patrimonio> getPatrimoniosFromTipo(String tipo){
+        
+        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE tipo='" + tipo + "'");
+        
+        if (patrimonios == null)
+            System.out.println("AVISO! Nenhum patrimonio encontrado com o Tipo: " + tipo);
+        
+        return patrimonios;
+        
+    }
+    
+    /**
+     * Pesquisa na DB 'staygreen' usando a query recebida.
+     * @param query
+     * @return Retorna objetos Patrimonio resultantes da query de pesquisa recebida.
+     */
+    public static ArrayList<Patrimonio> get(String query){
+        
+        ArrayList<Patrimonio> patrimonios = new ArrayList<>();
         
         try {
             
-            result = SQL.query("SELECT * FROM patrimonio WHERE Id=" + id);
-
-            if (result.next()) {
-                
-                patrimonio = new Patrimonio(result.getLong(ID_COLUMN), result.getString(NOME_COLUMN));
-                patrimonio.setTipo(result.getString(TIPO_COLUMN));
-                patrimonio.setDescricao(result.getString(DESCRICAO_COLUMN));
-                patrimonio.setStatus(result.getString(STATUS_COLUMN));
-                patrimonio.setIndiceDepreciacao(result.getDouble(INDICE_DEPRECIACAO_COLUMN));
-                patrimonio.setValorCompra(result.getDouble(VALOR_COMPRA_COLUMN));
-                patrimonio.setValorAtual(result.getDouble(VALOR_ATUAL_COLUMN));
-                patrimonio.setDataCompra(dateToCalendar(result.getDate(DATA_COMPRA_COLUMN)));
-                patrimonio.setDataSaida(dateToCalendar(result.getDate(DATA_SAIDA_COLUMN)));
-                patrimonio.setDataBaixa(dateToCalendar(result.getDate(DATA_BAIXA_COLUMN)));
-            } else{
-                System.out.println("AVISO! getRowFromId não encontrou nenhum patrimônio com o Id: " + id);
-                return null;
-            }
+            result = SQL.query(query);
             
-            return patrimonio;
+            if (result.next()) {
+                    do {
+                        
+                        Patrimonio patrimonio = new Patrimonio(result.getLong(ID_COLUMN), result.getString(NOME_COLUMN));
+                        patrimonio.setTipo(result.getString(TIPO_COLUMN));
+                        patrimonio.setDescricao(result.getString(DESCRICAO_COLUMN));
+                        patrimonio.setStatus(result.getString(STATUS_COLUMN));
+                        patrimonio.setIndiceDepreciacao(result.getDouble(INDICE_DEPRECIACAO_COLUMN));
+                        patrimonio.setValorCompra(result.getDouble(VALOR_COMPRA_COLUMN));
+                        patrimonio.setValorAtual(result.getDouble(VALOR_ATUAL_COLUMN));
+                        patrimonio.setDataCompra(dateToCalendar(result.getDate(DATA_COMPRA_COLUMN)));
+                        patrimonio.setDataSaida(dateToCalendar(result.getDate(DATA_SAIDA_COLUMN)));
+                        patrimonio.setDataBaixa(dateToCalendar(result.getDate(DATA_BAIXA_COLUMN)));
+                        
+                        patrimonios.add(patrimonio);
+                        
+                } while (result.next());
+            } else{
+                System.out.println("AVISO! Nenhum resultado encontrado na query fornecida.");
+            }
             
         } catch (SQLException ex) {
             System.out.println(ex + " at getRowFromId");
             return null;
+        }
+        
+        return patrimonios;
+    }
+    
+    /**
+     * Insere um objeto Patrimonio na DB 'staygreen'
+     * @param patrimonio
+     */
+    public static void insert(Patrimonio patrimonio){
+        
+            SQL.insert(patrimonio);
+    }
+    
+    /**
+     * Insere vários objetos Patrimonio na DB 'staygreen'
+     * @param patrimonios
+     */
+    public static void insertAll(ArrayList<Patrimonio> patrimonios){
+        
+        for (Patrimonio patrimonio : patrimonios) {
+            insert(patrimonio);
+        }
+    }
+    
+    /**
+     * Atualiza o patrimonio na DB correspondente ao objeto Patrimonio recebido
+     * @param patrimonio
+     */
+    public static void update(Patrimonio patrimonio){
+        
+            SQL.update(patrimonio);
+    }
+    
+    /**
+     * Atualiza os patrimonios na DB correspondentes aos objetos Patrimonio recebidos
+     * @param patrimonios
+     */
+    public static void updateAll(ArrayList<Patrimonio> patrimonios){
+        
+        for (Patrimonio patrimonio : patrimonios) {
+            SQL.update(patrimonio);
         }
     }
     

@@ -24,9 +24,9 @@ public class Patrimonio {
     private String tipo;
     private String descricao;
     private PatrimonioStatusEnum status;
-    private double indiceDepreciacao;
-    private double valorCompra;
-    private double valorAtual;
+    private Double indiceDepreciacao;
+    private Double valorCompra;
+    private Double valorAtual;
     private Calendar dataCompra;
     private Calendar dataSaida;
     private Calendar dataBaixa;
@@ -40,7 +40,6 @@ public class Patrimonio {
      * @param nome Nome do patrimônio
      */
     public Patrimonio(Long id, String nome) {
-        this.id = id;
         this.nome = nome;
     }
     
@@ -96,27 +95,27 @@ public class Patrimonio {
         this.status = PatrimonioStatusEnum.valueOf(status);
     }
 
-    public double getIndiceDepreciacao() {
+    public Double getIndiceDepreciacao() {
         return indiceDepreciacao;
     }
 
-    public void setIndiceDepreciacao(double indiceDepreciacao) {
+    public void setIndiceDepreciacao(Double indiceDepreciacao) {
         this.indiceDepreciacao = indiceDepreciacao;
     }
 
-    public double getValorCompra() {
+    public Double getValorCompra() {
         return valorCompra;
     }
 
-    public void setValorCompra(double valorCompra) {
+    public void setValorCompra(Double valorCompra) {
         this.valorCompra = valorCompra;
     }
 
-    public double getValorAtual() {
+    public Double getValorAtual() {
         return valorAtual;
     }
 
-    public void setValorAtual(double valorAtual) {
+    public void setValorAtual(Double valorAtual) {
         this.valorAtual = valorAtual;
     }
 
