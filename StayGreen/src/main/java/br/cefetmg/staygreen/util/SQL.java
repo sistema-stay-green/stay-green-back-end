@@ -10,11 +10,13 @@ import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.exception.InvalidIdException;
 import br.cefetmg.staygreen.exception.NotTableException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -146,13 +148,23 @@ public final class SQL {
                 T objeto = classe.newInstance();
                 for (String campo : nomesCampos) {
                     Object val = rs.getObject(campo);
+                    Class<?> classeCampo = classe
+                            .getDeclaredField(campo).getType();
+                    Method metValueOf;
+                    try {
+                        metValueOf = classeCampo.getDeclaredMethod("valueOf", String.class);
+                    } catch (NoSuchMethodException nsmex) {
+                        metValueOf = null;
+                    }
                     if (val instanceof Date) {
                         Calendar data = Calendar.getInstance();
                         data.setTime((Date) val);
                         val = data;
-                    } else if (classe.getDeclaredField(campo).getType()
-                            .equals(Boolean.class) && val instanceof Integer) {
+                    } else if (val instanceof Integer 
+                            && classeCampo.equals(Boolean.class)) {
                         val = val.equals(1); // converte para Boolean
+                    } else if (val instanceof String && metValueOf != null) {
+                        val = metValueOf.invoke(null, val);
                     }
                     Reflection.setAtributo(objeto, campo, val);
                 }
@@ -240,7 +252,7 @@ public final class SQL {
         String[] valoresCampos = campos.values().stream()
                 .map(val -> {
                     Object resultado = val;
-                    if (val instanceof String) { // strings entre aspas simples
+                    if (val instanceof String || val instanceof Enum<?>) { // strings entre aspas simples
                         resultado = String.format("'%s'", val);
                     } else if (val instanceof Calendar) { // data no formato SQL
                         resultado = String.format("'%s'",
