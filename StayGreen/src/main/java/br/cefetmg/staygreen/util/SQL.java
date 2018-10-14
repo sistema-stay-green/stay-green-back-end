@@ -16,7 +16,6 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +27,7 @@ import java.util.Optional;
  * Reúne ações básicas para a realização de requisições ao banco de dados.
  * 
  * @author Daniel
- * @version 1.0
+ * @version 1.1
  */
 public final class SQL {
     
