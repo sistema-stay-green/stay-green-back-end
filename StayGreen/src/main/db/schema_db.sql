@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `patrimonio`;
 CREATE TABLE IF NOT EXISTS `patrimonio` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` int(20) NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) DEFAULT NULL,
   `tipo` varchar(30) DEFAULT NULL,
   `descricao` text,

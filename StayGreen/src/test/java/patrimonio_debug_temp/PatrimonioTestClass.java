@@ -3,9 +3,6 @@ package patrimonio_debug_temp;
 
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.util.JSON;
-import br.cefetmg.staygreen.util.SQL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -24,19 +21,50 @@ public class PatrimonioTestClass {
     
     public static void main(String[] args){
         
-        //testGetFromNome();
-        //testGetFromId();
-        testInsert();
+        //testGetFromNome("Trator");
+        //testGetFromId(1);
+        //testInsert("Nome");
+        //testDelete(2);
 
     }
     
-    public static void testInsert(){
+    public static void testDelete(Integer id){
         
-        Patrimonio patrimonio = new Patrimonio(new Long(5),"Trator");
+        Patrimonio patrimonio = new Patrimonio(id,"Trator");
         patrimonio.setTipo("Tipo");
         patrimonio.setDescricao("Descrição");
-        // patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
+        
+        // Opção 1:
+        //patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
+        // Opção 2:
         patrimonio.setStatus("VENDIDO");
+        
+        patrimonio.setIndiceDepreciacao(1.5);
+        patrimonio.setValorCompra(new Double(4000));
+        patrimonio.setValorAtual(new Double(3800));
+        
+        Calendar c = Calendar.getInstance();
+        
+        patrimonio.setDataCompra(c);
+        patrimonio.setDataSaida(c);
+        patrimonio.setDataBaixa(c);
+        
+        System.out.println(patrimonio.getId());
+        
+        PatrimonioAccessService.delete(patrimonio);
+    }
+    
+    public static void testInsert(String nome){
+        
+        Patrimonio patrimonio = new Patrimonio(nome);
+        patrimonio.setTipo("Tipo");
+        patrimonio.setDescricao("Descrição");
+        
+        // Opção 1:
+        //patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
+        // Opção 2:
+        patrimonio.setStatus("VENDIDO");
+        
         patrimonio.setIndiceDepreciacao(1.5);
         patrimonio.setValorCompra(new Double(4000));
         patrimonio.setValorAtual(new Double(3800));
@@ -50,9 +78,9 @@ public class PatrimonioTestClass {
         PatrimonioAccessService.insert(patrimonio);
     }
     
-    public static void testGetFromNome(){
+    public static void testGetFromNome(String nome){
         
-        ArrayList<Patrimonio> p = PatrimonioAccessService.getPatrimoniosFromNome("Trator");
+        ArrayList<Patrimonio> p = PatrimonioAccessService.getPatrimoniosByNome(nome);
         
         System.out.println("Nome: " + p.get(0).getNome());
         System.out.println("Tipo: " + p.get(0).getTipo());
@@ -66,9 +94,9 @@ public class PatrimonioTestClass {
         System.out.println("Data da Baixa: " + p.get(0).getDataBaixa().getTime());
     }
     
-    public static void testGetFromId(){
+    public static void testGetFromId(Integer id){
         
-        Patrimonio p = PatrimonioAccessService.getPatrimonioFromId("1");
+        Patrimonio p = PatrimonioAccessService.getPatrimonioById(id.toString());
         
         System.out.println("Nome: " + p.getNome());
         System.out.println("Tipo: " + p.getTipo());
