@@ -3,6 +3,9 @@ package patrimonio_debug_temp;
 
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
+import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -32,7 +35,8 @@ public class PatrimonioTestClass {
         Patrimonio patrimonio = new Patrimonio(new Long(5),"Trator");
         patrimonio.setTipo("Tipo");
         patrimonio.setDescricao("Descrição");
-        //patrimonio.setStatus("VENDIDO");
+        // patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
+        patrimonio.setStatus("VENDIDO");
         patrimonio.setIndiceDepreciacao(1.5);
         patrimonio.setValorCompra(new Double(4000));
         patrimonio.setValorAtual(new Double(3800));

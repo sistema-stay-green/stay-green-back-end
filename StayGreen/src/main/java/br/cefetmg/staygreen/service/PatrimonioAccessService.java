@@ -7,6 +7,7 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.SQL;
+import br.cefetmg.staygreen.util.Data;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -115,16 +116,26 @@ public class PatrimonioAccessService {
             if (result.next()) {
                     do {
                         
-                        Patrimonio patrimonio = new Patrimonio(result.getLong(ID_COLUMN), result.getString(NOME_COLUMN));
-                        patrimonio.setTipo(result.getString(TIPO_COLUMN));
-                        patrimonio.setDescricao(result.getString(DESCRICAO_COLUMN));
-                        patrimonio.setStatus(result.getString(STATUS_COLUMN));
-                        patrimonio.setIndiceDepreciacao(result.getDouble(INDICE_DEPRECIACAO_COLUMN));
-                        patrimonio.setValorCompra(result.getDouble(VALOR_COMPRA_COLUMN));
-                        patrimonio.setValorAtual(result.getDouble(VALOR_ATUAL_COLUMN));
-                        patrimonio.setDataCompra(dateToCalendar(result.getDate(DATA_COMPRA_COLUMN)));
-                        patrimonio.setDataSaida(dateToCalendar(result.getDate(DATA_SAIDA_COLUMN)));
-                        patrimonio.setDataBaixa(dateToCalendar(result.getDate(DATA_BAIXA_COLUMN)));
+                        Patrimonio patrimonio = new Patrimonio(
+                                result.getLong(ID_COLUMN), result.getString(NOME_COLUMN));
+                        patrimonio.setTipo(
+                                result.getString(TIPO_COLUMN));
+                        patrimonio.setDescricao(
+                                result.getString(DESCRICAO_COLUMN));
+                        patrimonio.setStatus(
+                                result.getString(STATUS_COLUMN));
+                        patrimonio.setIndiceDepreciacao(
+                                result.getDouble(INDICE_DEPRECIACAO_COLUMN));
+                        patrimonio.setValorCompra(
+                                result.getDouble(VALOR_COMPRA_COLUMN));
+                        patrimonio.setValorAtual(
+                                result.getDouble(VALOR_ATUAL_COLUMN));
+                        patrimonio.setDataCompra(Data.dateToCalendar(
+                                result.getDate(DATA_COMPRA_COLUMN)));
+                        patrimonio.setDataSaida(Data.dateToCalendar(
+                                result.getDate(DATA_SAIDA_COLUMN)));
+                        patrimonio.setDataBaixa(Data.dateToCalendar(
+                                result.getDate(DATA_BAIXA_COLUMN)));
                         
                         patrimonios.add(patrimonio);
                         
@@ -182,7 +193,7 @@ public class PatrimonioAccessService {
     }
     
     /**
-     * Converte um objeto java.sql.Date para um objeto Calendar
+     * Converte um objeto java.sql.Data para um objeto Calendar
      * @param date 
      * @return Retorna um objeto Calendar convertido.
      */
