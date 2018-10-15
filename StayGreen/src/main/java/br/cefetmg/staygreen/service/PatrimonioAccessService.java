@@ -7,7 +7,6 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.SQL;
-import br.cefetmg.staygreen.util.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,6 +17,8 @@ import java.util.ArrayList;
  * @version 10-10-18/18:29
  */
 public class PatrimonioAccessService {
+    
+    // Atributos estáticos
     
     // Objetos de manipulação interna.
     private static ResultSet result;
@@ -35,6 +36,8 @@ public class PatrimonioAccessService {
     private static final String DATA_SAIDA_COLUMN;
     private static final String DATA_BAIXA_COLUMN;
     
+    private static final String TABLE_NAME;
+    
     // inicialização das constantes internas.
     static {
         ID_COLUMN = "id";
@@ -48,6 +51,8 @@ public class PatrimonioAccessService {
         DATA_COMPRA_COLUMN = "dataCompra";
         DATA_SAIDA_COLUMN = "dataSaida";
         DATA_BAIXA_COLUMN = "dataBaixa";
+        
+        TABLE_NAME = SQL.getNomeTabela(Patrimonio.class);
     }
     
     /**
@@ -57,10 +62,10 @@ public class PatrimonioAccessService {
      */
     public static Patrimonio getPatrimonioById(String id){
         
-        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE id=" + id);
+        ArrayList<Patrimonio> patrimonios = get("WHERE id=" + id);
         
         if (patrimonios == null){
-            System.out.println("AVISO! Nenhum patrimonio encontrado com o Id: " + id);
+            System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Id: " + id);
             return null;
         }
         
@@ -74,10 +79,10 @@ public class PatrimonioAccessService {
      */
     public static ArrayList<Patrimonio> getPatrimoniosByNome(String nome){
         
-        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE nome='" + nome + "'");
+        ArrayList<Patrimonio> patrimonios = get("WHERE nome='" + nome + "'");
         
         if (patrimonios == null){
-            System.out.println("AVISO! Nenhum patrimonio encontrado com o Nome: " + nome);
+            System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Nome: " + nome);
             return null;
         }
         
@@ -91,10 +96,10 @@ public class PatrimonioAccessService {
      */
     public static ArrayList<Patrimonio> getPatrimoniosByTipo(String tipo){
         
-        ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE tipo='" + tipo + "'");
+        ArrayList<Patrimonio> patrimonios = get("WHERE tipo='" + tipo + "'");
         
         if (patrimonios == null){
-            System.out.println("AVISO! Nenhum patrimonio encontrado com o Tipo: " + tipo);
+            System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Tipo: " + tipo);
             return null;
         }
         
@@ -102,23 +107,24 @@ public class PatrimonioAccessService {
     }
     
     /**
-     * Pesquisa na DB 'staygreen' usando a query recebida.
-     * @param query
-     * @return Retorna objetos Patrimonio resultantes da query de pesquisa recebida.
+     * Pesquisa na DB 'staygreen' usando a queryCondition recebida.
+     * @param queryCondition
+     * @return Retorna objetos Patrimonio resultantes da queryCondition de pesquisa recebida.
      */
-    public static ArrayList<Patrimonio> get(String query){
+    public static ArrayList<Patrimonio> get(String queryCondition){
         
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
         
         try {
             
-            result = SQL.query(query);
+            result = SQL.query("SELECT * FROM " + TABLE_NAME +  " " + queryCondition);
             
             if (result.next()) {
                     do {
                         
                         Patrimonio patrimonio = new Patrimonio(
-                                result.getLong(ID_COLUMN), result.getString(NOME_COLUMN));
+                                result.getInt(ID_COLUMN), 
+                                result.getString(NOME_COLUMN));
                         patrimonio.setTipo(
                                 result.getString(TIPO_COLUMN));
                         patrimonio.setDescricao(
@@ -131,18 +137,19 @@ public class PatrimonioAccessService {
                                 result.getDouble(VALOR_COMPRA_COLUMN));
                         patrimonio.setValorAtual(
                                 result.getDouble(VALOR_ATUAL_COLUMN));
-                        patrimonio.setDataCompra(Data.dateToCalendar(
-                                result.getDate(DATA_COMPRA_COLUMN)));
-                        patrimonio.setDataSaida(Data.dateToCalendar(
-                                result.getDate(DATA_SAIDA_COLUMN)));
-                        patrimonio.setDataBaixa(Data.dateToCalendar(
-                                result.getDate(DATA_BAIXA_COLUMN)));
+                        patrimonio.setDataCompra(
+                                result.getDate(DATA_COMPRA_COLUMN));
+                        patrimonio.setDataSaida(
+                                result.getDate(DATA_SAIDA_COLUMN));
+                        patrimonio.setDataBaixa(
+                                result.getDate(DATA_BAIXA_COLUMN));
                         
                         patrimonios.add(patrimonio);
                         
                 } while (result.next());
             } else{
-                System.out.println("AVISO! Nenhum resultado encontrado na query fornecida.");
+                System.out.println("!!! AVISO !!! Nenhum resultado encontrado"
+                        + " usando a condição recebida.");
                 return null;
             }
             
@@ -191,6 +198,20 @@ public class PatrimonioAccessService {
         
         for (Patrimonio patrimonio : patrimonios) {
             SQL.update(patrimonio);
+        }
+    }
+    
+    /**
+     * Deleta o Patrimonio do DB através de seu Id.
+     * @param patrimonio
+     */
+    public static void delete(Patrimonio patrimonio){
+        
+        if (patrimonio.getId() != null) {
+            SQL.delete(patrimonio.getId().intValue(), Patrimonio.class);
+        } else{
+            System.out.println("!!! ERRO !!! Não foi possível deletar pois"
+                    + " o Patrimonio recebido não possui um Id definido.");
         }
     }
 }

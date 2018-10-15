@@ -7,6 +7,8 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
+import br.cefetmg.staygreen.util.Data;
+import java.sql.Date;
 import java.util.Calendar;
 
 /**
@@ -19,7 +21,7 @@ public class Patrimonio {
     
     // Attributes
     @Id
-    private Long id;
+    private Integer id;
     private String nome;
     private String tipo;
     private String descricao;
@@ -39,7 +41,8 @@ public class Patrimonio {
      * @param id Id único da linha na tabela
      * @param nome Nome do patrimônio
      */
-    public Patrimonio(Long id, String nome) {
+    public Patrimonio(Integer id, String nome) {
+        this.id = id;
         this.nome = nome;
     }
     
@@ -59,11 +62,11 @@ public class Patrimonio {
     }
     
     // Getter and Setter
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -91,8 +94,15 @@ public class Patrimonio {
         this.status = status;
     }
     
-    public void setStatus(String status) {
-        this.status = PatrimonioStatusEnum.valueOf(status);
+    public void setStatus(String status){
+        
+        try {
+            this.status = PatrimonioStatusEnum.valueOf(status);
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception + " at Patrimonio.setStatus()");
+            System.out.println(" !!! ERRO !!! O valor inserido não corresponde "
+                    + "a um estado possível de PatrimonioStatusEnum");
+        }
     }
 
     public Double getIndiceDepreciacao() {
@@ -126,6 +136,10 @@ public class Patrimonio {
     public void setDataCompra(Calendar dataCompra) {
         this.dataCompra = dataCompra;
     }
+    
+    public void setDataCompra(Date dataCompra) {
+        this.dataCompra = Data.dateToCalendar(dataCompra);
+    }
 
     public Calendar getDataSaida() {
         return dataSaida;
@@ -134,6 +148,10 @@ public class Patrimonio {
     public void setDataSaida(Calendar dataSaida) {
         this.dataSaida = dataSaida;
     }
+    
+    public void setDataSaida(Date dataSaida) {
+        this.dataSaida = Data.dateToCalendar(dataSaida);
+    }
 
     public Calendar getDataBaixa() {
         return dataBaixa;
@@ -141,6 +159,10 @@ public class Patrimonio {
 
     public void setDataBaixa(Calendar dataBaixa) {
         this.dataBaixa = dataBaixa;
+    }
+    
+    public void setDataBaixa(Date dataBaixa) {
+        this.dataBaixa = Data.dateToCalendar(dataBaixa);
     }
 
     public String getTipo() {

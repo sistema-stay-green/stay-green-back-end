@@ -44,7 +44,7 @@ public class PatrimonioProcessService {
         
         for (Patrimonio patrimonio : patrimonios) {
             
-            output += stringfy(patrimonio);
+            output += stringfy(patrimonio) + OBJECT_SEPARATOR;
         }
         
         return output;
@@ -69,7 +69,7 @@ public class PatrimonioProcessService {
         output += patrimonio.getValorAtual().toString() + FIELD_SEPARATOR;
         output += patrimonio.getDataCompra().getTime().toString() + FIELD_SEPARATOR;
         output += patrimonio.getDataSaida().getTime().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataBaixa().getTime().toString() + OBJECT_SEPARATOR;
+        output += patrimonio.getDataBaixa().getTime().toString();
         
         return output;
     }
