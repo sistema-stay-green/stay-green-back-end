@@ -6,6 +6,8 @@
 
 -- Exemplo: INSERT INTO tabela (...) VALUES (...), (...), ..., (...);
 
+USE `staygreen`;
+
 -- Tabela Patrimonio
 
 INSERT INTO `patrimonio` (`id`, `nome`, `tipo`, `descricao`, `status`, `indiceDepreciacao`, `valorCompra`, `valorAtual`, `dataCompra`, `dataSaida`, `dataBaixa`)

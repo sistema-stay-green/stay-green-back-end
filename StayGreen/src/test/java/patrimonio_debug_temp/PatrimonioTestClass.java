@@ -3,9 +3,6 @@ package patrimonio_debug_temp;
 
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.util.JSON;
-import br.cefetmg.staygreen.util.SQL;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -24,9 +21,9 @@ public class PatrimonioTestClass {
     
     public static void main(String[] args){
         
-        //testGetFromNome();
+        testGetFromNome();
         //testGetFromId();
-        testInsert();
+        //testInsert();
 
     }
     
@@ -52,7 +49,7 @@ public class PatrimonioTestClass {
     
     public static void testGetFromNome(){
         
-        ArrayList<Patrimonio> p = PatrimonioAccessService.getPatrimoniosFromNome("Trator");
+        ArrayList<Patrimonio> p = PatrimonioAccessService.getPatrimoniosByNome("Trator");
         
         System.out.println("Nome: " + p.get(0).getNome());
         System.out.println("Tipo: " + p.get(0).getTipo());
@@ -68,7 +65,7 @@ public class PatrimonioTestClass {
     
     public static void testGetFromId(){
         
-        Patrimonio p = PatrimonioAccessService.getPatrimonioFromId("1");
+        Patrimonio p = PatrimonioAccessService.getPatrimonioById("1");
         
         System.out.println("Nome: " + p.getNome());
         System.out.println("Tipo: " + p.getTipo());

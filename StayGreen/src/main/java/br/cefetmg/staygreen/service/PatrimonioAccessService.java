@@ -57,7 +57,7 @@ public class PatrimonioAccessService {
      * @param id
      * @return Retorna um objeto Patrimonio que corresponde ao Id recebido.
      */
-    public static Patrimonio getPatrimonioFromId(String id){
+    public static Patrimonio getPatrimonioById(String id){
        
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE id=" + id);
@@ -73,7 +73,7 @@ public class PatrimonioAccessService {
      * @param nome
      * @return Retorna objetos Patrimonio que correspondam ao Nome recebido.
      */
-    public static ArrayList<Patrimonio> getPatrimoniosFromNome(String nome){
+    public static ArrayList<Patrimonio> getPatrimoniosByNome(String nome){
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE nome='" + nome + "'");
         
@@ -89,7 +89,7 @@ public class PatrimonioAccessService {
      * @param tipo
      * @return Retorna objetos Patrimonio que correspondam ao Tipo recebido. 
      */
-    public static ArrayList<Patrimonio> getPatrimoniosFromTipo(String tipo){
+    public static ArrayList<Patrimonio> getPatrimoniosByTipo(String tipo){
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE tipo='" + tipo + "'");
         
