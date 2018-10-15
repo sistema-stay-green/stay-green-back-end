@@ -12,8 +12,9 @@ import java.util.Calendar;
 /**
  *
  * @author gabri_000
- * @version 1.0
+ * @version 1.1
  */
+@Tabela("tarefa")
 public class Tarefa {
     
     //Attributes

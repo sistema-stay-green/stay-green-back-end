@@ -41,6 +41,20 @@ CREATE TABLE IF NOT EXISTS `patrimonio` (
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+-- Tabela Tarefa
+
+DROP TABLE IF EXISTS `tarefa`
+CREATE TABLE IF NOT EXISTS `tarefa` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(30) DEFAULT NULL,
+  `tipo` VARCHAR(30) DEFAULT NULL,
+  `caminhoImg` VARCHAR(30) DEFAULT NULL,
+  `dataMarcada` date DEFAULT NULL,
+  `repeticao` int DEFAULT NULL,
+  `producaoPrevista` double DEFAULT NULL,
+  `valorGasto` double DEFAULT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
 -- Tabela ...
 
 -- Exemplo: CREATE TABLE tabela (...) DEFAULT CHARACTER SET utf8;
