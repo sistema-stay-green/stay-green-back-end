@@ -7,11 +7,10 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Tarefa;
 import br.cefetmg.staygreen.util.SQL;
-import java.sql.Date;
+import br.cefetmg.staygreen.util.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  *
@@ -119,7 +118,7 @@ public class TarefaAccessService {
                             result.getString(NOME_COLUMN));
                     tarefa.setTipo(result.getString(TIPO_COLUMN));
                     tarefa.setCaminhoImg(result.getString(CAMINHO_IMG_COLUMN));
-                    tarefa.setDataMarcada(dateToCalendar(result.getDate(DATA_MARCADA_COLUMN)));
+                    tarefa.setDataMarcada(Data.dateToCalendar(result.getDate(DATA_MARCADA_COLUMN)));
                     tarefa.setRepeticao(result.getInt(REPETICAO_COLUMN));
                     tarefa.setProducaoPrevista(result.getDouble(PRODUCAO_PREVISTA_COLUMN));
                     tarefa.setValorGasto(result.getDouble(VALOR_GASTO_COLUMN));
@@ -175,17 +174,5 @@ public class TarefaAccessService {
         for (Tarefa tarefa : tarefas) {
             SQL.update(tarefa);
         }
-    }
-    
-    //Lembra de alterar quando a Mei adicionar o método em uma classe util
-    /**
-     * Converte um objeto java.sql.Date para um objeto Calendar
-     * @param date 
-     * @return Retorna um objeto Calendar convertido.
-     */
-    private static Calendar dateToCalendar(Date date){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
     }
 }
