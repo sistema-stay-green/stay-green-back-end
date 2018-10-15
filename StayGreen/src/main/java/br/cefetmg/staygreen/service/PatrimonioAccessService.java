@@ -8,11 +8,9 @@ package br.cefetmg.staygreen.service;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.util.Data;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  *
@@ -58,12 +56,13 @@ public class PatrimonioAccessService {
      * @return Retorna um objeto Patrimonio que corresponde ao Id recebido.
      */
     public static Patrimonio getPatrimonioById(String id){
-       
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE id=" + id);
         
-        if (patrimonios == null)
+        if (patrimonios == null){
             System.out.println("AVISO! Nenhum patrimonio encontrado com o Id: " + id);
+            return null;
+        }
         
         return patrimonios.get(0);
     }
@@ -77,11 +76,12 @@ public class PatrimonioAccessService {
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE nome='" + nome + "'");
         
-        if (patrimonios == null)
+        if (patrimonios == null){
             System.out.println("AVISO! Nenhum patrimonio encontrado com o Nome: " + nome);
+            return null;
+        }
         
         return patrimonios;
-        
     }
     
     /**
@@ -93,11 +93,12 @@ public class PatrimonioAccessService {
         
         ArrayList<Patrimonio> patrimonios = get("SELECT * FROM patrimonio WHERE tipo='" + tipo + "'");
         
-        if (patrimonios == null)
+        if (patrimonios == null){
             System.out.println("AVISO! Nenhum patrimonio encontrado com o Tipo: " + tipo);
+            return null;
+        }
         
         return patrimonios;
-        
     }
     
     /**
@@ -142,6 +143,7 @@ public class PatrimonioAccessService {
                 } while (result.next());
             } else{
                 System.out.println("AVISO! Nenhum resultado encontrado na query fornecida.");
+                return null;
             }
             
         } catch (SQLException ex) {
@@ -190,16 +192,5 @@ public class PatrimonioAccessService {
         for (Patrimonio patrimonio : patrimonios) {
             SQL.update(patrimonio);
         }
-    }
-    
-    /**
-     * Converte um objeto java.sql.Data para um objeto Calendar
-     * @param date 
-     * @return Retorna um objeto Calendar convertido.
-     */
-    private static Calendar dateToCalendar(Date date){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
     }
 }
