@@ -47,11 +47,32 @@ public class Maquina {
      * @param dataRetorno Data de retorno da maquina (data que ela retorna do aluguel)
      * @param dataBaixa Data de saida da maquina (data que ela foi vendida ou descartada)
      */
-    public Maquina(Long id, String nome, String finalidade, 
+    public Maquina(Long id, String nome, String finalidade,
             PatrimonioStatusEnum status, double depreciacaoAnual,
             double valorAtual, double valorVenda, Calendar dataCompra, 
             Calendar dataRetorno, Calendar dataBaixa) {
-        this(null,nome,finalidade,status,deprediacaoAnual,
+        this(null,nome,finalidade,status,depreciacaoAnual,
+                valorAtual,valorVenda,dataCompra,dataRetorno,
+                dataBaixa);
+        calculaValorAtual();
+    }
+    
+    /**
+     *  Cria uma maquina com todos os parametros
+     * @param id Id único da linha na tabela
+     * @param nome Nome da maquina
+     * @param finalidade Finalidade da maquina
+     * @param depreciacaoAnual Depreciação anual da maquina
+     * @param valorAtual Valor atual da maquina
+     * @param valorVenda Valor de venda da maquina
+     * @param dataCompra Data de compra da maquina
+     * @param dataRetorno Data de retorno da maquina (data que ela retorna do aluguel)
+     * @param dataBaixa Data de saida da maquina (data que ela foi vendida ou descartada)
+     */
+    public Maquina(Long id, String nome, String finalidade, 
+            double depreciacaoAnual, double valorAtual, double valorVenda, 
+            Calendar dataCompra, Calendar dataRetorno, Calendar dataBaixa) {
+        this(null,nome,finalidade,null,depreciacaoAnual,
                 valorAtual,valorVenda,dataCompra,dataRetorno,
                 dataBaixa);
         calculaValorAtual();
@@ -64,6 +85,7 @@ public class Maquina {
         this(null,null,null,null,null,null,null,null,null,null);
         valorAtual=0;
     }
+
     
     //Sets e Gets
 
@@ -186,7 +208,17 @@ public class Maquina {
     public void setStatus(PatrimonioStatusEnum status) {
         this.status = status;
     }
+    
+    
+    /**
+     *
+     * @param status
+     */
+    public void setStatus(String status) {
+        this.status = PatrimonioStatusEnum.valueOf(status);
+    }
 
+    
     /**
      *
      * @return
@@ -237,7 +269,8 @@ public class Maquina {
      * para calcular o Valor Atual
      */
     private int tempoEmAnos(){
-        return Calendar.getInstance().get(Calendar.YEAR)-dataCompra.get(Calendar.YEAR)
+        return Calendar.getInstance().get(Calendar.YEAR)-
+                dataCompra.get(Calendar.YEAR);
     }
     
     /**
