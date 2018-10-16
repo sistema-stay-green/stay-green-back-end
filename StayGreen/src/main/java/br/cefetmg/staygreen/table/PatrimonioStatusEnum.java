@@ -14,7 +14,8 @@ public enum PatrimonioStatusEnum {
     VENDIDO,
     ALUGADO,
     EM_POSSE,
-    DESCARTADO;
+    DESCARTADO,
+    EM_MANUTENCAO;
     
     public int getStatusId(){
         
@@ -27,6 +28,8 @@ public enum PatrimonioStatusEnum {
                 return 2;
             case DESCARTADO:
                 return 3;
+            case EM_MANUTENCAO:
+                return 4;
             default:
                 return -1;
         }
