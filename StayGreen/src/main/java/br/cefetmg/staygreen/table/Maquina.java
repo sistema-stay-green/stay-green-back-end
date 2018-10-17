@@ -41,7 +41,7 @@ public class Maquina {
      * @param finalidade Finalidade da maquina
      * @param status Condição da maquina
      * @param depreciacaoAnual Depreciação anual da maquina
-     * @param valorAtual Valor atual da maquina
+     * @param valorCompra Valor atual da maquina
      * @param valorVenda Valor de venda da maquina
      * @param dataCompra Data de compra da maquina
      * @param dataRetorno Data de retorno da maquina (data que ela retorna do aluguel)
@@ -49,11 +49,18 @@ public class Maquina {
      */
     public Maquina(Long id, String nome, String finalidade,
             PatrimonioStatusEnum status, double depreciacaoAnual,
-            double valorAtual, double valorVenda, Calendar dataCompra, 
+            double valorCompra, double valorVenda, Calendar dataCompra, 
             Calendar dataRetorno, Calendar dataBaixa) {
-        this(null,nome,finalidade,status,depreciacaoAnual,
-                valorAtual,valorVenda,dataCompra,dataRetorno,
-                dataBaixa);
+        this.id= id;
+        this.nome=nome;
+        this.finalidade=finalidade;
+        this.status=status;
+        this.depreciacaoAnual=depreciacaoAnual;
+        this.valorCompra=valorCompra;
+        this.valorVenda=valorVenda;
+        this.dataCompra=dataCompra;
+        this.dataRetorno=dataRetorno;
+        this.dataBaixa=dataBaixa;
         calculaValorAtual();
     }
     
@@ -63,17 +70,17 @@ public class Maquina {
      * @param nome Nome da maquina
      * @param finalidade Finalidade da maquina
      * @param depreciacaoAnual Depreciação anual da maquina
-     * @param valorAtual Valor atual da maquina
+     * @param valorCompra Valor atual da maquina
      * @param valorVenda Valor de venda da maquina
      * @param dataCompra Data de compra da maquina
      * @param dataRetorno Data de retorno da maquina (data que ela retorna do aluguel)
      * @param dataBaixa Data de saida da maquina (data que ela foi vendida ou descartada)
      */
     public Maquina(Long id, String nome, String finalidade, 
-            double depreciacaoAnual, double valorAtual, double valorVenda, 
+            double depreciacaoAnual, double valorCompra, double valorVenda, 
             Calendar dataCompra, Calendar dataRetorno, Calendar dataBaixa) {
         this(null,nome,finalidade,null,depreciacaoAnual,
-                valorAtual,valorVenda,dataCompra,dataRetorno,
+                valorCompra,valorVenda,dataCompra,dataRetorno,
                 dataBaixa);
         calculaValorAtual();
     }
@@ -82,11 +89,10 @@ public class Maquina {
      * Cria uma maquina com dados null
      */
     public Maquina(){
-        this(null,null,null,null,null,null,null,null,null,null);
+        this(null,null,null,null,0,0,0,null,null,null);
         valorAtual=0;
     }
 
-    
     //Sets e Gets
 
     /**

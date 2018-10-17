@@ -16,10 +16,10 @@ import java.util.Calendar;
 
 /**
  *
- * @author Gabriel
+ * @author Gabriel, Mei
  * @version 16-10-18/18:29
  */
-public class MaquinaServicoDeAcesso {
+public class MaquinaAccessService {
     
     // Objetos de manipulação interna.
     private static ResultSet result;
@@ -123,6 +123,7 @@ public class MaquinaServicoDeAcesso {
                             Data.dateToCalendar(result.getDate(DATA_COMPRA_COLUMN)),
                             Data.dateToCalendar(result.getDate(DATA_RETORNO_COLUMN)),
                             Data.dateToCalendar(result.getDate(DATA_BAIXA_COLUMN)));
+                    maquina.setStatus(result.getString(STATUS_COLUMN));
                     maquinas.add(maquina);    
                 } while (result.next());
             }
