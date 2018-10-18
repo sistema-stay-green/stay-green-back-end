@@ -16,7 +16,8 @@ import java.util.Calendar;
 
 /**
  *
- * @author Gabriel, Mei
+ * @author Gabriel
+ * @inspiration PatrimonioAccessService
  * @version 16-10-18/18:29
  */
 public class MaquinaAccessService {
@@ -31,7 +32,6 @@ public class MaquinaAccessService {
     private static final String STATUS_COLUMN;
     private static final String DEPRECIACAO_ANUAL_COLUMN;
     private static final String VALOR_COMPRA_COLUMN;
-    private static final String VALOR_ATUAL_COLUMN;
     private static final String VALOR_VENDA_COLUMN;
     private static final String DATA_COMPRA_COLUMN;
     private static final String DATA_RETORNO_COLUMN;
@@ -45,7 +45,6 @@ public class MaquinaAccessService {
         STATUS_COLUMN = "status";
         DEPRECIACAO_ANUAL_COLUMN = "depreciacaoAnual";
         VALOR_COMPRA_COLUMN = "valorCompra";
-        VALOR_ATUAL_COLUMN = "valorAtual";
         VALOR_VENDA_COLUMN = "valorVenda";
         DATA_COMPRA_COLUMN = "dataCompra";
         DATA_RETORNO_COLUMN = "dataRetorno";
@@ -60,7 +59,7 @@ public class MaquinaAccessService {
     public static Maquina getMaquinaFromId(String id){
        
         
-        ArrayList<Maquina> maquinas = get("SELECT * FROM maquina WHERE id=" + id);
+        ArrayList<Maquina> maquinas = getDeMaquina("SELECT * FROM maquina WHERE id=" + id);
         
         if (maquinas == null)
             System.out.println("AVISO! Nenhum maquina encontrado com o Id: " + id);
@@ -75,7 +74,7 @@ public class MaquinaAccessService {
      */
     public static ArrayList<Maquina> getMaquinasFromNome(String nome){
         
-        ArrayList<Maquina> maquinas = get("SELECT * FROM maquina WHERE nome='" + nome + "'");
+        ArrayList<Maquina> maquinas = getDeMaquina("SELECT * FROM maquina WHERE nome='" + nome + "'");
         
         if (maquinas == null)
             System.out.println("AVISO! Nenhum maquina encontrado com o Nome: " + nome);
@@ -86,15 +85,15 @@ public class MaquinaAccessService {
     
     /**
      * Pesquisa na DB 'staygreen' usando o Tipo recebido.
-     * @param tipo
+     * @param finalidade
      * @return Retorna objetos Maquina que correspondam ao Tipo recebido. 
      */
-    public static ArrayList<Maquina> getMaquinasFromTipo(String tipo){
+    public static ArrayList<Maquina> getMaquinasFromFinalidade(String finalidade){
         
-        ArrayList<Maquina> maquinas = get("SELECT * FROM maquina WHERE tipo='" + tipo + "'");
+        ArrayList<Maquina> maquinas = getDeMaquina("SELECT * FROM maquina WHERE finalidade='" + finalidade + "'");
         
         if (maquinas == null)
-            System.out.println("AVISO! Nenhum maquina encontrado com o Tipo: " + tipo);
+            System.out.println("AVISO! Nenhum maquina encontrado com o Finalidade: " + finalidade);
         
         return maquinas;
         
@@ -105,7 +104,7 @@ public class MaquinaAccessService {
      * @param query
      * @return Retorna objetos Maquina resultantes da query de pesquisa recebida.
      */
-    public static ArrayList<Maquina> get(String query){
+    public static ArrayList<Maquina> getDeMaquina(String query){
         
         ArrayList<Maquina> maquinas = new ArrayList<>();
         
@@ -142,7 +141,7 @@ public class MaquinaAccessService {
      * Insere um objeto Maquina na DB 'staygreen'
      * @param maquina
      */
-    public static void insert(Maquina maquina){
+    public static void insere(Maquina maquina){
         
             SQL.insert(maquina);
     }
@@ -151,10 +150,10 @@ public class MaquinaAccessService {
      * Insere vários objetos Maquina na DB 'staygreen'
      * @param maquinas
      */
-    public static void insertAll(ArrayList<Maquina> maquinas){
+    public static void insereTodos(ArrayList<Maquina> maquinas){
         
         maquinas.forEach((maquina) -> {
-            insert(maquina);
+            insere(maquina);
         });
     }
     
@@ -171,7 +170,7 @@ public class MaquinaAccessService {
      * Atualiza os maquinas na DB correspondentes aos objetos Maquina recebidos
      * @param maquinas
      */
-    public static void updateAll(ArrayList<Maquina> maquinas){
+    public static void updateTodos(ArrayList<Maquina> maquinas){
         
         maquinas.forEach((maquina) -> {
             SQL.update(maquina);

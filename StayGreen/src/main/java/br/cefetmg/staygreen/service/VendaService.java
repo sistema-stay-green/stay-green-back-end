@@ -10,7 +10,9 @@ import java.util.Calendar;
 
 /**
  *
- * @author Aluno
+ * @author Gabriel
+ * @version 15-10-18/07:16
+ * 
  */
 public class VendaService {
     // Atributos
