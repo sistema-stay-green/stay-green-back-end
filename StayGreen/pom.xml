@@ -4,7 +4,7 @@
 
     <groupId>br.cefetmg</groupId>
     <artifactId>StayGreen</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>war</packaging>
 
     <name>StayGreen</name>
@@ -61,6 +61,7 @@
                 <version>2.6</version>
                 <executions>
                     <execution>
+                        <id>validation</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy</goal>
@@ -78,7 +79,44 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.eclipse.jetty</groupId>
+                                    <artifactId>jetty-runner</artifactId>
+                                    <version>9.3.6.v20151106</version>
+                                    <destFileName>jetty-runner.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.3.6.v20151106</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                        <descriptor>maven</descriptor>
+                    </webApp>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>authorization.filter</key>
+                            <value>${authorization.filter}</value>
+                        </systemProperty>
+                        <systemProperty>
+                            <key>authorization.secret</key>
+                            <value>${authorization.secret}</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
             </plugin>
         </plugins>
         
