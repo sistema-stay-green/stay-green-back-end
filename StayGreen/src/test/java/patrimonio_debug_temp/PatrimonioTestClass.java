@@ -1,7 +1,7 @@
 package patrimonio_debug_temp;
 
-
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
+import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +25,31 @@ public class PatrimonioTestClass {
         //testGetFromId(1);
         //testInsert("Nome");
         //testDelete(2);
-
+        testJsonfy();
+    }
+    
+    public static void testJsonfy(){
+        
+        Patrimonio patrimonio = new Patrimonio(nome);
+        patrimonio.setTipo("Tipo");
+        patrimonio.setDescricao("Descrição");
+        
+        // Opção 1:
+        //patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
+        // Opção 2:
+        patrimonio.setStatus("VENDIDO");
+        
+        patrimonio.setIndiceDepreciacao(1.5);
+        patrimonio.setValorCompra(new Double(4000));
+        patrimonio.setValorAtual(new Double(3800));
+        
+        Calendar c = Calendar.getInstance();
+        
+        patrimonio.setDataCompra(c);
+        patrimonio.setDataSaida(c);
+        patrimonio.setDataBaixa(c);
+        
+        PatrimonioProcessService.jsoonfy(patrimonio);
     }
     
     public static void testDelete(Integer id){
@@ -76,6 +100,7 @@ public class PatrimonioTestClass {
         patrimonio.setDataBaixa(c);
         
         PatrimonioAccessService.insert(patrimonio);
+        
     }
     
     public static void testGetFromNome(String nome){
