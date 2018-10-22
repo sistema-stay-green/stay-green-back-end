@@ -7,6 +7,7 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
+import br.cefetmg.staygreen.service.TransacaoService;
 import java.util.Calendar;
 
 /**
@@ -61,7 +62,8 @@ public class Maquina {
         this.dataCompra=dataCompra;
         this.dataRetorno=dataRetorno;
         this.dataBaixa=dataBaixa;
-        calculaValorAtual();
+        valorAtual=TransacaoService.calculaValorAtual(valorCompra, depreciacaoAnual, 
+                dataCompra);
     }
     
     /**
@@ -82,7 +84,8 @@ public class Maquina {
         this(null,nome,finalidade,null,depreciacaoAnual,
                 valorCompra,valorVenda,dataCompra,dataRetorno,
                 dataBaixa);
-        calculaValorAtual();
+        valorAtual=TransacaoService.calculaValorAtual(valorCompra, depreciacaoAnual, 
+                dataCompra);
     }
 
     /**
@@ -230,9 +233,8 @@ public class Maquina {
      * @return
      */
     public double getValorAtual() {
-        if (valorAtual==0) {
-            calculaValorAtual();
-        }
+        valorAtual=TransacaoService.calculaValorAtual(valorCompra, depreciacaoAnual, 
+                    dataCompra);
         return valorAtual;
     }
 
@@ -267,28 +269,4 @@ public class Maquina {
     public void setValorVenda(double valorVenda) {
         this.valorVenda = valorVenda;
     }
-    
-    //Outros metódos importantes
-    
-    /**
-     * Calcula o tempo em anos entre a data Atual e a data de compra, utilizada
-     * para calcular o Valor Atual
-     */
-    private int tempoEmAnos(){
-        return Calendar.getInstance().get(Calendar.YEAR)-
-                dataCompra.get(Calendar.YEAR);
-    }
-    
-    /**
-     * Calcula o valor atual com base no valor de compra, a depreciação anual e
-     * o periodo de tempo entre a data atual e a data de compra
-     */
-    private void calculaValorAtual(){
-        double valorAuxiliar = valorCompra;
-        for (int i = 0; i < tempoEmAnos(); i++) {
-            valorAuxiliar=valorAuxiliar-((valorAuxiliar/100)*depreciacaoAnual);
-        }
-        valorAtual=valorAuxiliar;
-    }
-       
 }
