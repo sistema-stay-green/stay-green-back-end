@@ -6,6 +6,7 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Tarefa;
+import br.cefetmg.staygreen.util.Data;
 import static br.cefetmg.staygreen.util.Data.dateToCalendar;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
