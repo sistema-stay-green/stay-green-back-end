@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  *
  * @author Gabriel Brandão
- * @version 1.1
+ * @version 1.2
  */
 public class TarefaAccessService {
     
@@ -107,8 +107,17 @@ public class TarefaAccessService {
     }
     
     /**
+     * Remove uma tarefa do bd 'staygreen' usando o id recebido.
+     * @param id Id da tarefa a ser removida.
+     * @return Retorna true se a operação for bem sucedida e false se não for.
+     */
+    public static boolean remove(int id) {
+        return SQL.delete(id, Tarefa.class);
+    }
+    
+    /**
      * Pesquisa no db 'staygreen' usando a query recebida.
-     * @param query
+     * @param query query a ser executada
      * @return Retorna os objetos Tarefa encontrados utilizando a query 
      * recebida.
      */
@@ -147,11 +156,11 @@ public class TarefaAccessService {
     
     /**
      * Insere um objeto Tarefa no DB 'staygreen'
-     * @param tarefa
+     * @param tarefa objeto tarefa
+     * @return Retorna true se não houver problemas na operação.
      */
-    public static void insert(Tarefa tarefa){
-        
-            SQL.insert(tarefa);
+    public static boolean insert(Tarefa tarefa){
+            return SQL.insert(tarefa);
     }
     
     /**
@@ -168,10 +177,10 @@ public class TarefaAccessService {
     /**
      * Atualiza a tarefa no DB correspondente ao objeto Tarefa recebido
      * @param tarefa
+     * @return Retorna true se não houver problemas na operação.
      */
-    public static void update(Tarefa tarefa){
-        
-            SQL.update(tarefa);
+    public static boolean update(Tarefa tarefa){
+            return SQL.update(tarefa);
     }
     
     /**
