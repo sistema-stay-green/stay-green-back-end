@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `patrimonio` (
 
 -- Tabela Tarefa
 
-DROP TABLE IF EXISTS `tarefa`
+DROP TABLE IF EXISTS `tarefa`;
 CREATE TABLE IF NOT EXISTS `tarefa` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(30) DEFAULT NULL,
@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS `tarefa` (
   `dataMarcada` date DEFAULT NULL,
   `repeticao` int DEFAULT NULL,
   `producaoPrevista` double DEFAULT NULL,
-  `valorGasto` double DEFAULT NULL
+  `valorGasto` double DEFAULT NULL,
+  PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- Tabela ...

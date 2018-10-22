@@ -6,17 +6,16 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Tarefa;
+import static br.cefetmg.staygreen.util.Data.dateToCalendar;
 import br.cefetmg.staygreen.util.SQL;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  *
- * @author gabri_000
- * @version 1.0
+ * @author Gabriel Brandão
+ * @version 1.1
  */
 public class TarefaAccessService {
     
@@ -99,6 +98,14 @@ public class TarefaAccessService {
     }
     
     /**
+     * Pesquisa no db 'staygreen' todas as tarefas.
+     * @return Retorna todos os objetos Tarefa em um ArrayList.
+     */
+    public static ArrayList<Tarefa> getAll() {
+        return get("SELECT * FROM " + SQL.getNomeTabela(Tarefa.class));
+    }
+    
+    /**
      * Pesquisa no db 'staygreen' usando a query recebida.
      * @param query
      * @return Retorna os objetos Tarefa encontrados utilizando a query 
@@ -175,17 +182,5 @@ public class TarefaAccessService {
         for (Tarefa tarefa : tarefas) {
             SQL.update(tarefa);
         }
-    }
-    
-    //Lembra de alterar quando a Mei adicionar o método em uma classe util
-    /**
-     * Converte um objeto java.sql.Date para um objeto Calendar
-     * @param date 
-     * @return Retorna um objeto Calendar convertido.
-     */
-    private static Calendar dateToCalendar(Date date){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
     }
 }
