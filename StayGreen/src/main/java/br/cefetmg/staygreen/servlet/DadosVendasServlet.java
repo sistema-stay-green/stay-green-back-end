@@ -14,8 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
- * @author Aluno
+ * Servlet que recebe informações via POST e envia para o BD
+ * @version 1.0
+ * @author João Pedro
  */
 @WebServlet(name = "DadosVendasServlet", urlPatterns = {"/DadosVendasServlet"})
 public class DadosVendasServlet extends HttpServlet {
