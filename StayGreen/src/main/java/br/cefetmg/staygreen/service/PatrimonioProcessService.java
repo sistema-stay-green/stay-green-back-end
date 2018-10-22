@@ -6,6 +6,7 @@
 
 package br.cefetmg.staygreen.service;
 
+import org.json.JSONObject;
 import br.cefetmg.staygreen.table.Patrimonio;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +67,47 @@ public class PatrimonioProcessService {
         PatrimonioAccessService.update(patrimonio);
         
         return valorAtual;
+    }
+    
+    public static JSONObject jsonfy(Patrimonio patrimonio){
+        
+        try {
+            
+            JSONObject json = new JsonObject();
+            
+            json.put("id", patrimonio.getId().toString());
+            json.put("nome", patrimonio.getNome());
+            json.put("tipo", patrimonio.getTipo());
+            json.put("descricao", patrimonio.getDescricao());
+            json.put("status", patrimonio.getStatus().toString());
+            json.put("indiceDepreciacao", patrimonio.getIndiceDepreciacao().toString());
+            json.put("valorCompra", patrimonio.getValorCompra().toString());
+            json.put("valorAtual", patrimonio.getValorAtual().toString());
+            json.put("dataCompra", patrimonio.getDataCompra().getTime().toString());
+            json.put("dataSaida", patrimonio.getDataSaida().getTime().toString());
+            json.put("dataBaixa", patrimonio.getDataBaixa().getTime().toString());
+            
+            return json.toString();
+            
+        } catch (JSONException e) {
+            System.out.println(e + " at jsonfy");
+        }
+    }
+    
+    public static JSONArray jsonfy(ArrayList<Patrimonio> patrimonios){
+        
+        try {
+            
+            JSONArray jsonArray = new JSONArray();
+
+            for (Patrimonio patrimonio : patrimonios) {
+                jsonArray.put(jsonfy(patrimonio));
+            }
+        } catch (JSONException e) {
+            System.out.println(e + " at jsonfy");
+        }
+
+        return jsonArray;
     }
     
     /**
