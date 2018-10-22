@@ -126,7 +126,7 @@ public class TarefaAccessService {
                             result.getString(NOME_COLUMN));
                     tarefa.setTipo(result.getString(TIPO_COLUMN));
                     tarefa.setCaminhoImg(result.getString(CAMINHO_IMG_COLUMN));
-                    tarefa.setDataMarcada(dateToCalendar(result.getDate(DATA_MARCADA_COLUMN)));
+                    tarefa.setDataMarcada(Data.dateToCalendar(result.getDate(DATA_MARCADA_COLUMN)));
                     tarefa.setRepeticao(result.getInt(REPETICAO_COLUMN));
                     tarefa.setProducaoPrevista(result.getDouble(PRODUCAO_PREVISTA_COLUMN));
                     tarefa.setValorGasto(result.getDouble(VALOR_GASTO_COLUMN));
