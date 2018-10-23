@@ -10,8 +10,8 @@ import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet que retorna uma string em formato JSON contendo dados dos produtos registrados
- * @version 1.0
+ * @version 1.1
  * @author Paulo Vitor
  */
 @WebServlet(name = "ProdutosVendaServlet", urlPatterns = {"/ProdutosVendaServlet"})
@@ -43,26 +43,14 @@ public class ProdutosVendaServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         response.setContentType("application/json;charset=UTF-8");
         
-        ResultSet produto = SQL.query("SELECT * FROM " + SQL.getNomeTabela(Produto.class));
-        String resultado = "[";
-        while(produto.next())
-                 resultado += JSON.stringify(new Produto(produto)) + (produto.isLast()?"":",");
-        resultado += "]";
+        List<Produto> produtos = (List<Produto>) SQL.getRegistros(Produto.class);
+        String resultado = JSON.stringify(produtos);
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println(resultado);
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,14 +61,6 @@ public class ProdutosVendaServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -91,11 +71,6 @@ public class ProdutosVendaServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

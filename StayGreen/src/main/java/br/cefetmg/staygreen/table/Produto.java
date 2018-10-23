@@ -64,9 +64,8 @@ public class Produto {
         this(null, nome, descricao, valorUniCompra, valorUniVenda, pontoAviso, estoque, unidadeVenda);
     }
     
-    public Produto(ResultSet resultado) throws SQLException{
-        this(resultado.getLong("id"), resultado.getString("nome"), resultado.getString("descricao"), resultado.getDouble("valorUniCompra"),
-                resultado.getDouble("valorUniVenda"), resultado.getDouble("pontoAviso"), resultado.getDouble("estoque"), resultado.getDouble("unidadeVenda"));
+    public Produto() {
+        this(null, null, null, null, null, null, null);
     }
 
     public Long getId() {
