@@ -1,7 +1,7 @@
 package patrimonio_debug_temp;
 
-
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
+import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +25,6 @@ public class PatrimonioTestClass {
         //testGetFromId(1);
         //testInsert("Nome");
         //testDelete(2);
-
     }
     
     public static void testDelete(Integer id){
@@ -74,6 +73,7 @@ public class PatrimonioTestClass {
         patrimonio.setDataBaixa(c);
         
         PatrimonioAccessService.insert(patrimonio);
+        
     }
     
     public static void testGetFromNome(String nome){
