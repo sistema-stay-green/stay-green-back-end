@@ -27,30 +27,30 @@ public class PatrimonioAccessService {
     private static final String ID_COLUMN;
     private static final String NOME_COLUMN;
     private static final String TIPO_COLUMN;
-    private static final String DESCRICAO_COLUMN;
+    private static final String FINALIDADE_COLUMN;
     private static final String STATUS_COLUMN;
     private static final String INDICE_DEPRECIACAO_COLUMN;
     private static final String VALOR_COMPRA_COLUMN;
-    private static final String VALOR_ATUAL_COLUMN;
     private static final String DATA_COMPRA_COLUMN;
     private static final String DATA_SAIDA_COLUMN;
+    private static final String DATA_RETORNO_COLUMN;
     private static final String DATA_BAIXA_COLUMN;
     
     private static final String TABLE_NAME;
     
     // inicialização das constantes internas.
     static {
-        ID_COLUMN = "id";
-        NOME_COLUMN = "nome";
-        TIPO_COLUMN = "tipo";
-        DESCRICAO_COLUMN = "descricao";
-        STATUS_COLUMN = "status";
-        INDICE_DEPRECIACAO_COLUMN = "indiceDepreciacao";
-        VALOR_COMPRA_COLUMN = "valorCompra";
-        VALOR_ATUAL_COLUMN = "valorAtual";
-        DATA_COMPRA_COLUMN = "dataCompra";
-        DATA_SAIDA_COLUMN = "dataSaida";
-        DATA_BAIXA_COLUMN = "dataBaixa";
+        ID_COLUMN = "idPatrimonio";
+        NOME_COLUMN = "nomePatrimonio";
+        TIPO_COLUMN = "tipoPatrimonio";
+        FINALIDADE_COLUMN = "finalidadePatrimonio";
+        STATUS_COLUMN = "statusPatrimonio";
+        INDICE_DEPRECIACAO_COLUMN = "indDeprecPatrimonio";
+        VALOR_COMPRA_COLUMN = "valorCompraPatrimonio";
+        DATA_COMPRA_COLUMN = "dataCompraPatrimonio";
+        DATA_SAIDA_COLUMN = "dataSaidaPatrimonio";
+        DATA_RETORNO_COLUMN = "dataRetornoPatrimonio";
+        DATA_BAIXA_COLUMN = "dataBaixaPatrimonio";
         
         TABLE_NAME = SQL.getNomeTabela(Patrimonio.class);
     }
@@ -127,20 +127,20 @@ public class PatrimonioAccessService {
                                 result.getString(NOME_COLUMN));
                         patrimonio.setTipo(
                                 result.getString(TIPO_COLUMN));
-                        patrimonio.setDescricao(
-                                result.getString(DESCRICAO_COLUMN));
+                        patrimonio.setFinalidade(
+                                result.getString(FINALIDADE_COLUMN));
                         patrimonio.setStatus(
                                 result.getString(STATUS_COLUMN));
                         patrimonio.setIndiceDepreciacao(
                                 result.getDouble(INDICE_DEPRECIACAO_COLUMN));
                         patrimonio.setValorCompra(
                                 result.getDouble(VALOR_COMPRA_COLUMN));
-                        patrimonio.setValorAtual(
-                                result.getDouble(VALOR_ATUAL_COLUMN));
                         patrimonio.setDataCompra(
                                 result.getDate(DATA_COMPRA_COLUMN));
                         patrimonio.setDataSaida(
                                 result.getDate(DATA_SAIDA_COLUMN));
+                        patrimonio.setDataRetorno(
+                                result.getDate(DATA_RETORNO_COLUMN));
                         patrimonio.setDataBaixa(
                                 result.getDate(DATA_BAIXA_COLUMN));
                         
@@ -208,7 +208,7 @@ public class PatrimonioAccessService {
     public static void delete(Patrimonio patrimonio){
         
         if (patrimonio.getId() != null) {
-            SQL.delete(patrimonio.getId().intValue(), Patrimonio.class);
+            SQL.delete(patrimonio.getId(), Patrimonio.class);
         } else{
             System.out.println("!!! ERRO !!! Não foi possível deletar pois"
                     + " o Patrimonio recebido não possui um Id definido.");

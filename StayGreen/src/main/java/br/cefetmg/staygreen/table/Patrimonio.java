@@ -24,13 +24,13 @@ public class Patrimonio {
     private Integer id;
     private String nome;
     private String tipo;
-    private String descricao;
+    private String finalidade;
     private PatrimonioStatusEnum status;
     private Double indiceDepreciacao;
     private Double valorCompra;
-    private Double valorAtual;
     private Calendar dataCompra;
     private Calendar dataSaida;
+    private Calendar dataRetorno;
     private Calendar dataBaixa;
     
     
@@ -78,12 +78,12 @@ public class Patrimonio {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getFinalidade() {
+        return finalidade;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setFinalidade(String finalidade) {
+        this.finalidade = finalidade;
     }
 
     public Enum getStatus() {
@@ -121,14 +121,6 @@ public class Patrimonio {
         this.valorCompra = valorCompra;
     }
 
-    public Double getValorAtual() {
-        return valorAtual;
-    }
-
-    public void setValorAtual(Double valorAtual) {
-        this.valorAtual = valorAtual;
-    }
-
     public Calendar getDataCompra() {
         return dataCompra;
     }
@@ -151,6 +143,18 @@ public class Patrimonio {
     
     public void setDataSaida(Date dataSaida) {
         this.dataSaida = Data.dateToCalendar(dataSaida);
+    }
+    
+    public Calendar getDataRetorno() {
+        return dataRetorno;
+    }
+    
+    public void setDataRetorno(Calendar dataRetorno) {
+        this.dataRetorno = dataRetorno;
+    }
+    
+    public void setDataRetorno(Date dataRetorno) {
+        this.dataRetorno = Data.dateToCalendar(dataRetorno);
     }
 
     public Calendar getDataBaixa() {

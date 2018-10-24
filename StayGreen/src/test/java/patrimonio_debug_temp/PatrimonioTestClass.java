@@ -32,7 +32,7 @@ public class PatrimonioTestClass {
         
         Patrimonio patrimonio = new Patrimonio(id,"Trator");
         patrimonio.setTipo("Tipo");
-        patrimonio.setDescricao("Descrição");
+        patrimonio.setFinalidade("Descrição");
         
         // Opção 1:
         //patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
@@ -41,7 +41,6 @@ public class PatrimonioTestClass {
         
         patrimonio.setIndiceDepreciacao(1.5);
         patrimonio.setValorCompra(new Double(4000));
-        patrimonio.setValorAtual(new Double(3800));
         
         Calendar c = Calendar.getInstance();
         
@@ -58,7 +57,7 @@ public class PatrimonioTestClass {
         
         Patrimonio patrimonio = new Patrimonio(nome);
         patrimonio.setTipo("Tipo");
-        patrimonio.setDescricao("Descrição");
+        patrimonio.setFinalidade("Descrição");
         
         // Opção 1:
         //patrimonio.setStatus(PatrimonioStatusEnum.VENDIDO);
@@ -67,7 +66,6 @@ public class PatrimonioTestClass {
         
         patrimonio.setIndiceDepreciacao(1.5);
         patrimonio.setValorCompra(new Double(4000));
-        patrimonio.setValorAtual(new Double(3800));
         
         Calendar c = Calendar.getInstance();
         
@@ -84,11 +82,10 @@ public class PatrimonioTestClass {
         
         System.out.println("Nome: " + p.get(0).getNome());
         System.out.println("Tipo: " + p.get(0).getTipo());
-        System.out.println("Descrição: " + p.get(0).getDescricao());
+        System.out.println("Descrição: " + p.get(0).getFinalidade());
         System.out.println("Status: " + p.get(0).getStatus());
         System.out.println("Índice de Depreciação: " + p.get(0).getIndiceDepreciacao());
         System.out.println("Valor da Compra: " + p.get(0).getValorCompra());
-        System.out.println("Valor atual: " + p.get(0).getValorAtual());
         System.out.println("Data da Compra: " + p.get(0).getDataSaida().getTime());
         System.out.println("Data da Saída: " + p.get(0).getDataSaida().getTime());
         System.out.println("Data da Baixa: " + p.get(0).getDataBaixa().getTime());
@@ -100,11 +97,10 @@ public class PatrimonioTestClass {
         
         System.out.println("Nome: " + p.getNome());
         System.out.println("Tipo: " + p.getTipo());
-        System.out.println("Descrição: " + p.getDescricao());
+        System.out.println("Descrição: " + p.getFinalidade());
         System.out.println("Status: " + p.getStatus());
         System.out.println("Índice de Depreciação: " + p.getIndiceDepreciacao());
         System.out.println("Valor da Compra: " + p.getValorCompra());
-        System.out.println("Valor atual: " + p.getValorAtual());
         System.out.println("Data da Compra: " + p.getDataSaida().getTime());
         System.out.println("Data da Saída: " + p.getDataSaida().getTime());
         System.out.println("Data da Baixa: " + p.getDataBaixa().getTime());

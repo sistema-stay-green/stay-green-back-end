@@ -38,6 +38,7 @@ public class PatrimonioProcessService {
      * @param patrimonios
      * @return String with all values from Patrimonio Objects.
      */
+    @Deprecated
     public static String stringfy(ArrayList<Patrimonio> patrimonios){
         
         String output = new String();
@@ -50,11 +51,13 @@ public class PatrimonioProcessService {
         return output;
     }
     
+    
     /**
      * Concatenates values from a object Patrimonio into a new String
      * @param patrimonio
      * @return String with all values from a Patrimonio Object.
      */
+    @Deprecated
     public static String stringfy(Patrimonio patrimonio){
         
         String output = new String();
@@ -62,11 +65,10 @@ public class PatrimonioProcessService {
         output += patrimonio.getId().toString() + FIELD_SEPARATOR;
         output += patrimonio.getNome() + FIELD_SEPARATOR;
         output += patrimonio.getTipo() + FIELD_SEPARATOR;
-        output += patrimonio.getDescricao() + FIELD_SEPARATOR;
+        output += patrimonio.getFinalidade() + FIELD_SEPARATOR;
         output += patrimonio.getStatus().toString() + FIELD_SEPARATOR;
         output += patrimonio.getIndiceDepreciacao().toString() + FIELD_SEPARATOR;
         output += patrimonio.getValorCompra().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getValorAtual().toString() + FIELD_SEPARATOR;
         output += patrimonio.getDataCompra().getTime().toString() + FIELD_SEPARATOR;
         output += patrimonio.getDataSaida().getTime().toString() + FIELD_SEPARATOR;
         output += patrimonio.getDataBaixa().getTime().toString();
