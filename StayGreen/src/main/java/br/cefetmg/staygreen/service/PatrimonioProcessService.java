@@ -6,8 +6,8 @@
 
 package br.cefetmg.staygreen.service;
 
-import org.json.JSONObject;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -39,18 +39,19 @@ public class PatrimonioProcessService {
     /**
      * Calcula e aplica a desvalorização de acordo com a Data
      * @param id
-     * @return
+     * @return valor atual (dia do acesso)
+     * @author Simonetti
      */
-    public static Double Desvaloriza(String id){
+    private static Double desvalorizaPatrimonio(String id){
         
-        // Instancia do patrimônio, desvalorização e Valor de compra
+        // Instancia do patrimÃ´nio, desvalorizaÃ§Ã£o e Valor de compra
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
 
         Double indiceDepreciacaoAnual = patrimonio.getIndiceDepreciacao()/100;
 
         Double valorCompra = patrimonio.getValorCompra();
  	
-	// Calculo da diferença de data
+	// Calculo da diferenÃ§a de data
 
         Integer anoCompra = patrimonio.getDataCompra().get(Calendar.YEAR);
 
@@ -60,54 +61,66 @@ public class PatrimonioProcessService {
 
         Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual) * valorCompra);
         
-        // Atualiza valor atual no banco de dados
-        
-	patrimonio.setValorAtual(valorAtual);
-
-        PatrimonioAccessService.update(patrimonio);
-        
         return valorAtual;
     }
     
-    public static JSONObject jsonfy(Patrimonio patrimonio){
-        
-        try {
-            
-            JSONObject json = new JsonObject();
-            
-            json.put("id", patrimonio.getId().toString());
-            json.put("nome", patrimonio.getNome());
-            json.put("tipo", patrimonio.getTipo());
-            json.put("descricao", patrimonio.getDescricao());
-            json.put("status", patrimonio.getStatus().toString());
-            json.put("indiceDepreciacao", patrimonio.getIndiceDepreciacao().toString());
-            json.put("valorCompra", patrimonio.getValorCompra().toString());
-            json.put("valorAtual", patrimonio.getValorAtual().toString());
-            json.put("dataCompra", patrimonio.getDataCompra().getTime().toString());
-            json.put("dataSaida", patrimonio.getDataSaida().getTime().toString());
-            json.put("dataBaixa", patrimonio.getDataBaixa().getTime().toString());
-            
-            return json.toString();
-            
-        } catch (JSONException e) {
-            System.out.println(e + " at jsonfy");
+    /**
+     * Vende um patrimonio
+     * @param id
+     * @return valor de venda do patrimonio
+     * @author Simonetti
+     */
+    public static Double vendaPatrimonio(String id){
+        //InstÃ¢ncia do objeto patrimÃ´nio a partir da sua Id
+        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
+        //VerificaÃ§Ã£o 
+        if(patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
+            System.out.println("PatrimÃ´nio jÃ¡ foi vendido!");
+            else {
+                Calendar dataBaixa = Calendar.getInstance();
+                
+                patrimonio.setStatus("VENDIDO");
+                
+                patrimonio.setDataBaixa(dataBaixa);
+                
+                PatrimonioAccessService.update(patrimonio);
+                
+                return PatrimonioProcessService.desvalorizaPatrimonio(id);          
         }
+        return null;
     }
     
-    public static JSONArray jsonfy(ArrayList<Patrimonio> patrimonios){
+    /**
+     * Compra um patrimonio
+     * @param nome
+     * @param tipo
+     * @param finalidade
+     * @param indiceDepreciacao
+     * @param valorCompra
+     * @param dataCompra
+     * @author Simonetti
+     */
+    public static void compraPatrimonio( String nome, String tipo, String finalidade,
+        Double indiceDepreciacao, Double valorCompra, Calendar dataCompra){
         
-        try {
-            
-            JSONArray jsonArray = new JSONArray();
+        Patrimonio novoPatrimonio = new Patrimonio();
+        
+        novoPatrimonio.setNome(nome);
+        
+        novoPatrimonio.setTipo(tipo);
+        
+        novoPatrimonio.setFinalidade(finalidade);
+        
+        novoPatrimonio.setStatus("EM_POSSE");
+        
+        novoPatrimonio.setIndiceDepreciacao(indiceDepreciacao);
+        
+        novoPatrimonio.setValorCompra(valorCompra);
+        
+        novoPatrimonio.setDataCompra(dataCompra);
+                
+        PatrimonioAccessService.insert(novoPatrimonio);      
 
-            for (Patrimonio patrimonio : patrimonios) {
-                jsonArray.put(jsonfy(patrimonio));
-            }
-        } catch (JSONException e) {
-            System.out.println(e + " at jsonfy");
-        }
-
-        return jsonArray;
     }
     
     /**

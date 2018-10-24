@@ -5,6 +5,7 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Aluno
+ * @author Mei
  */
 @WebServlet(name = "PatrimonioServlet", urlPatterns = {"/PatrimonioServlet"})
 public class PatrimonioServlet extends HttpServlet {
@@ -59,6 +60,19 @@ public class PatrimonioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        // To-do
+        String action = request.getParameter("action");
+                switch(action){
+                    case "venda":
+                        String idPatrimonio = request.getParameter("id");
+                        PatrimonioProcessService.vendaPatrimonio(idPatrimonio);
+                        break;
+                    case "compra":
+                        break;
+                        
+                        
+                }
     }
 
     /**
