@@ -6,15 +6,14 @@
 package br.cefetmg.staygreen.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import br.cefetmg.staygreen.table.Cliente;
+import br.cefetmg.staygreen.table.Comprador;
 import br.cefetmg.staygreen.util.SQL;
-import br.cefetmg.staygreen.table.Venda;
+import br.cefetmg.staygreen.table.VendaUsuario;
 import br.cefetmg.staygreen.util.JSON;
 
 /**
@@ -32,8 +31,8 @@ public class DadosVendasServlet extends HttpServlet {
         String vendaJSON = request.getParameter("venda");
         String clienteJSON = request.getParameter("cliente");
         
-        Venda venda = JSON.parse(vendaJSON, Venda.class);
-        Cliente cliente = JSON.parse(clienteJSON, Cliente.class);
+        VendaUsuario venda = JSON.parse(vendaJSON, VendaUsuario.class);
+        Comprador cliente = JSON.parse(clienteJSON, Comprador.class);
         
         SQL.insert(cliente);
         SQL.insert(venda);
