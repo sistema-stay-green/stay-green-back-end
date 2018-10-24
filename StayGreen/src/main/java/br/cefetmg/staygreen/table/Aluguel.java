@@ -7,7 +7,7 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.annotation.Id;
-import br.cefetmg.staygreen.service.TransacaoService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
 
 /**
@@ -18,44 +18,36 @@ import java.util.Calendar;
 public class Aluguel {
     //Atributos
     @Id
-    private Long id;
-    private String produto;
-    private String locatario;
-    private double taxaMensal;
-    private double valorTotal;
-    private Calendar dataEmprestimo;
-    private Calendar dataTermino;
-    private Calendar dataProximoPagamento;
-    
+    private Long idAluguel;
+    private Long idMaquina;
+    private double valorAluguel;
+    private int periodoAluguel;
+    private Calendar dataInicialAluguel;
+
     // Construtores
 
     /**
      *  Cria uma produto com todos os parametros
-     * @param id Id único da linha na tabela
-     * @param produto String a ser vendida
-     * @param locatario Locatário da produto
-     * @param taxaMensal Taxa a ser recebida mensalmente pelo emprestimo
-     * @param dataEmprestimo Data do emprestimo da produto
-     * @param dataTermino Data do Termino da produto
+     * @param idAluguel Id único da linha na tabela
+     * @param idMaquina Id da maquina localizado na tabela Patrimonio
+     * @param valorAluguel Valor mensal recebido com o aluguel
+     * @param periodoAluguel Periodo total que o aluguel está demarcado
+     * @param dataInicialAluguel Data do emprestimo da produto
      */
-    public Aluguel(Long id, String produto, String locatario, double taxaMensal, Calendar dataEmprestimo, Calendar dataTermino) {
-        this.id = id;
-        this.produto = produto;
-        this.locatario = locatario;
-        this.taxaMensal = taxaMensal;
-        this.dataEmprestimo = dataEmprestimo;
-        this.dataTermino = dataTermino;
-        dataProximoPagamento = 
-                TransacaoService.calculaProximoPagamento(dataEmprestimo);
-        valorTotal=TransacaoService.
-                calculaValorRecebido(taxaMensal, dataEmprestimo);
-    }
+    
+    public Aluguel(Long idAluguel, Long idMaquina, double valorAluguel, int periodoAluguel, Calendar dataInicialAluguel) {
+        this.idAluguel = idAluguel;
+        this.idMaquina = idMaquina;
+        this.valorAluguel = valorAluguel;
+        this.periodoAluguel = periodoAluguel;
+        this.dataInicialAluguel = dataInicialAluguel;
+    }   
     
     /**
      * Cria uma venda/compra com dados null
      */
     public Aluguel() {
-        this(null,null,null,0,null,null);
+        this(null,null,0,0,null);
     }
     //Sets e Gets
 
@@ -63,107 +55,113 @@ public class Aluguel {
      *
      * @return
      */
-    public Long getId() {
-        return id;
+    public Long getIdAluguel() {
+        return idAluguel;
+    }
+
+    /**
+     *
+     * @param idAluguel
+     */
+    public void setIdAluguel(Long idAluguel) {
+        this.idAluguel = idAluguel;
     }
 
     /**
      *
      * @return
      */
-    public String getProduto() {
-        return produto;
+    public Long getIdMaquina() {
+        return idMaquina;
     }
 
     /**
      *
-     * @param produto
+     * @param idMaquina
      */
-    public void setProduto(String produto) {
-        this.produto = produto;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getLocatario() {
-        return locatario;
-    }
-
-    /**
-     *
-     * @param locatario
-     */
-    public void setLocatario(String locatario) {
-        this.locatario = locatario;
+    public void setIdMaquina(Long idMaquina) {
+        this.idMaquina = idMaquina;
     }
 
     /**
      *
      * @return
      */
-    public double getTaxaMensal() {
-        return taxaMensal;
+    public double getValorAluguel() {
+        return valorAluguel;
     }
 
     /**
      *
-     * @param taxaMensal
+     * @param valorAluguel
      */
-    public void setTaxaMensal(double taxaMensal) {
-        this.taxaMensal = taxaMensal;
+    public void setValorAluguel(double valorAluguel) {
+        this.valorAluguel = valorAluguel;
     }
 
     /**
      *
      * @return
      */
-    public Calendar getDataEmprestimo() {
-        return dataEmprestimo;
+    public int getPeriodoAluguel() {
+        return periodoAluguel;
     }
 
     /**
      *
-     * @param dataEmprestimo
+     * @param periodoAluguel
      */
-    public void setDataEmprestimo(Calendar dataEmprestimo) {
-        this.dataEmprestimo = dataEmprestimo;
-    }
-    
-    /**
-     *
-     * @return
-     */
-    public Calendar getDataTermino() {
-        return dataTermino;
+    public void setPeriodoAluguel(int periodoAluguel) {
+        this.periodoAluguel = periodoAluguel;
     }
 
     /**
      *
-     * @param dataTermino
+     * @return
      */
-    public void setDataTermino(Calendar dataTermino) {
-        this.dataTermino = dataTermino;
+    public Calendar getDataInicialAluguel() {
+        return dataInicialAluguel;
     }
-    
+
     /**
      *
-     * @return
+     * @param dataInicialAluguel
+     */
+    public void setDataInicialAluguel(Calendar dataInicialAluguel) {
+        this.dataInicialAluguel = dataInicialAluguel;
+    }
+
+    /**
+     *
+     * @return o valor recebido até a data atual
      */
     public double getValorRecebido(){
-        valorTotal=TransacaoService.
-                calculaValorRecebido(taxaMensal, dataEmprestimo);
-        return valorTotal;
+        return TransacaoEAluguelService.
+                calculaValorRecebido(valorAluguel, dataInicialAluguel);
     }
     
     /**
      *
-     * @return
+     * @return o valor a ser recebido até a data final
+     */
+    public double getValorTotal(){
+        return TransacaoEAluguelService.
+                calculaValorTotalAluguel(valorAluguel, periodoAluguel);
+    }
+    
+    /**
+     *
+     * @return a data que o proximo pagamento deve ser efetuado
      */
     public Calendar getProximoPagamento() {
-        dataProximoPagamento=
-                TransacaoService.calculaProximoPagamento(dataEmprestimo);
-        return dataProximoPagamento;
+        return TransacaoEAluguelService.calculaProximoPagamento(dataInicialAluguel);
+    }
+    
+    /**
+     *
+     * @return a data que o contrato do aluguel acaba
+     */
+    public Calendar getDataFinalAluguel() {
+        return TransacaoEAluguelService.calculaDataFinal(dataInicialAluguel, periodoAluguel);
     }
 }

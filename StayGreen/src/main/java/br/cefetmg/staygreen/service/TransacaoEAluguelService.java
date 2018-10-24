@@ -11,26 +11,24 @@ import java.util.Calendar;
 /**
  *
  * @author Gabriel
- * @version 15-10-18/07:16
+ * @version 22-10-18/07:12
  * 
  */
-public class TransacaoService {
-    
-    //Outros metódos importantes
+public class TransacaoEAluguelService {
     
     /**
      * Calcula o valor total com base no valor e a quantidade de produtos que
-     * foi comprada/vendida.
+     * foi transacionada.
      * 
      * @param valor
-     * @param entradaSaida
+     * @param quantTransacao
      * @param tipo
      * @return 
      */
-    public static double calculaValorTotal(double valor, double entradaSaida, String tipo){
-        double valorTotal=valor*entradaSaida;
+    public static double calculaValorTotal(double valor, int quantTransacao, int tipo){
+        double valorTotal=valor*quantTransacao;
         
-        if(tipo.equals("compra")){
+        if(tipo<0){
             return 0-valorTotal;
         }
         else
@@ -38,28 +36,15 @@ public class TransacaoService {
     }
     
     /**
-     * Calcula o valor atual com base no valor de compra, a depreciação anual e
-     * o periodo de tempo entre a data atual e a data de compra
-     * @param valorCompra
-     * @param depreciacaoAnual
-     * @param dataCompra
+     * Calcula o valor total com base no valor e a quantidade de produtos que
+     * foi transacionada.
+     * 
+     * @param valor
+     * @param tempo
      * @return 
      */
-    
-    public static double calculaValorAtual(double valorCompra, double depreciacaoAnual, Calendar dataCompra){
-        double valorAuxiliar = valorCompra;
-        for (int i = 0; i < tempoEmAnos(dataCompra); i++) {
-            valorAuxiliar=valorAuxiliar-((valorAuxiliar/100)*depreciacaoAnual);
-        }
-        return valorAuxiliar;
-    }
-    
-    /**
-     * Calcula o tempo em anos entre a data Atual e a data inicial
-     * @param dataInicial
-     */
-    private static int tempoEmAnos(Calendar dataInicial){
-        return dataAtual().get(Calendar.YEAR)-dataInicial.get(Calendar.YEAR);
+    public static double calculaValorTotalAluguel(double valor, int tempo){
+        return valor*tempo;
     }
     
     /**
@@ -106,6 +91,23 @@ public class TransacaoService {
         else
             dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), diaInicial);
         return dataProxPagamento;
+    }
+    
+    /**
+     * Calcula a data que o contrato do aluguel acaba.
+     * @param dataInicial
+     * @param periodoAluguel
+     * @return 
+     */
+    public static Calendar calculaDataFinal(Calendar dataInicial, int periodoAluguel){
+        Calendar dataFimContrato;
+        dataFimContrato = Calendar.getInstance();
+        
+        dataFimContrato.set(dataInicial.get(Calendar.YEAR), (dataInicial.
+                get(Calendar.MONTH)+periodoAluguel), dataInicial.
+                get(Calendar.DAY_OF_MONTH));
+        
+        return dataFimContrato;
     }
     
 }
