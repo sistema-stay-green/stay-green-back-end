@@ -42,7 +42,7 @@ public class PatrimonioProcessService {
      * @return valor atual (dia do acesso)
      * @author Simonetti
      */
-    private static Double desvalorizaPatrimonio(String id){
+    public static Double desvalorizaPatrimonio(String id){
         
         // Instancia do patrimÃ´nio, desvalorizaÃ§Ã£o e Valor de compra
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
@@ -70,12 +70,12 @@ public class PatrimonioProcessService {
      * @return valor de venda do patrimonio
      * @author Simonetti
      */
-    public static Double vendaPatrimonio(String id){
+    public static boolean vendaPatrimonio(String id){
         //InstÃ¢ncia do objeto patrimÃ´nio a partir da sua Id
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
         //VerificaÃ§Ã£o 
         if(patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
-            System.out.println("PatrimÃ´nio jÃ¡ foi vendido!");
+            return false;
             else {
                 Calendar dataBaixa = Calendar.getInstance();
                 
@@ -85,9 +85,8 @@ public class PatrimonioProcessService {
                 
                 PatrimonioAccessService.update(patrimonio);
                 
-                return PatrimonioProcessService.desvalorizaPatrimonio(id);          
+                return true;          
         }
-        return null;
     }
     
     /**
