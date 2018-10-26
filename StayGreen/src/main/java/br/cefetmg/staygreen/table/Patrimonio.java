@@ -96,13 +96,7 @@ public class Patrimonio {
     
     public void setStatus(String status){
         
-        try {
             this.status = PatrimonioStatusEnum.valueOf(status);
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception + " at Patrimonio.setStatus()");
-            System.out.println(" !!! ERRO !!! O valor inserido não corresponde "
-                    + "a um estado possível de PatrimonioStatusEnum");
-        }
     }
 
     public Double getIndiceDepreciacao() {
