@@ -26,6 +26,7 @@ public class PatrimonioProcessService {
         OBJECT_SEPARATOR = "¢";
     }
     
+    @Deprecated
     public static String getPatrimonioByNome(String name){
         
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
@@ -139,7 +140,6 @@ public class PatrimonioProcessService {
         
         return output;
     }
-    
     
     /**
      * Concatenates values from a object Patrimonio into a new String

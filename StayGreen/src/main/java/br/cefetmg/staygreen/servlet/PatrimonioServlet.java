@@ -10,6 +10,7 @@ import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,36 +32,76 @@ public class PatrimonioServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @author Simonetti, Mei
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
         String resposta = "";
         Patrimonio patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
         
         if(patrimonio != null) {
                 switch(request.getParameter("action")){
-                    case "v"://Caso de venda
+                    
+                    case "v": //Caso de venda
+                        
                         if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                            resposta = "O patrimÃ´nio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
+                            resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
                                     PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
                             else
-                                resposta = "O patrimonio [" + request.getParameter("id") + "] jÃ¡ foi vendido.";       
-                        break;
-                    case "c"://Caso de compra
-                        PatrimonioProcessService.compraPatrimonio(patrimonio.getNome(), patrimonio.getTipo(), patrimonio.getFinalidade(),
-                                patrimonio.getIndiceDepreciacao(), patrimonio.getValorCompra(), patrimonio.getDataCompra());
-                        resposta = "Patrimonio comprado com sucesso.";
-                        break;
-                    case "s"://Caso de saÃ­da
-                        /*if(request.getParameter("tipoSaida") == )
-                        */
-                        break;
-                    case "e"://Caso de entrada
-                        break;
-                    default://Caso base
+                                resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
                         break;
                         
+                    case "c": //Caso de compra
+                        
+                        Calendar currentTime = Calendar.getInstance();
+                        
+                        PatrimonioProcessService.compraPatrimonio(
+                                patrimonio.getNome(), patrimonio.getTipo(),
+                                patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
+                                patrimonio.getValorCompra(), currentTime
+                        );
+                        
+                        resposta = "Patrimonio comprado com sucesso.";
+                        break;
+                        
+                    case "s": //Caso de saída
+                            
+                        switch(request.getParameter("tipoSaida")){
+                            
+                            case "alugado":
+                                // Alugar
+                                break;
+                                
+                            case "em_manutencao":
+                                // Colocar em manutenção
+                                break;
+                                
+                            default:
+                                throw new IllegalArgumentException("Parametro 'tipoSaida' possui um valor inválido.");
+                        }
+                        
+                    case "e": //Caso de entrada
+                        break;
+                        
+                    case "p":
+                        
+                        switch(request.getParameter("pesquisarPor")){
+                            
+                            case "id":
+                                break;
+                                
+                            case "nome":
+                                break;
+                                
+                            default:
+                                throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
+                        }
+                        break;
+                        
+                    default: //Caso base
+                        throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
                 }
         }
         try (PrintWriter out = response.getWriter()) {
