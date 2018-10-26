@@ -6,6 +6,8 @@
 package br.cefetmg.staygreen.servlet;
 
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
+import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -33,17 +35,37 @@ public class PatrimonioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String resposta = "";
+        Patrimonio patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+        
+        if(patrimonio != null) {
+                switch(request.getParameter("action")){
+                    case "v"://Caso de venda
+                        if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
+                            resposta = "O patrimÃ´nio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
+                                    PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
+                            else
+                                resposta = "O patrimonio [" + request.getParameter("id") + "] jÃ¡ foi vendido.";       
+                        break;
+                    case "c"://Caso de compra
+                        PatrimonioProcessService.compraPatrimonio(patrimonio.getNome(), patrimonio.getTipo(), patrimonio.getFinalidade(),
+                                patrimonio.getIndiceDepreciacao(), patrimonio.getValorCompra(), patrimonio.getDataCompra());
+                        resposta = "Patrimonio comprado com sucesso.";
+                        break;
+                    case "s"://Caso de saÃ­da
+                        /*if(request.getParameter("tipoSaida") == )
+                        */
+                        break;
+                    case "e"://Caso de entrada
+                        break;
+                    default://Caso base
+                        break;
+                        
+                }
+        }
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PatrimonioServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PatrimonioServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            out.println(resposta);
         }
     }
 
@@ -60,19 +82,6 @@ public class PatrimonioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        // To-do
-        String action = request.getParameter("action");
-                switch(action){
-                    case "venda":
-                        String idPatrimonio = request.getParameter("id");
-                        PatrimonioProcessService.vendaPatrimonio(idPatrimonio);
-                        break;
-                    case "compra":
-                        break;
-                        
-                        
-                }
     }
 
     /**
