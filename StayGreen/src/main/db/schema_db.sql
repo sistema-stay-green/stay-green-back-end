@@ -41,6 +41,37 @@ CREATE TABLE IF NOT EXISTS `patrimonio` (
   PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
+-- Tabela Transacao
+/**
+ * @author Gabriel Cruz
+ * @version 27-10-18/15:20
+ */
+
+CREATE TABLE transacao (
+    id int(20) NOT NULL AUTO_INCREMENT,
+    idItemTransacao int(20) DEFAULT NULL,
+    valorTransacao double DEFAULT NULL,
+    quantTransacao int(??) DEFAULT NULL,
+    dataBaixa date DEFAULT NULL,
+    tipoTransacao enum('INSUMO','PATRIMONIO','MAQUINA','PRODUTO') DEFAULT NULL,
+    PRIMARY KEY (Id)
+) AUTO_INCREMENT=0 CHARSET=utf8;
+
+-- Tabela Aluguel
+/**
+ * @author Gabriel Cruz
+ * @version 27-10-18/15:26
+ */
+
+CREATE TABLE aluguel (
+    idAluguel int(20) NOT NULL AUTO_INCREMENT,
+    idMaquina int(20) DEFAULT NULL,
+    valorAluguel double DEFAULT NULL,
+    periodoAluguel int(??) DEFAULT NULL,
+    dataInicialAluguel date DEFAULT NULL,
+    PRIMARY KEY (IdAluguel)
+) AUTO_INCREMENT=0 CHARSET=utf8;
+
 -- Tabela ...
 
 -- Exemplo: CREATE TABLE tabela (...) DEFAULT CHARACTER SET utf8;
