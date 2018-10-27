@@ -41,91 +41,104 @@ public class PatrimonioServlet extends HttpServlet {
         
         response.setContentType("text/html;charset=UTF-8");
         String resposta = "";
-        Patrimonio patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+        Patrimonio patrimonio;
         
-        if(patrimonio != null) {
-                switch(request.getParameter("action")){
-                    
-                    case "v": //Caso de venda
-                        
-                        if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                            resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
-                                    PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
-                            else
-                                resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
-                        break;
-                        
-                    case "c": //Caso de compra
-                        
-                        Calendar currentTime = Calendar.getInstance();
-                        
-                        PatrimonioProcessService.compraPatrimonio(
-                                patrimonio.getNome(), patrimonio.getTipo(),
-                                patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
-                                patrimonio.getValorCompra(), currentTime
-                        );
-                        
-                        resposta = "Patrimonio comprado com sucesso.";
-                        break;
-                        
-                    case "s": //Caso de saída
+            switch(request.getParameter("action")){
+
+                case "v": //Caso de venda
+
+                    if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
+                        resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
+                                PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
+                        else
+                            resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
+                    break;
+
+                case "c": //Caso de compra
+
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    Calendar currentTime = Calendar.getInstance();
+
+                    PatrimonioProcessService.compraPatrimonio(
+                            patrimonio.getNome(), patrimonio.getTipo(),
+                            patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
+                            patrimonio.getValorCompra(), currentTime
+                    );
+
+                    resposta = "Patrimonio comprado com sucesso.";
+                    break;
+
+                case "s": //Caso de saída
+
+                    switch(request.getParameter("tipoSaida")){
+
+                        case "alugado":
+                            if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
+                                resposta = "Patrimonio alugado com sucesso.";
+                                else
+                                    resposta = "Este patrimonio não está em posse do proprietário.";
+                            break;
+
+                        case "em_manutencao":
+                            if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
+                                resposta = "Patrimonio colocado em manutenção com sucesso.";
+                                else
+                                    resposta = "Este patrimonio não está em posse do proprietário.";
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Parametro 'tipoSaida' possui um valor inválido.");
+                    }
+
+                case "e": //Caso de entrada
+                    if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
+                        resposta = "Patrimonio recebido com sucesso.";
+                        else
+                            resposta = "Patrimonio já esta em posse do proprietario.";
+                    break;
+
+                case "p": //Caso de pesquisa
+
+                    switch(request.getParameter("pesquisarPor")){
+
+                        case "id":
+                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                            resposta += JSON.stringify(patrimonio);
+                            break;
+
+                        case "nome":
+                            String name = request.getParameter("nome");
+                            ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.getPatrimoniosByNome(name);
                             
-                        switch(request.getParameter("tipoSaida")){
-                            
-                            case "alugado":
-                                if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
-                                    resposta = "Patrimonio alugado com sucesso.";
-                                    else
-                                        resposta = "Este patrimonio não está em posse do proprietário.";
-                                break;
+                            if (patrimonios != null) {
                                 
-                            case "em_manutencao":
-                                if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
-                                    resposta = "Patrimonio colocado em manutenção com sucesso.";
-                                    else
-                                        resposta = "Este patrimonio não está em posse do proprietário.";
-                                break;
+                                // Caso Stringfy não funcione para ArrayList:
+                                for (Patrimonio currentPatrimonio : patrimonios) {
+                                    resposta += JSON.stringify(currentPatrimonio);
+                                }
                                 
-                            default:
-                                throw new IllegalArgumentException("Parametro 'tipoSaida' possui um valor inválido.");
-                        }
-                        
-                    case "e": //Caso de entrada
-                        if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
-                            resposta = "Patrimonio recebido com sucesso.";
-                            else
-                                resposta = "Patrimonio já esta em posse do proprietario.";
-                        break;
-                        
-                    case "p": //Caso de pesquisa
-                        
-                        switch(request.getParameter("pesquisarPor")){
-                            
-                            case "id":
-                                Patrimonio patrimonioA = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
-                                resposta += JSON.stringify(patrimonioA);
-                                break;
-                                
-                            case "nome":
-                                ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
-                                break;
-                                
-                            default:
-                                throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
-                        }
-                        break;
-                        
-                    case "r": //Caso de retorno de todos os patrimonios
-                        ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.get("");
-                        resposta += JSON.stringify(patrimonios);
-                        break;
-                        
-                    default: //Caso base
-                        throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
-                }
-        }
+                                // Caso funcione:
+                                //resposta = JSON.stringify(patrimonios);
+                            } else
+                                resposta = "Nenhum Patrimonio foi encontrado com o nome " + name + ".";
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
+                    }
+                    break;
+
+                case "r": //Caso de retorno de todos os patrimonios
+                    ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.get("");
+                    resposta += JSON.stringify(patrimonios);
+                    break;
+
+                default: //Caso base
+                    throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
+            }
+        
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            
             out.println(resposta);
         }
     }
