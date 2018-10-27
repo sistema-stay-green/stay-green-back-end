@@ -5,11 +5,13 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -71,11 +73,17 @@ public class PatrimonioServlet extends HttpServlet {
                         switch(request.getParameter("tipoSaida")){
                             
                             case "alugado":
-                                // Alugar
+                                if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
+                                    resposta = "Patrimonio alugado com sucesso.";
+                                    else
+                                        resposta = "Este patrimonio não está em posse do proprietário.";
                                 break;
                                 
                             case "em_manutencao":
-                                // Colocar em manutenção
+                                if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
+                                    resposta = "Patrimonio colocado em manutenção com sucesso.";
+                                    else
+                                        resposta = "Este patrimonio não está em posse do proprietário.";
                                 break;
                                 
                             default:
@@ -83,21 +91,33 @@ public class PatrimonioServlet extends HttpServlet {
                         }
                         
                     case "e": //Caso de entrada
+                        if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
+                            resposta = "Patrimonio recebido com sucesso.";
+                            else
+                                resposta = "Patrimonio já esta em posse do proprietario.";
                         break;
                         
-                    case "p":
+                    case "p": //Caso de pesquisa
                         
                         switch(request.getParameter("pesquisarPor")){
                             
                             case "id":
+                                Patrimonio patrimonioA = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                                resposta += JSON.stringify(patrimonioA);
                                 break;
                                 
                             case "nome":
+                                ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
                                 break;
                                 
                             default:
                                 throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
                         }
+                        break;
+                        
+                    case "r": //Caso de retorno de todos os patrimonios
+                        ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.get("");
+                        resposta += JSON.stringify(patrimonios);
                         break;
                         
                     default: //Caso base
