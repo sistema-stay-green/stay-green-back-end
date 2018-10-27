@@ -6,8 +6,8 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Tarefa;
+import br.cefetmg.staygreen.table.TarefaTipoEnum;
 import br.cefetmg.staygreen.util.Data;
-import static br.cefetmg.staygreen.util.Data.dateToCalendar;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  *
  * @author Gabriel Brandão
- * @version 1.2
+ * @version 1.3
  */
 public class TarefaAccessService {
     
@@ -27,73 +27,78 @@ public class TarefaAccessService {
     //Constantes que representam os nomes das colunas no DB SQL.
     private static final String ID_COLUMN;
     private static final String NOME_COLUMN;
+    private static final String DESCR_COLUMN;
     private static final String TIPO_COLUMN;
-    private static final String CAMINHO_IMG_COLUMN;
-    private static final String DATA_MARCADA_COLUMN;
-    private static final String REPETICAO_COLUMN;
-    private static final String PRODUCAO_PREVISTA_COLUMN;
-    private static final String VALOR_GASTO_COLUMN;
+    private static final String DATA_INICIAL_COLUMN;
+    private static final String PERIOD_REPET_COLUMN;
+    private static final String GASTO_COLUMN;
+    private static final String QUANT_PRODUZ_COLUMN;
+    private static final String INSUMOS_COLUMN;
+    private static final String QUANT_INSUMOS_COLUMN;
     
     //Inicialização das constantes
     static{
-        ID_COLUMN = "id";
-        NOME_COLUMN = "nome";
-        TIPO_COLUMN = "tipo";
-        CAMINHO_IMG_COLUMN = "caminhoImg";
-        DATA_MARCADA_COLUMN = "dataMarcada";
-        REPETICAO_COLUMN = "repeticao";
-        PRODUCAO_PREVISTA_COLUMN = "producaoPrevista";
-        VALOR_GASTO_COLUMN = "valorGasto";
+        ID_COLUMN = "idTarefa";
+        NOME_COLUMN = "nomeTarefa";
+        DESCR_COLUMN = "descrTarefa";
+        TIPO_COLUMN = "tipoTarefa";
+        DATA_INICIAL_COLUMN = "dataInicialTarefa";
+        PERIOD_REPET_COLUMN = "periodRepetTarefa";
+        GASTO_COLUMN = "gastoTarefa";
+        QUANT_PRODUZ_COLUMN = "quantProduzTarefa";
+        INSUMOS_COLUMN = "insumosTarefa";
+        QUANT_INSUMOS_COLUMN = "quantInsumosTarefa";
     }
     
     /**
      * Pesquisa no db 'staygreen' usando o id recebido.
-     * @param id
+     * @param idTarefa
      * @return Retorna um objeto Tarefa que corresponde ao id recebido.
      */
-    public static Tarefa getTarefaFromId(String id) {
+    public static Tarefa getTarefaFromId(String idTarefa) {
         
-        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE id=" + id);
+        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE idTarefa=" 
+                + idTarefa);
         
         if(tarefas == null)
             System.out.println("AVISO! Nenhuma tarefa encontrada com o id: " 
-                    + id);
+                    + idTarefa);
         
         return tarefas.get(0);
     }
     
     /**
      * Pesquisa no db 'staygreen' usando o nome recebido.
-     * @param nome
+     * @param nomeTarefa
      * @return Retorna um ArrayList de objetos Tarefa que correspondem ao nome
      * recebido.
      */
-    public static ArrayList<Tarefa> getTarefasFromNome(String nome) {
+    public static ArrayList<Tarefa> getTarefasFromNome(String nomeTarefa) {
         
-        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE nome=" 
-                + nome);
+        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE nomeTarefa=" 
+                + nomeTarefa);
         
         if(tarefas == null)
             System.out.println("AVISO! Nenhuma tarefa encontrada com o nome: " 
-                    + nome);
+                    + nomeTarefa);
         
         return tarefas;
     }
     
     /**
      * Pesquisa no db 'staygreen' usando o tipo recebido.
-     * @param tipo
+     * @param tipoTarefa
      * @return Retorna um ArrayList de objetos Tarefa que correspondem ao tipo
      * recebido.
      */
-    public static ArrayList<Tarefa> getTarefasFromTipo(String tipo) {
+    public static ArrayList<Tarefa> getTarefasFromTipo(TarefaTipoEnum tipoTarefa) {
         
-        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE tipo=" 
-                + tipo);
+        ArrayList<Tarefa> tarefas = get("SELECT * FROM tarefa WHERE tipoTarefa=" 
+                + tipoTarefa);
         
         if(tarefas == null)
             System.out.println("AVISO! Nenhuma tarefa encontrada com o tipo: " 
-                    + tipo);
+                    + tipoTarefa);
         
         return tarefas;
     }
@@ -108,11 +113,11 @@ public class TarefaAccessService {
     
     /**
      * Remove uma tarefa do bd 'staygreen' usando o id recebido.
-     * @param id Id da tarefa a ser removida.
+     * @param idTarefa Id da tarefa a ser removida.
      * @return Retorna true se a operação for bem sucedida e false se não for.
      */
-    public static boolean remove(int id) {
-        return SQL.delete(id, Tarefa.class);
+    public static boolean remove(int idTarefa) {
+        return SQL.delete(idTarefa, Tarefa.class);
     }
     
     /**
@@ -134,12 +139,18 @@ public class TarefaAccessService {
                     
                     Tarefa tarefa = new Tarefa(result.getLong(ID_COLUMN), 
                             result.getString(NOME_COLUMN));
-                    tarefa.setTipo(result.getString(TIPO_COLUMN));
-                    tarefa.setCaminhoImg(result.getString(CAMINHO_IMG_COLUMN));
-                    tarefa.setDataMarcada(Data.dateToCalendar(result.getDate(DATA_MARCADA_COLUMN)));
-                    tarefa.setRepeticao(result.getInt(REPETICAO_COLUMN));
-                    tarefa.setProducaoPrevista(result.getDouble(PRODUCAO_PREVISTA_COLUMN));
-                    tarefa.setValorGasto(result.getDouble(VALOR_GASTO_COLUMN));
+                    tarefa.setDescrTarefa(result.getString(DESCR_COLUMN));
+                    tarefa.setTipoTarefa(result.getString(TIPO_COLUMN));
+                    tarefa.setDataInicialTarefa(Data.dateToCalendar(result
+                            .getDate(DATA_INICIAL_COLUMN)));
+                    tarefa.setPeriodRepetTarefa(result
+                            .getInt(PERIOD_REPET_COLUMN));
+                    tarefa.setGastoTarefa(result.getDouble(GASTO_COLUMN));
+                    tarefa.setQuantProduzTarefa(result
+                            .getInt(QUANT_PRODUZ_COLUMN));
+                    tarefa.setInsumosTarefa(result.getString(INSUMOS_COLUMN));
+                    tarefa.setQuantInsumosTarefa(result
+                            .getString(QUANT_INSUMOS_COLUMN));
                     
                     tarefas.add(tarefa);
                     

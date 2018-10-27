@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *
  * @author Gabriel Brandão
- * @version 1.0
+ * @version 1.1
  */
 @WebServlet(name = "TarefaServlet", urlPatterns = {"/TarefaServlet"})
 public class TarefaServlet extends HttpServlet {
@@ -94,7 +94,7 @@ public class TarefaServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Retorna todas as tarefas da tabela Tarefa";
     }// </editor-fold>
 
 }

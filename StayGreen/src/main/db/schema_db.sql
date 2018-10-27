@@ -152,5 +152,3 @@ CREATE TABLE `Aluguel`
   PRIMARY KEY (`idAluguel`)
 )
 ;
-
-

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *
  * @author Gabriel Brandão
- * @version 1.0
+ * @version 1.1
  */
 @WebServlet(name = "TarefaBDServlet", urlPatterns = {"/TarefaBDServlet"})
 public class TarefaBDServlet extends HttpServlet {
@@ -41,10 +41,13 @@ public class TarefaBDServlet extends HttpServlet {
         if(tarefa != null) {
             switch(request.getParameter("operation")) {
                 case "r":
-                    /*if(TarefaAccessService.remove(tarefa.getId()))
-                        resposta = "Tarefa de id " + tarefa.getId() + " removida com sucesso!";
+                    if(TarefaAccessService.remove(Integer
+                            .valueOf(tarefa.getIdTarefa().toString())))
+                        resposta = "Tarefa de id " + tarefa.getIdTarefa() 
+                                + " removida com sucesso!";
                     else
-                        resposta = "Nenhuma tarefa encontrada com o id " + tarefa.getId();*/
+                        resposta = "Nenhuma tarefa encontrada com o id " 
+                                + tarefa.getIdTarefa();
                     break;
                 case "u":
                     if(TarefaAccessService.update(tarefa))
@@ -101,7 +104,7 @@ public class TarefaBDServlet extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet para manipulação da tabela Tarefa";
     }// </editor-fold>
 
 }
