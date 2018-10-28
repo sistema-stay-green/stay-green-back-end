@@ -9,11 +9,8 @@ import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
-import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.ServletException;
@@ -48,6 +45,15 @@ public class PatrimonioServlet extends HttpServlet {
         
             switch(request.getParameter("action")){
 
+                case "v": //Caso de venda
+
+                    if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
+                        resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
+                                PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
+                        else
+                            resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
+                    break;
+
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
@@ -58,18 +64,8 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
                             patrimonio.getValorCompra(), currentTime
                     );
-                    
-                    try{
-                    ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-                    if(lastId.next()){
-                        lastId.getInt("LAST_INSERT_ID");
-                        String id = Integer.toString(lastId.getInt("LAST_INSERT_ID"));
-                        Patrimonio patrimonioReturn = PatrimonioAccessService.getPatrimonioById(id);
-                        resposta = JSON.stringify(patrimonioReturn);
-                    }
-                    }catch(SQLException ex){
-                        System.out.println(ex + " at getID");
-                    }
+
+                    resposta = "Patrimonio comprado com sucesso.";
                     break;
 
                 case "s": //Caso de saída
@@ -88,15 +84,6 @@ public class PatrimonioServlet extends HttpServlet {
                                 resposta = "Patrimonio colocado em manutenção com sucesso.";
                                 else
                                     resposta = "Este patrimonio não está em posse do proprietário.";
-                            break;
-                            
-                        case "venda": //Caso de venda
-
-                            if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                                resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
-                                        PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
-                                else
-                                    resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
                             break;
 
                         default:
