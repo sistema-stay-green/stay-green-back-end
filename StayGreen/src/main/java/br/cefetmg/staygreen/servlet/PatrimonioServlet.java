@@ -64,8 +64,17 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
                             patrimonio.getValorCompra(), currentTime
                     );
-
-                    resposta = "Patrimonio comprado com sucesso.";
+                    
+                    try{
+                    ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
+                    if(lastId.next()){
+                        Patrimonio patrimonioReturn = PatrimonioAccessService.getPatrimonioById(
+                                Integer.toString(lastId.getInt("LAST_INSERT_ID")));
+                        resposta = JSON.stringify(patrimonioReturn);
+                    }
+                    }catch(SQLException ex){
+                        System.out.println(ex + " at case Compra");
+                    }
                     break;
 
                 case "s": //Caso de saída
