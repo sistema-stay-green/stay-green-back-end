@@ -22,8 +22,8 @@ public class Patrimonio {
     // Attributes
     @Id
     private Integer id;
-    private String nome;
-    private String tipo;
+    private String nomePatrimonio;
+    private PatrimonioTipoEnum tipoPatrimonio;
     private String finalidade;
     private PatrimonioStatusEnum status;
     private Double indiceDepreciacao;
@@ -39,19 +39,19 @@ public class Patrimonio {
     /**
      *  Cria um patrimônio com um Id e Nome 
      * @param id Id único da linha na tabela
-     * @param nome Nome do patrimônio
+     * @param nomePatrimonio Nome do patrimônio
      */
-    public Patrimonio(Integer id, String nome) {
+    public Patrimonio(Integer id, String nomePatrimonio) {
         this.id = id;
-        this.nome = nome;
+        this.nomePatrimonio = nomePatrimonio;
     }
     
     /**
      * Cria um patrimônio com um Nome
-     * @param nome Nome do patrimônio
+     * @param nomePatrimonio Nome do patrimônio
      */
-    public Patrimonio(String nome){
-        this(null, nome);
+    public Patrimonio(String nomePatrimonio){
+        this(null, nomePatrimonio);
     }
     
     /**
@@ -71,11 +71,11 @@ public class Patrimonio {
     }
 
     public String getNome() {
-        return nome;
+        return nomePatrimonio;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nomePatrimonio   ) {
+        this.nomePatrimonio = nomePatrimonio;
     }
 
     public String getFinalidade() {
@@ -163,12 +163,16 @@ public class Patrimonio {
         this.dataBaixa = Data.dateToCalendar(dataBaixa);
     }
 
-    public String getTipo() {
-        return tipo;
+    public PatrimonioTipoEnum getTipo() {
+        return tipoPatrimonio;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo(PatrimonioTipoEnum tipoPatrimonio) {
+        this.tipoPatrimonio = tipoPatrimonio;
+    }
+    
+    public void setTipo(String tipoPatrimonio){
+        this.tipoPatrimonio = PatrimonioTipoEnum.valueOf(tipoPatrimonio);
     }
 }
 

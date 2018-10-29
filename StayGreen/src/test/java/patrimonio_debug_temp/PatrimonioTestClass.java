@@ -3,6 +3,7 @@ package patrimonio_debug_temp;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -28,7 +29,7 @@ public class PatrimonioTestClass {
         Double a = new Double(5000);
         Double b = new Double(15);
         Calendar dataCompra = Calendar.getInstance();
-        testCompraPatrimonio("Machine", "maquina", "Maquinar coisas", a, b, dataCompra);
+        testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", a, b, dataCompra);
     }
     
     public static void testDelete(Integer id){
@@ -110,7 +111,7 @@ public class PatrimonioTestClass {
         System.out.println("Data da Baixa: " + p.getDataBaixa().getTime());
     }
     
-    public static void testCompraPatrimonio(String nome, String tipo, String finalidade, Double valor, Double indiceDeprec, Calendar dataCompra){
+    public static void testCompraPatrimonio(String nome, PatrimonioTipoEnum tipo, String finalidade, Double valor, Double indiceDeprec, Calendar dataCompra){
         PatrimonioProcessService.compraPatrimonio(nome, tipo, finalidade, valor, indiceDeprec, dataCompra);
     }
 }

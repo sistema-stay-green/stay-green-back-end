@@ -8,6 +8,7 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
+import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -100,7 +101,7 @@ public class PatrimonioProcessService {
      * @param dataCompra
      * @author Simonetti
      */
-    public static void compraPatrimonio( String nome, String tipo, String finalidade,
+    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, String finalidade,
         Double indiceDepreciacao, Double valorCompra, Calendar dataCompra){
         
         Patrimonio novoPatrimonio = new Patrimonio();
