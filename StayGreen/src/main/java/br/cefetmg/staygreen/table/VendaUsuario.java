@@ -14,7 +14,7 @@ import br.cefetmg.staygreen.annotation.Tabela;
  * @author Paulo Vitor
  * @version 1.0
  */
-@Tabela("VendaUsuario")
+@Tabela("vendausuario")
 public class VendaUsuario {
     @Id
     private Long id;

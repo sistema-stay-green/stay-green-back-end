@@ -1,11 +1,14 @@
-﻿/*
-Created: 22/10/2018
-Modified: 22/10/2018
-Project: DB_TrabalhoFinal
-Model: schema_db.sql
-Database: MySQL 5.7
-*/
+/* 
+ * Sistema de Agronegocio :: Stay Green
+ * CEFET-MG
+ * INF-2A 2018
+ */
 
+DROP DATABASE IF EXISTS `staygreen`;
+
+CREATE DATABASE `staygreen` DEFAULT CHARACTER SET utf8;
+
+USE `staygreen`;
 
 -- Create tables section -------------------------------------------------
 

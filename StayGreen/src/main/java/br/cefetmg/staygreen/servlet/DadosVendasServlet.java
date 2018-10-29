@@ -26,7 +26,7 @@ public class DadosVendasServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         
         String vendaJSON = request.getParameter("venda");
         String clienteJSON = request.getParameter("cliente");

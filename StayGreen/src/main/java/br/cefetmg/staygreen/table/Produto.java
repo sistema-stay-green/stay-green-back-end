@@ -8,139 +8,118 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 /**
- * Classe relacionada à tabela de produtos (temporária devido a possíveis mudanças)
+ *
  * @author Paulo Vitor
- * @version 1.0
+ * @version 1.1
  */
-@Tabela("produtos")
+@Tabela("produto")
 public class Produto {
     @Id
-    private Long id;
-    private String nome;
-    private String descricao;
-    private Double valorUniCompra;
-    private Double valorUniVenda;
-    private Double pontoAviso;
-    private Double estoque;
-    private Double unidadeVenda;
-    
-    /**
-     * Cria um Produto
-     * @param id identificação
-     * @param nome nome do produto
-     * @param descricao descrição do produto
-     * @param valorUniCompra valor de compra por unidade
-     * @param valorUniVenda valor de venda por unidade
-     * @param pontoAviso ponto de aviso do estoque
-     * @param estoque estoque disponível
-     * @param unidadeVenda unidade de venda
-     */
-    public Produto(Long id, String nome, String descricao, Double valorUniCompra, Double valorUniVenda, Double pontoAviso, Double estoque, Double unidadeVenda) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valorUniCompra = valorUniCompra;
-        this.valorUniVenda = valorUniVenda;
-        this.pontoAviso = pontoAviso;
-        this.estoque = estoque;
-        this.unidadeVenda = unidadeVenda;
+    private Integer idProduto;
+    private String nomeProduto;
+    private String descrProduto;
+    private UnidadesMedidaProduto unidMedProduto;
+    private Double valorUnitProduto;
+    private Integer quantEstoqueProduto;
+    private Integer pontoAvisoProduto;
+    private String fotoMercadoria;
+
+    public Produto(Integer id, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
+        this.idProduto = id;
+        this.nomeProduto = nomeProduto;
+        this.descrProduto = descProduto;
+        this.unidMedProduto = unidMedProduto;
+        this.valorUnitProduto = valorProduto;
+        this.quantEstoqueProduto = quantEstoqueProduto;
+        this.pontoAvisoProduto = pontoAvisoProdto;
+        this.fotoMercadoria = fotoMercadoria;
     }
 
-    /**
-     * Cria um produto sem id
-     * @param nome nome do produto
-     * @param descricao descrição do produto
-     * @param valorUniCompra valor de compra por unidade
-     * @param valorUniVenda valor de venda por unidade
-     * @param pontoAviso ponto de aviso do estoque
-     * @param estoque estoque disponível
-     * @param unidadeVenda unidade de venda
-     */
-    public Produto(String nome, String descricao, Double valorUniCompra, Double valorUniVenda, Double pontoAviso, Double estoque, Double unidadeVenda) {
-        this(null, nome, descricao, valorUniCompra, valorUniVenda, pontoAviso, estoque, unidadeVenda);
+    public Produto(String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
+        this(null, nomeProduto, descProduto, unidMedProduto, valorProduto, quantEstoqueProduto, pontoAvisoProdto, fotoMercadoria);
     }
-    
+
     public Produto() {
         this(null, null, null, null, null, null, null);
     }
 
-    public Long getId() {
-        return id;
+    public Integer getIdProduto() {
+        return idProduto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProduto(Integer idProduto) {
+        this.idProduto = idProduto;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeProduto() {
+        return nomeProduto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescrProduto() {
+        return descrProduto;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescrProduto(String descrProduto) {
+        this.descrProduto = descrProduto;
     }
 
-    public Double getValorUniCompra() {
-        return valorUniCompra;
+    public UnidadesMedidaProduto getUnidMedProduto() {
+        return unidMedProduto;
     }
 
-    public void setValorUniCompra(Double valorUniCompra) {
-        this.valorUniCompra = valorUniCompra;
+    public void setUnidMedProduto(UnidadesMedidaProduto unidMedProduto) {
+        this.unidMedProduto = unidMedProduto;
     }
 
-    public Double getValorUniVenda() {
-        return valorUniVenda;
+    public Double getValorUnitProduto() {
+        return valorUnitProduto;
     }
 
-    public void setValorUniVenda(Double valorUniVenda) {
-        this.valorUniVenda = valorUniVenda;
+    public void setValorUnitProduto(Double valorUnitProduto) {
+        this.valorUnitProduto = valorUnitProduto;
     }
 
-    public Double getPontoAviso() {
-        return pontoAviso;
+    public Integer getQuantEstoqueProduto() {
+        return quantEstoqueProduto;
     }
 
-    public void setPontoAviso(Double pontoAviso) {
-        this.pontoAviso = pontoAviso;
+    public void setQuantEstoqueProduto(Integer quantEstoqueProduto) {
+        this.quantEstoqueProduto = quantEstoqueProduto;
     }
 
-    public Double getEstoque() {
-        return estoque;
+    public Integer getPontoAvisoProduto() {
+        return pontoAvisoProduto;
     }
 
-    public void setEstoque(Double estoque) {
-        this.estoque = estoque;
+    public void setPontoAvisoProduto(Integer pontoAvisoProduto) {
+        this.pontoAvisoProduto = pontoAvisoProduto;
     }
 
-    public Double getUnidadeVenda() {
-        return unidadeVenda;
+    public String getFotoMercadoria() {
+        return fotoMercadoria;
     }
 
-    public void setUnidadeVenda(Double unidadeVenda) {
-        this.unidadeVenda = unidadeVenda;
+    public void setFotoMercadoria(String fotoMercadoria) {
+        this.fotoMercadoria = fotoMercadoria;
     }
 
     @Override
     public String toString() {
-        return "Id: " + id + "\nNome: " + nome + "\nDescrição: " + descricao + "\nValor de Compra: " + valorUniCompra
-            + "\nValor de Venda: " + valorUniVenda 
-            + "\nPonto de aviso: " + pontoAviso 
-            + "\nEstoque disponível: " +estoque  
-            + "\nUnidade de Venda: " + unidadeVenda;
+        return "{Id: "
+                + "Nome: " + this.nomeProduto
+                + ", Descrição: " + this.descrProduto
+                + ", Valor: " + this.valorUnitProduto
+                + ", Quantidade: " + this.quantEstoqueProduto
+                + ", Ponto de Aviso" + this.pontoAvisoProduto
+                + ", Foto: " + this.fotoMercadoria
+                + ", Unidade de Medida: " + this.unidMedProduto
+                + "}";
     }
-    
     
     
 }
