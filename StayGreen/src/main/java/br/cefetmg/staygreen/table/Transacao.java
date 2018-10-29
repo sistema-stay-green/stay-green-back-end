@@ -11,10 +11,8 @@ import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
 
 /**
- *
- * @author Gabriel
+ * @author Gabriel Cruz
  * @version 15-10-18/07:16
- * 
  */
 @Tabela("transacao")
 public class Transacao {

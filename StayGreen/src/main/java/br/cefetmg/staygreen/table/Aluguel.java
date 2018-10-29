@@ -11,8 +11,8 @@ import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
 
 /**
- *
- * @author Aluno
+ * @author Gabriel Cruz
+ * @version 21-10-18/14:53
  */
 @Tabela("aluguel")
 public class Aluguel {
