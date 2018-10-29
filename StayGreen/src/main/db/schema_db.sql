@@ -1,4 +1,5 @@
-﻿DROP DATABASE IF EXISTS `staygreen`;
+﻿
+DROP DATABASE IF EXISTS `staygreen`;
 
 CREATE DATABASE `staygreen` DEFAULT CHARACTER SET utf8;
 
@@ -28,11 +29,11 @@ CREATE TABLE `Patrimonio`
 (
   `idPatrimonio` Int NOT NULL AUTO_INCREMENT,
   `nomePatrimonio` Varchar(40) NOT NULL,
-  `finalidadePatrimonio` Varchar(120) NOT NULL,
+  `finalidadePatrimonio` text NOT NULL,
   `tipoPatrimonio` Enum('MAQUINA', 'OUTROS') NOT NULL,
   `valorCompraPatrimonio` Double NOT NULL,
   `dataCompraPatrimonio` Date NOT NULL,
-  `statusPatrimonio` Enum('EM_POSSE', 'VENDIDO', 'ALUGADO', 'DESCARTADO', 'MANUTENÇÃO') NOT NULL,
+  `statusPatrimonio` Enum('EM_POSSE', 'VENDIDO', 'ALUGADO', 'DESCARTADO', 'EM_MANUTENCAO') NOT NULL,
   `dataSaidaPatrimonio` Date,
   `dataRetornoPatrimonio` Date,
   `dataBaixaPatrimonio` Date,
