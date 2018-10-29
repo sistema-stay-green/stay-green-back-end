@@ -48,15 +48,6 @@ public class PatrimonioServlet extends HttpServlet {
         
             switch(request.getParameter("action")){
 
-                case "v": //Caso de venda
-
-                    if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                        resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
-                                PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
-                        else
-                            resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
-                    break;
-
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
@@ -84,18 +75,27 @@ public class PatrimonioServlet extends HttpServlet {
 
                     switch(request.getParameter("tipoSaida")){
 
-                        case "alugado":
+                        case "ALUGADO":
                             if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
                                 resposta = "Patrimonio alugado com sucesso.";
                                 else
                                     resposta = "Este patrimonio não está em posse do proprietário.";
                             break;
 
-                        case "em_manutencao":
+                        case "EM_MANUTENCAO":
                             if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
                                 resposta = "Patrimonio colocado em manutenção com sucesso.";
                                 else
                                     resposta = "Este patrimonio não está em posse do proprietário.";
+                            break;
+                        
+                        case "VENDA": //Caso de venda
+
+                            if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
+                                resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
+                                        PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
+                                else
+                                    resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
                             break;
 
                         default:
