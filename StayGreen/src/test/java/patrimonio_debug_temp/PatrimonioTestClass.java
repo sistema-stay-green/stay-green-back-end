@@ -26,10 +26,10 @@ public class PatrimonioTestClass {
         //testGetFromId(1);
         //testInsert("Nome");
         //testDelete(2);
-        Double a = new Double(5000);
-        Double b = new Double(15);
-        Calendar dataCompra = Calendar.getInstance();
-        testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", a, b, dataCompra);
+        //Double a = new Double(5000);
+        //Double b = new Double(15);
+        //Calendar dataCompra = Calendar.getInstance();
+        //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
     }
     
     public static void testDelete(Integer id){
@@ -60,7 +60,7 @@ public class PatrimonioTestClass {
     public static void testInsert(String nome){
         
         Patrimonio patrimonio = new Patrimonio(nome);
-        patrimonio.setTipo("Tipo");
+        patrimonio.setTipo("OUTROS");
         patrimonio.setFinalidade("Descrição");
         
         // Opção 1:
@@ -111,7 +111,7 @@ public class PatrimonioTestClass {
         System.out.println("Data da Baixa: " + p.getDataBaixa().getTime());
     }
     
-    public static void testCompraPatrimonio(String nome, PatrimonioTipoEnum tipo, String finalidade, Double valor, Double indiceDeprec, Calendar dataCompra){
-        PatrimonioProcessService.compraPatrimonio(nome, tipo, finalidade, valor, indiceDeprec, dataCompra);
+    public static void testCompraPatrimonio(String nome, PatrimonioTipoEnum tipo, String finalidade, Double indiceDeprec, Double valor, Calendar dataCompra){
+        PatrimonioProcessService.compraPatrimonio(nome, tipo, finalidade, indiceDeprec, valor, dataCompra);
     }
 }

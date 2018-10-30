@@ -62,7 +62,7 @@ public class PatrimonioAccessService {
      */
     public static Patrimonio getPatrimonioById(String id){
         
-        ArrayList<Patrimonio> patrimonios = get("WHERE id=" + id);
+        ArrayList<Patrimonio> patrimonios = get("WHERE idPatrimonio=" + id);
         
         if (patrimonios == null){
             System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Id: " + id);
@@ -79,7 +79,7 @@ public class PatrimonioAccessService {
      */
     public static ArrayList<Patrimonio> getPatrimoniosByNome(String nome){
         
-        ArrayList<Patrimonio> patrimonios = get("WHERE nome='" + nome + "'");
+        ArrayList<Patrimonio> patrimonios = get("WHERE nomePatrimonio='" + nome + "'");
         
         if (patrimonios == null){
             System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Nome: " + nome);
@@ -96,7 +96,7 @@ public class PatrimonioAccessService {
      */
     public static ArrayList<Patrimonio> getPatrimoniosByTipo(String tipo){
         
-        ArrayList<Patrimonio> patrimonios = get("WHERE tipo='" + tipo + "'");
+        ArrayList<Patrimonio> patrimonios = get("WHERE tipoPatrimonio='" + tipo + "'");
         
         if (patrimonios == null){
             System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Tipo: " + tipo);
