@@ -42,7 +42,16 @@ CREATE TABLE `Patrimonio`
 )
 ;
 
--- Table Insumo
+DROP TABLE IF EXISTS `transacao`;
+CREATE TABLE IF NOT EXISTS `transacao` (
+    `id` int(20) NOT NULL AUTO_INCREMENT,
+    `idItemTransacao` int(20) DEFAULT NULL,
+    `valorTransacao` double DEFAULT NULL,
+    `quantTransacao` int DEFAULT NULL,
+    `dataBaixa` date DEFAULT NULL,
+    `tipoTransacao` enum('INSUMO','PATRIMONIO','MAQUINA','PRODUTO') DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) CHARSET=utf8;
 
 CREATE TABLE `Insumo`
 (
@@ -56,7 +65,15 @@ CREATE TABLE `Insumo`
 )
 ;
 
--- Table Tarefa
+DROP TABLE IF EXISTS `aluguel`;
+CREATE TABLE IF NOT EXISTS `aluguel` (
+    `idAluguel` int(20) NOT NULL AUTO_INCREMENT,
+    `idMaquina` int(20) DEFAULT NULL,
+    `valorAluguel` double DEFAULT NULL,
+    `periodoAluguel` int DEFAULT NULL,
+    `dataInicialAluguel` date DEFAULT NULL,
+    PRIMARY KEY (`idAluguel`)
+) CHARSET=utf8;
 
 CREATE TABLE `Tarefa`
 (
