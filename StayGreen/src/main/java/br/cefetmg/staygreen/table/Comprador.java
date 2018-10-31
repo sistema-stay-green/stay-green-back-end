@@ -11,7 +11,7 @@ import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
 
 /**
- *
+ * Representa um comprador na tabela "comprador"
  * @author Paulo Vitor
  * @versio 1.0
  */
@@ -24,6 +24,14 @@ public class Comprador {
     private String cepComprador;
     private ModosPagamento modoPagamento;
 
+    /**
+     * Cria um Comprador com todos os atribútos inicializados
+     * @param id id do comprador
+     * @param nomeComprador nome do comprador
+     * @param enderecoComprador endereço do comprador
+     * @param cepComprador cep do comprador
+     * @param modoPagamento modo de pagamento
+     */
     public Comprador(Long id, String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamento modoPagamento) {
         this.id = id;
         this.nomeComprador = nomeComprador;
@@ -31,7 +39,14 @@ public class Comprador {
         this.cepComprador = cepComprador;
         this.modoPagamento = modoPagamento;
     }
-
+    
+    /**
+     * Cria um comprador sem id
+     * @param nomeComprador nome do comprador
+     * @param enderecoComprador endereço do comprador
+     * @param cepComprador cep do comprador
+     * @param modoPagamento modo de pagamento
+     */
     public Comprador(String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamento modoPagamento) {
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
@@ -39,7 +54,11 @@ public class Comprador {
         this.modoPagamento = modoPagamento;
     }
     
+    /**
+     * Cria um comprador com todos os campos nulos
+     */
     public Comprador() {
+        this(null, null, null, null);
     }
 
     public Long getId() {
@@ -80,6 +99,17 @@ public class Comprador {
 
     public void setModoPagamento(ModosPagamento modoPagamento) {
         this.modoPagamento = modoPagamento;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "Id: " + this.id
+                + "Nome: " + this.nomeComprador
+                + "Endereço: " + this.enderecoComprador
+                + "CEP: " + this.cepComprador
+                + "Modo de pagamento: " + this.modoPagamento
+                + "}";
     }
     
     

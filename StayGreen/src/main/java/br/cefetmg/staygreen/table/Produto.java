@@ -9,14 +9,14 @@ package br.cefetmg.staygreen.table;
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
 /**
- *
+ * Representa uma linha da tabela "produto"
  * @author Paulo Vitor
  * @version 1.1
  */
 @Tabela("produto")
 public class Produto {
     @Id
-    private Integer idProduto;
+    private Long idProduto;
     private String nomeProduto;
     private String descrProduto;
     private UnidadesMedidaProduto unidMedProduto;
@@ -25,7 +25,18 @@ public class Produto {
     private Integer pontoAvisoProduto;
     private String fotoMercadoria;
 
-    public Produto(Integer id, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
+    /**
+     * Cria um Produto com todos os campos preenchidos
+     * @param id id do Produto
+     * @param nomeProduto nome do produto
+     * @param descProduto descrição do produto
+     * @param unidMedProduto unidade de medida do produto
+     * @param valorProduto valor por unidade do produto
+     * @param quantEstoqueProduto quantidade no estoque
+     * @param pontoAvisoProdto ponto de aviso
+     * @param fotoMercadoria caminho para a foto da mercadoria
+     */
+    public Produto(Long id, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
         this.idProduto = id;
         this.nomeProduto = nomeProduto;
         this.descrProduto = descProduto;
@@ -36,19 +47,32 @@ public class Produto {
         this.fotoMercadoria = fotoMercadoria;
     }
 
+    /**
+     * Cria um Produto sem id
+     * @param nomeProduto nome do produto
+     * @param descProduto descrição do produto
+     * @param unidMedProduto unidade de medida do produto
+     * @param valorProduto valor por unidade do produto
+     * @param quantEstoqueProduto quantidade no estoque
+     * @param pontoAvisoProdto ponto de aviso
+     * @param fotoMercadoria caminho para a foto da mercadoria
+     */
     public Produto(String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
         this(null, nomeProduto, descProduto, unidMedProduto, valorProduto, quantEstoqueProduto, pontoAvisoProdto, fotoMercadoria);
     }
 
+    /**
+     * Cria um Produto todos os campos nulos
+     */
     public Produto() {
         this(null, null, null, null, null, null, null);
     }
 
-    public Integer getIdProduto() {
+    public Long getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(Integer idProduto) {
+    public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
     }
 
@@ -110,8 +134,9 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "{Id: "
-                + "Nome: " + this.nomeProduto
+        return "{"
+                + "Id: " + this.idProduto
+                + ", Nome: " + this.nomeProduto
                 + ", Descrição: " + this.descrProduto
                 + ", Valor: " + this.valorUnitProduto
                 + ", Quantidade: " + this.quantEstoqueProduto
