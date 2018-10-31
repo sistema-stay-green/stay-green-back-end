@@ -63,8 +63,19 @@ public class PatrimonioProcessService {
 
         Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual) * valorCompra);
         
-        return valorAtual;
+        if(valorAtual <= 0)
+            
+            return 0.1*valorCompra;
+            
+            else
+                
+                return valorAtual;
     }
+    
+    /*public static Double depreciacaoAcelerada(String id){
+        PatrimonioAccessService.getPatrimonioById(id);
+        
+    }*/
     
     /**
      * Vende um patrimonio

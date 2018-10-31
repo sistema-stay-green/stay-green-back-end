@@ -45,9 +45,16 @@ public class PatrimonioServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String resposta = "";
         Patrimonio patrimonio;
+        ArrayList<Patrimonio> patrimonios;
         
             switch(request.getParameter("action")){
-
+                
+                //Valores iniciais do retorno: S -> Sem problemas
+                //                             R -> Comando redundante
+                //                             I -> Comando ilegal
+                //                             E -> Patrimonio(s) encontrado(s)
+                //                             N -> Nenhum patrimonio encontrado/não recebido
+                
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
@@ -77,25 +84,24 @@ public class PatrimonioServlet extends HttpServlet {
 
                         case "ALUGADO":
                             if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
-                                resposta = "Patrimonio alugado com sucesso.";
+                                resposta = "S";
                                 else
-                                    resposta = "Este patrimonio não está em posse do proprietário.";
+                                    resposta = "I";
                             break;
 
                         case "EM_MANUTENCAO":
                             if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
-                                resposta = "Patrimonio colocado em manutenção com sucesso.";
+                                resposta = "S";
                                 else
-                                    resposta = "Este patrimonio não está em posse do proprietário.";
+                                    resposta = "I";
                             break;
                         
                         case "VENDA": //Caso de venda
 
                             if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                                resposta = "O patrimonio [" + request.getParameter("id") + "] foi vendido pelo valor de R$ " + 
-                                        PatrimonioProcessService.desvalorizaPatrimonio(request.getParameter("id"));
+                                resposta = "S";
                                 else
-                                    resposta = "O patrimonio [" + request.getParameter("id") + "] já foi vendido.";       
+                                    resposta = "R";       
                             break;
 
                         default:
@@ -104,9 +110,9 @@ public class PatrimonioServlet extends HttpServlet {
 
                 case "e": //Caso de entrada
                     if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
-                        resposta = "Patrimonio recebido com sucesso.";
+                        resposta = "S";
                         else
-                            resposta = "Patrimonio já esta em posse do proprietario.";
+                            resposta = "I";
                     break;
 
                 case "p": //Caso de pesquisa
@@ -114,15 +120,12 @@ public class PatrimonioServlet extends HttpServlet {
                     switch(request.getParameter("pesquisarPor")){
 
                         case "id":
-                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
-                            resposta += JSON.stringify(patrimonio);
-                            break;
-
-                        case "nome":
-                            String name = request.getParameter("nome");
-                            ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.getPatrimoniosByNome(name);
+                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("id"));
                             
                             if (patrimonios != null) {
+                                
+                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
+                                resposta += "E";
                                 
                                 // Caso Stringfy não funcione para ArrayList:
                                 for (Patrimonio currentPatrimonio : patrimonios) {
@@ -132,7 +135,27 @@ public class PatrimonioServlet extends HttpServlet {
                                 // Caso funcione:
                                 //resposta = JSON.stringify(patrimonios);
                             } else
-                                resposta = "Nenhum Patrimonio foi encontrado com o nome " + name + ".";
+                                resposta = "N";
+                            break;
+
+                        case "nome":
+                            
+                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
+                            
+                            if (patrimonios != null) {
+                                
+                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
+                                resposta += "E";
+                                
+                                // Caso Stringfy não funcione para ArrayList:
+                                for (Patrimonio currentPatrimonio : patrimonios) {
+                                    resposta += JSON.stringify(currentPatrimonio);
+                                }
+                                
+                                // Caso funcione:
+                                //resposta = JSON.stringify(patrimonios);
+                            } else
+                                resposta = "N";
                             break;
 
                         default:
@@ -141,8 +164,40 @@ public class PatrimonioServlet extends HttpServlet {
                     break;
 
                 case "r": //Caso de retorno de todos os patrimonios
-                    ArrayList<Patrimonio> patrimonios = PatrimonioAccessService.get("");
-                    resposta += JSON.stringify(patrimonios);
+                    patrimonios = PatrimonioAccessService.get("");
+                            
+                        if (patrimonios != null) {
+                            // Caso Stringfy não funcione para ArrayList:
+                            resposta += "E";
+                            
+                            for (Patrimonio currentPatrimonio : patrimonios) {
+                                resposta += JSON.stringify(currentPatrimonio);
+                            }
+                                
+                                // Caso funcione:
+                                //resposta = JSON.stringify(patrimonios);
+                        } else
+                            resposta = "N";
+                    break;
+                    
+                case "u": 
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    if(patrimonio != null){
+                        
+                        PatrimonioAccessService.update(patrimonio);
+                        resposta = "S";
+                        }else
+                            resposta = "N";
+                    break;
+                    
+                case "d":
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    if(patrimonio != null){
+                        PatrimonioAccessService.delete(patrimonio);
+                        resposta = "S";
+                        }else
+                            resposta = "N";
+                    
                     break;
 
                 default: //Caso base
