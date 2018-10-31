@@ -44,6 +44,14 @@ public class Transacao {
         this.dataTransacao = dataTransacao;
         this.tipoTransacao = tipoTransacao;
     }
+    
+    public Transacao(Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacao tipoTransacao) {
+        this.idItemTransacao = idItemTransacao;
+        this.valorTransacao = valorTransacao;
+        this.quantTransacao = quantTransacao;
+        this.dataTransacao = dataTransacao;
+        this.tipoTransacao = tipoTransacao;
+    }
 
     /**
      * Cria uma transação com dados null
