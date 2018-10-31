@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.filter.FiltroCORSGeral;
 /**
  *
  * @author Aluno
@@ -36,13 +37,7 @@ public class MaquinasServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()){
             
             String maquinaJSON = request.getParameter("maquinaJSON");
-            String tipo = request.getParameter("tipo");
-            System.out.println(maquinaJSON);
-            
-            Patrimonio aux = new Patrimonio();
-            Class T = aux.getClass();
-            
-            JSON.parse(maquinaJSON, T);
+            System.out.println("teste");
             
             
             
@@ -61,7 +56,7 @@ public class MaquinasServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        fixHeader(response);
+        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -76,7 +71,7 @@ public class MaquinasServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        fixHeader(response);
+        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -90,11 +85,12 @@ public class MaquinasServlet extends HttpServlet {
         return "Short description";
     }
     
-    public void fixHeader(HttpServletResponse response){
+    public HttpServletResponse fixHeader(HttpServletResponse response){
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS, DELETE");
-        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.addHeader("Access-Control-Allow-Headers", "*");
         response.addHeader("Access-Control-Max-Age", "86400");
+        return response;
     }
     // </editor-fold>
 
