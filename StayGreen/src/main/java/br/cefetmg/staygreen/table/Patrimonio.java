@@ -37,6 +37,29 @@ public class Patrimonio {
     // Constructors
 
     /**
+     * @author Gabriel Cruz
+     * Cria um patrimônio com os para uso da MaquinaServlet
+     * @param id
+     * @param nome
+     * @param finalidade
+     * @param status
+     * @param indiceDepreciacao
+     * @param valorCompra
+     * @param dataCompra
+     */
+
+    public Patrimonio(Integer id, String nome, String finalidade, PatrimonioStatusEnum status, Double indiceDepreciacao, Double valorCompra, Calendar dataCompra) {
+        this.id = id;
+        this.nome = nome;
+        this.tipo = "MAQUINA";
+        this.finalidade = finalidade;
+        this.status = status;
+        this.indiceDepreciacao = indiceDepreciacao;
+        this.valorCompra = valorCompra;
+        this.dataCompra = dataCompra;
+    }
+     
+    /**
      *  Cria um patrimônio com um Id e Nome 
      * @param id Id único da linha na tabela
      * @param nome Nome do patrimônio
