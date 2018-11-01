@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.filter.FiltroCORSGeral;
+import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import java.sql.Date;
 import java.util.Calendar;
 /**
@@ -40,8 +41,11 @@ public class MaquinasServlet extends HttpServlet {
             
             String maquinaJSON = request.getParameter("maquinaJSON");
             System.out.println("teste");
-            Date data = new Calendar();
-            Patrimonio maquina = new Patrimonio(21,"Tratorzinho","Tratore para as crianças aprenderem a profissão", "EM_POSSE", 10, 10000, data);// Dados recebidos             
+            Patrimonio maquina = new Patrimonio(21,"Tratorzinho",
+                    "Trator para as crianças aprenderem a profissão","EM_POSSE",
+                    10.0, 10000.0, Calendar.getInstance());// Dados recebidos     
+            
+            PatrimonioAccessService.insert(maquina);
         }
     }
 

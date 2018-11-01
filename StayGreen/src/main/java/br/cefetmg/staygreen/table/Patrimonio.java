@@ -48,12 +48,29 @@ public class Patrimonio {
      * @param dataCompra
      */
 
-    public Patrimonio(Integer id, String nome, String finalidade, PatrimonioStatusEnum status, Double indiceDepreciacao, Double valorCompra, Calendar dataCompra) {
+    public Patrimonio(Integer id, String nome, String finalidade, String status, Double indiceDepreciacao, Double valorCompra, Calendar dataCompra) {
         this.id = id;
         this.nome = nome;
         this.tipo = "MAQUINA";
         this.finalidade = finalidade;
-        this.status = status;
+        switch(status){
+            case "ALUGADO":
+               this.status=PatrimonioStatusEnum.ALUGADO;
+               break;
+            case "EM_POSSE":
+               this.status=PatrimonioStatusEnum.EM_POSSE;
+               break;
+            case "EM_MANUTECAO":
+               this.status=PatrimonioStatusEnum.EM_MANUTENCAO;
+               break;
+            case "VENDIDO":
+               this.status=PatrimonioStatusEnum.VENDIDO;
+               break;
+            case "DESCARTADO":
+               this.status=PatrimonioStatusEnum.DESCARTADO;
+               break;
+        }
+        
         this.indiceDepreciacao = indiceDepreciacao;
         this.valorCompra = valorCompra;
         this.dataCompra = dataCompra;
