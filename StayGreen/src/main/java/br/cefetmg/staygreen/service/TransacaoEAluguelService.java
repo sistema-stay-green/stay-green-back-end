@@ -57,6 +57,15 @@ public class TransacaoEAluguelService {
     }
     
     /**
+     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * @param dataInicial
+     */
+    private static int tempoEmAnos(Calendar dataInicial){
+        return dataAtual().get(Calendar.YEAR)-
+                dataInicial.get(Calendar.YEAR);
+    }
+    
+    /**
      * Calcula a data Atual
      */
     private static Calendar dataAtual(){
@@ -108,6 +117,23 @@ public class TransacaoEAluguelService {
                 get(Calendar.DAY_OF_MONTH));
         
         return dataFimContrato;
+    }
+    
+    /**
+     * Calcula o valor atual.
+     * @param dataInicial
+     * @param indiceDepreciacao
+     * @param valorCompra
+     * @return 
+     */
+    public static double calculaValorAtual(Calendar dataInicial, double indiceDepreciacao, double valorCompra){
+        double valorAtual=valorCompra;
+        
+        for (int i = 0; i < tempoEmAnos(dataInicial); i++) {
+            valorAtual=valorAtual-(valorAtual*(indiceDepreciacao/100));
+        }
+        
+        return valorAtual;
     }
     
 }

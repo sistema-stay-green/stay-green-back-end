@@ -9,6 +9,7 @@ import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author Gabriel Cruz
@@ -117,6 +118,27 @@ public class Transacao {
      */
     public void setTipoTransacao(TipoTransacao tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
+    }
+    
+    /**
+     *
+     * @param tipoTransacao
+     */
+    public void setTipoTransacao(String tipoTransacao) {
+        switch(tipoTransacao){
+            case "MAQUINA":
+                this.tipoTransacao = TipoTransacao.MAQUINA;
+                break;
+            case "PATRIMONIO":
+                this.tipoTransacao = TipoTransacao.PATRIMONIO;
+                break;
+            case "INSUMO":
+                this.tipoTransacao = TipoTransacao.INSUMO;
+                break;
+            case "PRODUTO":
+                this.tipoTransacao = TipoTransacao.PRODUTO;
+                break;
+        }
     }
     
     /**

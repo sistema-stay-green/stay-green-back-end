@@ -42,8 +42,10 @@ CREATE TABLE `Patrimonio`
 )
 ;
 
-DROP TABLE IF EXISTS `transacao`;
-CREATE TABLE IF NOT EXISTS `transacao` (
+-- Table Transação
+
+DROP TABLE IF EXISTS `Transacao`;
+CREATE TABLE IF NOT EXISTS `Transacao` (
     `id` int(20) NOT NULL AUTO_INCREMENT,
     `idItemTransacao` int(20) DEFAULT NULL,
     `valorTransacao` double DEFAULT NULL,
@@ -52,6 +54,8 @@ CREATE TABLE IF NOT EXISTS `transacao` (
     `tipoTransacao` enum('INSUMO','PATRIMONIO','MAQUINA','PRODUTO') DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) CHARSET=utf8;
+
+-- Table Insumo
 
 CREATE TABLE `Insumo`
 (
@@ -65,15 +69,7 @@ CREATE TABLE `Insumo`
 )
 ;
 
-DROP TABLE IF EXISTS `aluguel`;
-CREATE TABLE IF NOT EXISTS `aluguel` (
-    `idAluguel` int(20) NOT NULL AUTO_INCREMENT,
-    `idMaquina` int(20) DEFAULT NULL,
-    `valorAluguel` double DEFAULT NULL,
-    `periodoAluguel` int DEFAULT NULL,
-    `dataInicialAluguel` date DEFAULT NULL,
-    PRIMARY KEY (`idAluguel`)
-) CHARSET=utf8;
+-- Table Tarefa
 
 CREATE TABLE `Tarefa`
 (
@@ -158,15 +154,16 @@ CREATE TABLE `EstoqueProdutos`
 )
 ;
 
+
 -- Table Aluguel
 
-CREATE TABLE `Aluguel`
-(
-  `idAluguel` Int NOT NULL AUTO_INCREMENT,
-  `idMaquina` Int NOT NULL,
-  `valorAluguel` Double NOT NULL,
-  `periodoAluguel` Int NOT NULL,
-  `dataInicialAluguel` Date NOT NULL,
-  PRIMARY KEY (`idAluguel`)
-)
-;
+DROP TABLE IF EXISTS `Aluguel`;
+CREATE TABLE IF NOT EXISTS `Aluguel` (
+    `idAluguel` Int(20) NOT NULL AUTO_INCREMENT,
+    `idMaquina` Int(20) DEFAULT NULL,
+    `valorAluguel` Double DEFAULT NULL,
+    `periodoAluguel` Int DEFAULT NULL,
+    `dataInicialAluguel` Date DEFAULT NULL,
+    PRIMARY KEY (`idAluguel`)
+) CHARSET=utf8;
+
