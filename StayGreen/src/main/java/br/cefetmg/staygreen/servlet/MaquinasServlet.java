@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.filter.FiltroCORSGeral;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import java.sql.Date;
 import java.util.Calendar;
 /**
  *
@@ -38,12 +36,40 @@ public class MaquinasServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
-            
-            String maquinaJSON = request.getParameter("maquinaJSON");
-            System.out.println("teste");
-            Patrimonio maquina = new Patrimonio(21,"Tratorzinho",
+            String resposta = "";
+            Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"), Patrimonio.class);   
+/*          Patrimonio maquina = new Patrimonio(21,"Tratorzinho",
                     "Trator para as crianças aprenderem a profissão","EM_POSSE",
-                    10.0, 10000.0, Calendar.getInstance());// Dados recebidos     
+                    10.0, 10000.0, Calendar.getInstance());// Dados recebidos    */
+            if(maquina != null) {
+                switch(maquina.getStatus) {
+                    case PatrimonioStatusEnum.:
+                        maquina.setStatus("VENDIDO");
+                        PatrimonioAccessService.insert(maquina);
+                        break;
+                    case "v":
+                        if(patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO){
+                            System.out.println("Maquina já vendida");
+                            break;
+                        }
+                        else {
+                            Calendar dataBaixa = Calendar.getInstance();
+                            maquina.setDataBaixa(dataBaixa);
+                            maquina.setStatus("VENDIDO");
+                            PatrimonioAccessService.update(maquina);
+                        break;
+                        }
+                    case "a":
+                        Calendar dataBaixa = Calendar.getInstance();
+                            maquina.setDataBaixa(dataBaixa);
+                            maquina.setStatus("ALUGADO");
+                            PatrimonioAccessService.update(maquina);
+                        break;
+                    case "d":
+                        PatrimonioAccessService.delete(maquina);
+                        break;
+                }
+            } 
             
             PatrimonioAccessService.insert(maquina);
         }
