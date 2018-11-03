@@ -87,7 +87,7 @@ public class TransacaoAccessService {
      * @param id Id da transação a ser removida.
      * @return true se a operação for bem sucedida e false se não for.
      */
-    public static boolean deleta(int id) {
+    public static boolean delete(int id) {
         return SQL.delete(id, Transacao.class);
     }
     

@@ -5,6 +5,7 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.AluguelAccessService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,6 +19,7 @@ import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.TransacaoAccessService;
 import static br.cefetmg.staygreen.service.TransacaoEAluguelService.
         calculaValorAtual;
+import br.cefetmg.staygreen.table.Aluguel;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import br.cefetmg.staygreen.table.TipoTransacao;
 import br.cefetmg.staygreen.table.Transacao;
@@ -67,7 +69,6 @@ public class MaquinasServlet extends HttpServlet {
                     case "v":
                         if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
                             System.out.println("Maquina já vendida");
-                            break;
                         }
                         else {
                             Calendar dataBaixa = Calendar.getInstance();
@@ -81,13 +82,33 @@ public class MaquinasServlet extends HttpServlet {
                             maquina.setStatus("VENDIDO");
                             TransacaoAccessService.insert(venda);
                             PatrimonioAccessService.update(maquina);
-                        break;
                         }
+                        break;
                     case "a":
-                        
+                        if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
+                            System.out.println("Maquina já foi alugada");
+                        }
+                        else {
+                            Calendar dataSaida = Calendar.getInstance();
+                            Aluguel aluguel = new Aluguel(maquina.getId().
+                                    longValue(), maquina.getId().longValue(),
+                                    Double.parseDouble(request.
+                                    getParameter("valorAluguel")),
+                                    Integer.parseInt(request.
+                                    getParameter("periodoAluguel")),dataSaida);
+                            maquina.setDataSaida(dataSaida);
+                            maquina.setStatus("VENDIDO");
+                            AluguelAccessService.insert(aluguel);
+                            PatrimonioAccessService.update(maquina);
+                        }
                         break;
                     case "d":
-                        PatrimonioAccessService.delete(maquina);
+                        if(maquina.getStatus() == PatrimonioStatusEnum.DESCARTADO){
+                            System.out.println("Maquina tinha sido descartada");
+                        }
+                        else {
+                            PatrimonioAccessService.delete(maquina);
+                        }
                         break;
                 }
             } 
