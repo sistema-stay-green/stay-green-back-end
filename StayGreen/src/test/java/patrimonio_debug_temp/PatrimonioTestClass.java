@@ -24,7 +24,7 @@ public class PatrimonioTestClass {
         
         //testGetFromNome("Trator");
         //testGetFromId(1);
-        //testInsert("Nome");
+        testInsert("Nome");
         //testDelete(2);
         //Double a = new Double(5000);
         //Double b = new Double(15);

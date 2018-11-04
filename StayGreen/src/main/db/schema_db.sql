@@ -1,4 +1,4 @@
-﻿
+﻿-- Comentário para evitar o bug de não detectar o 'DROP' completo
 DROP DATABASE IF EXISTS `staygreen`;
 
 CREATE DATABASE `staygreen` DEFAULT CHARACTER SET utf8;

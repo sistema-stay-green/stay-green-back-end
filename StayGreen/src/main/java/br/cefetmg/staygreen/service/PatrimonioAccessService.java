@@ -6,6 +6,7 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -161,24 +162,43 @@ public class PatrimonioAccessService {
         return patrimonios;
     }
     
+    public Patrimonio getLastInsertedPatrimonio(){
+        
+        try{
+            ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
+            
+            if(lastId.next())
+                return PatrimonioAccessService.getPatrimonioById(
+                        Integer.toString(lastId.getInt("LAST_INSERT_ID")));
+            
+        } catch(SQLException ex){
+            System.out.println(ex + " at case Compra");
+        }
+        
+        return null;
+    }
+    
     /**
      * Insere um objeto Patrimonio na DB 'staygreen'
      * @param patrimonio
      */
-    public static void insert(Patrimonio patrimonio){
+    public static Patrimonio insert(Patrimonio patrimonio){
         
-            SQL.insert(patrimonio);
+        SQL.insert(patrimonio);
+        return getPatrimonioById(Integer.toString(SQL.getLastInsertId()));
     }
     
     /**
      * Insere vários objetos Patrimonio na DB 'staygreen'
      * @param patrimonios
      */
-    public static void insertAll(ArrayList<Patrimonio> patrimonios){
+    public static ArrayList<Patrimonio> insertAll(ArrayList<Patrimonio> patrimonios){
         
-        for (Patrimonio patrimonio : patrimonios) {
-            insert(patrimonio);
+        for (int i = 0; i < patrimonios.size(); i++) {
+            patrimonios.set(i, insert(patrimonios.get(i)));
         }
+        
+        return patrimonios;
     }
     
     /**
