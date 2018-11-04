@@ -81,6 +81,26 @@ public final class SQL {
     }
     
     /**
+     * Retorna o Id da ultima linha inserida com sucesso no DB.
+     * @return Id do ultimo objeto inserido no DB.
+     * @author Mei 
+     */
+    public static Integer getLastInsertId(){
+        
+        ResultSet resultSet = query("SELECT LAST_INSERT_ID()");
+        
+        try {
+            if (resultSet.next())
+                return resultSet.getInt("LAST_INSERT_ID()");
+            
+        } catch (SQLException sqlex) {
+            System.out.println(sqlex);
+        }
+        
+        return null;
+    }
+    
+    /**
      * Realiza a atualização dos dados de um objeto na respectiva tabela.
      * É importante saber que o objeto passado precisa ter um id não nulo. Os
      * dados que serão atualizados serão todos os campos não nulos do objeto.

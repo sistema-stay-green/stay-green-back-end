@@ -19,9 +19,12 @@ public class Data {
      * @return Retorna um objeto Calendar convertido.
      */
     public static Calendar dateToCalendar(java.sql.Date date){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
+        if(date != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar;
+        }else
+            return null;
     }
     
 }

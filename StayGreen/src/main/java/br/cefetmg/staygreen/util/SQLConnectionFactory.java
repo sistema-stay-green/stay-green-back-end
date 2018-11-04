@@ -26,7 +26,7 @@ public class SQLConnectionFactory {
                    senha = dbProps.getProperty("db.senha");
             return DriverManager.getConnection(
                     url + "?"
-                    + "autoReconnect=true"
+                    + "autoReconnect=false"
                     + "&useSSL=false"
                     + "&useTimezone=true"
                     + "&serverTimezone=UTC",
