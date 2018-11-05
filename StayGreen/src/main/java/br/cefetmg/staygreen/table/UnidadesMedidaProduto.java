@@ -12,19 +12,10 @@ package br.cefetmg.staygreen.table;
  */
 public enum UnidadesMedidaProduto {
     KG, L;
-    private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    
     public static UnidadesMedidaProduto converter(Object id) {
         for (UnidadesMedidaProduto tipo : values()) {
-            if (tipo.getId().equals(id)) {
+            if (tipo.toString().equals(id)) {
                 return tipo;
             }
         }
