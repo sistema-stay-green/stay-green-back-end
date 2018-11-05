@@ -5,7 +5,7 @@
  */
 package br.cefetmg.staygreen.servlet;
 
-import br.cefetmg.staygreen.service.AluguelAccessService;
+import br.cefetmg.staygreen.service.MaquinasService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -16,17 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import br.cefetmg.staygreen.service.TransacaoAccessService;
-import static br.cefetmg.staygreen.service.TransacaoEAluguelService.
-        calculaValorAtual;
-import br.cefetmg.staygreen.table.Aluguel;
-import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.table.TipoTransacao;
-import br.cefetmg.staygreen.table.Transacao;
-import java.util.Calendar;
+
 /**
- *
- * @author Aluno
+ * @author Gabriel Cruz
+ * @version 03-11-18/14:09
  */
 @WebServlet(name = "MaquinasServlet", urlPatterns = {"/MaquinasServlet"})
 public class MaquinasServlet extends HttpServlet {
@@ -48,67 +41,24 @@ public class MaquinasServlet extends HttpServlet {
             String resposta = "";
             Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"),
                     Patrimonio.class);   
+            int quantidade=Integer.parseInt(request.
+                                getParameter("quantAluguel"));
 /*          Patrimonio maquina = new Patrimonio(21,"Tratorzinho",
                     "Trator para as crianças aprenderem a profissão","EM_POSSE",
                     10.0, 10000.0, Calendar.getInstance());// Dados recebidos */
             if(maquina != null) {
                 switch(request.getParameter("acao")){
                     case "c":
-                        Calendar dataCompra= Calendar.getInstance();
-                        maquina.setDataCompra(dataCompra);
-                        Transacao compra = new Transacao(maquina.getId().
-                                longValue(), maquina.getId().longValue(),
-                                calculaValorAtual(maquina.getDataCompra(),
-                                maquina.getIndiceDepreciacao(),
-                                maquina.getValorCompra()), 1, dataCompra,
-                                TipoTransacao.MAQUINA);
-                        maquina.setStatus("EM_POSSE");
-                        TransacaoAccessService.insert(compra);
-                        PatrimonioAccessService.insert(maquina);
+                        MaquinasService.Compra(maquina, quantidade);
                         break;
                     case "v":
-                        if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
-                            System.out.println("Maquina já vendida");
-                        }
-                        else {
-                            Calendar dataBaixa = Calendar.getInstance();
-                            Transacao venda = new Transacao(maquina.getId().
-                                    longValue(), maquina.getId().longValue(),
-                                    calculaValorAtual(maquina.getDataCompra(),
-                                    maquina.getIndiceDepreciacao(),
-                                    maquina.getValorCompra()), 1, dataBaixa,
-                                    TipoTransacao.MAQUINA);
-                            maquina.setDataBaixa(dataBaixa);
-                            maquina.setStatus("VENDIDO");
-                            TransacaoAccessService.insert(venda);
-                            PatrimonioAccessService.update(maquina);
-                        }
+                        MaquinasService.Venda(maquina, quantidade);
                         break;
                     case "a":
-                        if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
-                            System.out.println("Maquina já foi alugada");
-                        }
-                        else {
-                            Calendar dataSaida = Calendar.getInstance();
-                            Aluguel aluguel = new Aluguel(maquina.getId().
-                                    longValue(), maquina.getId().longValue(),
-                                    Double.parseDouble(request.
-                                    getParameter("valorAluguel")),
-                                    Integer.parseInt(request.
-                                    getParameter("periodoAluguel")),dataSaida);
-                            maquina.setDataSaida(dataSaida);
-                            maquina.setStatus("VENDIDO");
-                            AluguelAccessService.insert(aluguel);
-                            PatrimonioAccessService.update(maquina);
-                        }
+                        MaquinasService.Aluguel(maquina, request);
                         break;
                     case "d":
-                        if(maquina.getStatus() == PatrimonioStatusEnum.DESCARTADO){
-                            System.out.println("Maquina tinha sido descartada");
-                        }
-                        else {
-                            PatrimonioAccessService.delete(maquina);
-                        }
+                        MaquinasService.Descarte(maquina);
                         break;
                 }
             } 
