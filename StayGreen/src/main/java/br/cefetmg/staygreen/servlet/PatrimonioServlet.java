@@ -64,18 +64,7 @@ public class PatrimonioServlet extends HttpServlet {
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
-                    String dataCompraString =  request.getParameter("dataCompra");
-                    DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-                    Date dataCompraDate;
-                    Calendar currentTime = Calendar.getInstance();
-                     try {
-                        dataCompraDate = (Date)format.parse(dataCompraString);
-                        currentTime.setTime(dataCompraDate);
-                    } catch (ParseException ex) {
-                        System.out.println("Exception "+ex+" at parse Date");
-                    }
-                    
-                    
+                    Calendar currentTime = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
 
                     PatrimonioProcessService.compraPatrimonio(
                             patrimonio.getNome(), patrimonio.getTipo(),
@@ -90,26 +79,6 @@ public class PatrimonioServlet extends HttpServlet {
                             
                     
                     break;
-
-                case "s": //Caso de saída
-
-                    switch(request.getParameter("tipoSaida")){
-
-                        case "ALUGADO":
-                            PatrimonioProcessService.alugaPatrimonio(request.getParameter("id"));
-                            break;
-
-                        case "EM_MANUTENCAO":
-                            PatrimonioProcessService.colocaEmManutencao(request.getParameter("id"));
-                            break;
-                        
-                        case "VENDA": //Caso de venda
-                            PatrimonioProcessService.vendaPatrimonio(request.getParameter("id"));
-                            break;
-
-                        default:
-                            throw new IllegalArgumentException("Parametro 'tipoSaida' possui um valor inválido.");
-                    }
 
                 case "e": //Caso de entrada
                     PatrimonioProcessService.recebePatrimonio(request.getParameter("id"));
@@ -158,24 +127,46 @@ public class PatrimonioServlet extends HttpServlet {
                             
                     if (patrimonios != null) {
 
-                        for (Patrimonio currentPatrimonio : patrimonios) {
-                            resposta += JSON.stringify(currentPatrimonio);
-                        }
+                        
+                            resposta = JSON.stringify(patrimonios);
+                        
                                 
-                        // Caso funcione:
-                        //resposta = JSON.stringify(patrimonios);
                     }
                     break;
                     
                 case "u": 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    
+                    Calendar dataCompra = null;
+                    Calendar dataBaixa = null;
+                    Calendar dataSaida = null;
+                    Calendar dataRetorno = null;
+                    
+                    if(request.getParameter("dataCompra")!=null || request.getParameter("dataCompra") == "")
+                        dataCompra = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
+                    if(request.getParameter("dataBaixa")!=null || request.getParameter("dataBaixa") == "")    
+                        dataBaixa = PatrimonioProcessService.dataParse(request.getParameter("dataBaixa"));
+                    if(request.getParameter("dataSaida")!=null || request.getParameter("dataSaida") == "")    
+                        dataSaida = PatrimonioProcessService.dataParse(request.getParameter("dataSaida"));
+                    if(request.getParameter("dataRetorno")!=null || request.getParameter("dataRetorno") == "")    
+                        dataRetorno = PatrimonioProcessService.dataParse(request.getParameter("dataRetorno"));
+                    
+                    if(dataCompra!=null)
+                        patrimonio.setDataCompra(dataCompra);
+                    if(dataBaixa!=null)
+                        patrimonio.setDataBaixa(dataBaixa);
+                    if(dataSaida!=null)
+                        patrimonio.setDataSaida(dataSaida);
+                    if(dataRetorno!=null)
+                        patrimonio.setDataRetorno(dataRetorno);
+                    
                     if(patrimonio != null){
                         PatrimonioAccessService.update(patrimonio);
                     }
                     break;
                     
                 case "d":
-                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
                     if(patrimonio != null){
                         PatrimonioAccessService.delete(patrimonio);
                     }
