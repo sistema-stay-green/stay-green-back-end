@@ -9,8 +9,12 @@ package br.cefetmg.staygreen.service;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Classe com a lógica principal de manipulação dos patrimônios da empresa.
@@ -189,6 +193,20 @@ public class PatrimonioProcessService {
                 return true;
        }
        
+    }
+    
+    public static Calendar dataParse(String data){
+            Calendar dataAtual = Calendar.getInstance();
+            Date dataCompraDate;
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                dataCompraDate = (Date)format.parse(data);
+                dataAtual.setTime(dataCompraDate);
+            } catch (ParseException ex) {
+                System.out.println("Exception "+ex+" at parse Date");
+            }
+            return dataAtual;
+
     }
     
     /**
