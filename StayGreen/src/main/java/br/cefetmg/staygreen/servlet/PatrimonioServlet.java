@@ -12,10 +12,16 @@ import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,7 +64,18 @@ public class PatrimonioServlet extends HttpServlet {
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    String dataCompraString =  request.getParameter("dataCompra");
+                    DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+                    Date dataCompraDate;
                     Calendar currentTime = Calendar.getInstance();
+                     try {
+                        dataCompraDate = (Date)format.parse(dataCompraString);
+                        currentTime.setTime(dataCompraDate);
+                    } catch (ParseException ex) {
+                        System.out.println("Exception "+ex+" at parse Date");
+                    }
+                    
+                    
 
                     PatrimonioProcessService.compraPatrimonio(
                             patrimonio.getNome(), patrimonio.getTipo(),
@@ -66,16 +83,12 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonio.getValorCompra(), currentTime
                     );
                     
-                    try{
-                    ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-                    if(lastId.next()){
-                        Patrimonio patrimonioReturn = PatrimonioAccessService.getPatrimonioById(
-                                Integer.toString(lastId.getInt("LAST_INSERT_ID")));
-                        resposta = JSON.stringify(patrimonioReturn);
-                    }
-                    }catch(SQLException ex){
-                        System.out.println(ex + " at case Compra");
-                    }
+                    patrimonio = PatrimonioAccessService.getLastInsertedPatrimonio();
+                    
+                    if(patrimonio != null)
+                        resposta = JSON.stringify(patrimonio);
+                            
+                    
                     break;
 
                 case "s": //Caso de saída
@@ -83,25 +96,15 @@ public class PatrimonioServlet extends HttpServlet {
                     switch(request.getParameter("tipoSaida")){
 
                         case "ALUGADO":
-                            if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "I";
+                            PatrimonioProcessService.alugaPatrimonio(request.getParameter("id"));
                             break;
 
                         case "EM_MANUTENCAO":
-                            if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "I";
+                            PatrimonioProcessService.colocaEmManutencao(request.getParameter("id"));
                             break;
                         
                         case "VENDA": //Caso de venda
-
-                            if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "R";       
+                            PatrimonioProcessService.vendaPatrimonio(request.getParameter("id"));
                             break;
 
                         default:
@@ -109,10 +112,7 @@ public class PatrimonioServlet extends HttpServlet {
                     }
 
                 case "e": //Caso de entrada
-                    if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
-                        resposta = "S";
-                        else
-                            resposta = "I";
+                    PatrimonioProcessService.recebePatrimonio(request.getParameter("id"));
                     break;
 
                 case "p": //Caso de pesquisa
@@ -123,10 +123,6 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("id"));
                             
                             if (patrimonios != null) {
-                                
-                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
-                                resposta += "E";
-                                
                                 // Caso Stringfy não funcione para ArrayList:
                                 for (Patrimonio currentPatrimonio : patrimonios) {
                                     resposta += JSON.stringify(currentPatrimonio);
@@ -134,19 +130,14 @@ public class PatrimonioServlet extends HttpServlet {
                                 
                                 // Caso funcione:
                                 //resposta = JSON.stringify(patrimonios);
-                            } else
-                                resposta = "N";
+                            } 
                             break;
 
                         case "nome":
                             
                             patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
                             
-                            if (patrimonios != null) {
-                                
-                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
-                                resposta += "E";
-                                
+                            if (patrimonios != null) {                               
                                 // Caso Stringfy não funcione para ArrayList:
                                 for (Patrimonio currentPatrimonio : patrimonios) {
                                     resposta += JSON.stringify(currentPatrimonio);
@@ -154,8 +145,7 @@ public class PatrimonioServlet extends HttpServlet {
                                 
                                 // Caso funcione:
                                 //resposta = JSON.stringify(patrimonios);
-                            } else
-                                resposta = "N";
+                            }
                             break;
 
                         default:
@@ -166,37 +156,29 @@ public class PatrimonioServlet extends HttpServlet {
                 case "r": //Caso de retorno de todos os patrimonios
                     patrimonios = PatrimonioAccessService.get("");
                             
-                        if (patrimonios != null) {
-                            // Caso Stringfy não funcione para ArrayList:
-                            resposta += "E";
-                            
-                            for (Patrimonio currentPatrimonio : patrimonios) {
-                                resposta += JSON.stringify(currentPatrimonio);
-                            }
+                    if (patrimonios != null) {
+
+                        for (Patrimonio currentPatrimonio : patrimonios) {
+                            resposta += JSON.stringify(currentPatrimonio);
+                        }
                                 
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
-                        } else
-                            resposta = "N";
+                        // Caso funcione:
+                        //resposta = JSON.stringify(patrimonios);
+                    }
                     break;
                     
                 case "u": 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
                     if(patrimonio != null){
-                        
                         PatrimonioAccessService.update(patrimonio);
-                        resposta = "S";
-                        }else
-                            resposta = "N";
+                    }
                     break;
                     
                 case "d":
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
                     if(patrimonio != null){
                         PatrimonioAccessService.delete(patrimonio);
-                        resposta = "S";
-                        }else
-                            resposta = "N";
+                    }
                     
                     break;
 
