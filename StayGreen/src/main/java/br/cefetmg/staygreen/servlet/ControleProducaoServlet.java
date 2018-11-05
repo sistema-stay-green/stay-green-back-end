@@ -6,6 +6,8 @@
 package br.cefetmg.staygreen.servlet;
 
 
+import br.cefetmg.staygreen.service.ProdutoEntradaService;
+import br.cefetmg.staygreen.service.ProdutoSaidaService;
 import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet para exemplo, sem utilidade para o projeto.
  *
- * @author Daniel
+ * @author Arthur
  */
 @WebServlet(name = "ControleProducaoServlet", urlPatterns = {"/ControleProducaoServlet"})
 public class ControleProducaoServlet extends HttpServlet {
@@ -29,12 +31,13 @@ public class ControleProducaoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String resposta = "";
-        Produto produto = JSON.parse(request.getParameter("produto"), Produto.class);
-        if (produto != null) {
-            System.out.println(produto.toString());
-        }
+        Produto produto = JSON.parse(request.getParameter("JSON"), Produto.class);
+        produto.setFotoMercadoria("foto");
         try (PrintWriter out = response.getWriter()) {
+            ProdutoEntradaService.AdicionarProduto(produto);
+            resposta = produto.toString();
             out.println(resposta);
+            
         }
     }
 

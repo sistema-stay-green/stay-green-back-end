@@ -110,16 +110,9 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "{Id: "
-                + "Nome: " + this.nomeProduto
-                + ", Descrição: " + this.descrProduto
-                + ", Valor: " + this.valorUnitProduto
-                + ", Quantidade: " + this.quantEstoqueProduto
-                + ", Ponto de Aviso" + this.pontoAvisoProduto
-                + ", Foto: " + this.fotoMercadoria
-                + ", Unidade de Medida: " + this.unidMedProduto
-                + "}";
+        return "id=" + id + ", nomeProduto=" + nomeProduto + ", descrProduto=" + descrProduto + ", unidMedProduto=" + unidMedProduto + ", valorUnitProduto=" + valorUnitProduto + ", quantEstoqueProduto=" + quantEstoqueProduto + ", pontoAvisoProduto=" + pontoAvisoProduto + ", fotoMercadoria=" + fotoMercadoria;
     }
+
     
     
 }

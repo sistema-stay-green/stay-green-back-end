@@ -75,7 +75,6 @@ public final class SQL {
         String sql = "INSERT INTO " + getNomeTabela(objeto.getClass())
                 +" (" + String.join(", ", nomesCampos) + ")"
                 +  "  VALUES (" + String.join(", ", valoresCampos) + ")";
-        
         return query(sql) == null;
         
     }
