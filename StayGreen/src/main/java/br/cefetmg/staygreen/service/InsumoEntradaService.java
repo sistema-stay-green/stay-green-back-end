@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class InsumoEntradaService {
 
     public static void inserir(Insumo insumo) {
-
         SQL.insert(insumo);
     }
 

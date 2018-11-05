@@ -7,7 +7,6 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.table.UnidadesMedidaProduto;
-import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,11 +35,11 @@ public class ProdutoSaidaService {
 
     // inicialização das constantes internas
     static {
-        ID_COLUMN = "id";
+        ID_COLUMN = "idProduto";
         NOME_PRODUTO_COLUMN = "nomeProduto";
-        DESCRICAO_PRODUTO_COLUMN = "descProduto";
+        DESCRICAO_PRODUTO_COLUMN = "descrProduto";
         UNIDADE_MEDIDA_PRODUTO_COLUMN = "unidMedProduto";
-        VALOR_PRODUTO_COLUMN = "valorProduto";
+        VALOR_PRODUTO_COLUMN = "valorUnitProduto";
         QUANTIDADE_ESTOQUE_PRODUTO_COLUMN = "quantEstoqueProduto";
         PONTO_AVISO_PRODUTO_COLUMN = "pontoAvisoProduto";
         FOTO_MERCADORIA_COLUMN = "fotoMercadoria";
@@ -50,8 +49,7 @@ public class ProdutoSaidaService {
 
     public static Produto getProdutoPorNome(String nome) {
 
-        ArrayList<Produto> produtos = get("WHERE id=" + nome);
-
+        ArrayList<Produto> produtos = get("WHERE `nomeProduto`='" + nome + "'");
         if (produtos == null) {
             System.out.println("NENHUM PRODUTO COM NOME " + nome + " FOI ENCONTRADO NO BANCO DE DADOS");
             return null;
@@ -64,7 +62,7 @@ public class ProdutoSaidaService {
  
     public static Produto getProdutoPorId(String id) {
 
-        ArrayList<Produto> produtos = get("WHERE id=" + id);
+       ArrayList<Produto> produtos = get("WHERE `id`='" + id + "'");
 
         if (produtos == null) {
             System.out.println("NENHUM PRODUTO COM ID " + id + " FOI ENCONTRADO NO BANCO DE DADOS");
@@ -77,7 +75,7 @@ public class ProdutoSaidaService {
 
     public static ArrayList<Produto> getProdutosPorNome(String nome) {
 
-        ArrayList<Produto> produtos = get("WHERE nome='" + nome + "'");
+        ArrayList<Produto> produtos = get("WHERE `nomeProduto`='" + nome + "'");
 
         if (produtos == null) {
             System.out.println("NENHUM PRODUTO COM NOME " + nome + " FOI ENCONTRADO NO BANCO DE DADOS");
@@ -90,7 +88,7 @@ public class ProdutoSaidaService {
  
     public static ArrayList<Produto> getProdutosPorId(Long id) {
 
-        ArrayList<Produto> produtos = get("WHERE id=" + id);
+        ArrayList<Produto> produtos = get("WHERE `id`='" + id + "'");
 
         if (produtos == null) {
             System.out.println("NENHUM PRODUTO COM ID " + id + " FOI ENCONTRADO NO BANCO DE DADOS");
@@ -106,9 +104,7 @@ public class ProdutoSaidaService {
         ArrayList<Produto> produtos = new ArrayList<>();
 
         try {
-
-            result = SQL.query("SELECT * FROM " + TABLE_NAME + " " + queryCondition);
-
+            result = SQL.query("SELECT * FROM `" + TABLE_NAME + "` " + queryCondition);
             if (result.next()) {
                 do {
                     Produto produto = new Produto();

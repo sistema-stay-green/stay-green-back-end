@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class ProdutoEntradaService {
 
     public static void inserir(Produto produto) {
-
         SQL.insert(produto);
     }
 
@@ -39,7 +38,7 @@ public class ProdutoEntradaService {
         }
     }
 
-    public static void deletAR(Produto produto) {
+    public static void deletar(Produto produto) {
 
         if (produto.getId() != null) {
             SQL.delete((int) produto.getId().longValue(), Produto.class);
@@ -57,7 +56,7 @@ public class ProdutoEntradaService {
 
     public static void RemoverProduto(Produto produto) {
 
-        deletAR(produto);
+        deletar(produto);
 
     }
 
