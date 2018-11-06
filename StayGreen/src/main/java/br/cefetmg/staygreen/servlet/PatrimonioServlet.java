@@ -89,16 +89,10 @@ public class PatrimonioServlet extends HttpServlet {
                     switch(request.getParameter("pesquisarPor")){
 
                         case "id":
-                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("id"));
+                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
                             
-                            if (patrimonios != null) {
-                                // Caso Stringfy não funcione para ArrayList:
-                                for (Patrimonio currentPatrimonio : patrimonios) {
-                                    resposta += JSON.stringify(currentPatrimonio);
-                                }
-                                
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
+                            if (patrimonio != null) {
+                                    resposta += JSON.stringify(patrimonio);
                             } 
                             break;
 
@@ -107,13 +101,7 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
                             
                             if (patrimonios != null) {                               
-                                // Caso Stringfy não funcione para ArrayList:
-                                for (Patrimonio currentPatrimonio : patrimonios) {
-                                    resposta += JSON.stringify(currentPatrimonio);
-                                }
-                                
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
+                                    resposta += JSON.stringify(patrimonios);
                             }
                             break;
 
@@ -126,11 +114,7 @@ public class PatrimonioServlet extends HttpServlet {
                     patrimonios = PatrimonioAccessService.get("");
                             
                     if (patrimonios != null) {
-
-                        
-                            resposta = JSON.stringify(patrimonios);
-                        
-                                
+                            resposta = JSON.stringify(patrimonios);             
                     }
                     break;
                     

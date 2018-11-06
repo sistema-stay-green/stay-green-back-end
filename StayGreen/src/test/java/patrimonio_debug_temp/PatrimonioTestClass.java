@@ -4,6 +4,7 @@ import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
+import br.cefetmg.staygreen.util.JSON;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -24,12 +25,13 @@ public class PatrimonioTestClass {
         
         //testGetFromNome("Trator");
         //testGetFromId(1);
-        testInsert("Nome");
+        //testInsert("Nome");
         //testDelete(2);
         //Double a = new Double(5000);
         //Double b = new Double(15);
         //Calendar dataCompra = Calendar.getInstance();
         //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
+        System.out.println(JSON.stringify(PatrimonioAccessService.getPatrimonioById("12")));
     }
     
     public static void testDelete(Integer id){

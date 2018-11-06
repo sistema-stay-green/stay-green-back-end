@@ -65,7 +65,8 @@ public class PatrimonioProcessService {
         
 	    Integer diferencaData = anoAtual-anoCompra;
 
-        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual) * valorCompra);
+        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual)
+                * valorCompra);
         
         if(valorAtual <= 0)
             
@@ -116,8 +117,9 @@ public class PatrimonioProcessService {
      * @param dataCompra
      * @author Simonetti
      */
-    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, String finalidade,
-        Double indiceDepreciacao, Double valorCompra, Calendar dataCompra){
+    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, 
+            String finalidade,Double indiceDepreciacao, Double valorCompra,
+            Calendar dataCompra){
         
         Patrimonio novoPatrimonio = new Patrimonio();
         
@@ -183,7 +185,8 @@ public class PatrimonioProcessService {
      */
     public static boolean recebePatrimonio(String id){
        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE)
+       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE || 
+               patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
             return false;
             else{
                 patrimonio.setStatus("EM_POSSE");
@@ -196,17 +199,14 @@ public class PatrimonioProcessService {
     }
     
     public static Calendar dataParse(String data){
-            Calendar dataAtual = Calendar.getInstance();
-            Date dataCompraDate;
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                dataCompraDate = (Date)format.parse(data);
-                dataAtual.setTime(dataCompraDate);
-            } catch (ParseException ex) {
-                System.out.println("Exception "+ex+" at parse Date");
-            }
-            return dataAtual;
-
+        String[] dataSplited;
+        dataSplited = data.split("-");
+        Calendar dataParsed = Calendar.getInstance();
+        dataParsed.set(Calendar.YEAR, Integer.parseInt(dataSplited[0]));
+        dataParsed.set(Calendar.MONTH, Integer.parseInt(dataSplited[1])-1);
+        dataParsed.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dataSplited[2]));
+        
+        return dataParsed;
     }
     
     /**
