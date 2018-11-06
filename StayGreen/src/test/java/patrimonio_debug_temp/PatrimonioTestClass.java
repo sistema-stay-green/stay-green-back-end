@@ -3,10 +3,13 @@ package patrimonio_debug_temp;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.table.PatrimonioData;
 import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
-import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.Data;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 
 /*
  * Sistema de Agronegocio :: Stay Green
@@ -16,7 +19,7 @@ import java.util.Calendar;
 
 /**
  *
- * @author Mei
+ * @author Mei Fagundes
  * @version 10-10-18/21:45
  */
 public class PatrimonioTestClass {
@@ -27,11 +30,33 @@ public class PatrimonioTestClass {
         //testGetFromId(1);
         //testInsert("Nome");
         //testDelete(2);
-        //Double a = new Double(5000);
-        //Double b = new Double(15);
-        //Calendar dataCompra = Calendar.getInstance();
         //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
-        //System.out.println(JSON.stringify(PatrimonioAccessService.getPatrimonioById("12")));
+        //testGetCalendarFromDateTimeString();
+        testEmbedPatrimonioData();
+    }
+    
+    public static void testEmbedPatrimonioData(){
+        
+        Patrimonio p = new Patrimonio();
+        PatrimonioData pD = new PatrimonioData();
+        
+        pD.setDataBaixa("1999-08-03-09-25");
+        p.embedPatrimonioData(pD);
+        
+        System.out.println(p.getDataBaixa());
+    }
+    
+    public static void testGetCalendarFromDateTimeString(){
+        
+        try {
+
+            Calendar a = Data.getCalendarFromDateTimeString("1999-08-03-09-25");
+            System.out.println(a);
+
+            a = Data.getCalendarFromDateString("1999-08-03");
+            System.out.println(a);
+        } catch (ParseException e) {
+        }
     }
     
     public static void testDelete(Integer id){

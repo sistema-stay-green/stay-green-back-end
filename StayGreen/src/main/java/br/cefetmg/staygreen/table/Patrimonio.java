@@ -33,7 +33,6 @@ public class Patrimonio {
     private Calendar dataRetornoPatrimonio;
     private Calendar dataBaixaPatrimonio;
     
-    
     // Constructors
 
     /**
@@ -59,6 +58,21 @@ public class Patrimonio {
      */
     public Patrimonio(){
         this(null, null);
+    }
+    
+    public void embedPatrimonioData(PatrimonioData patrimonioData){
+        
+        if(patrimonioData.getDataBaixa() != null)
+            this.dataBaixaPatrimonio = patrimonioData.getDataBaixa();
+        
+        if(patrimonioData.getDataCompra() != null)
+            this.dataCompraPatrimonio = patrimonioData.getDataCompra();
+        
+        if(patrimonioData.getDataRetorno() != null)
+            this.dataRetornoPatrimonio = patrimonioData.getDataRetorno();
+        
+        if(patrimonioData.getDataSaida() != null)
+            this.dataSaidaPatrimonio = patrimonioData.getDataSaida();
     }
     
     // Getter and Setter
@@ -95,8 +109,7 @@ public class Patrimonio {
     }
     
     public void setStatus(String statusPatrimonio){
-        
-            this.statusPatrimonio = PatrimonioStatusEnum.valueOf(statusPatrimonio);
+        this.statusPatrimonio = PatrimonioStatusEnum.valueOf(statusPatrimonio);
     }
 
     public Double getIndiceDepreciacao() {
