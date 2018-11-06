@@ -140,42 +140,7 @@ public class PatrimonioProcessService {
         PatrimonioAccessService.insert(novoPatrimonio);      
 
     }
-    
-    /**
-     * Coloca um patrimonio em manutencao
-     * @param id
-     * @return true ou false dependendo se foi para manutenção corretamente
-     * @author Simonetti
-     */
-    public static boolean colocaEmManutencao(String id){
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-        if(patrimonio.getStatus() != PatrimonioStatusEnum.EM_POSSE){
-            return false;
-            }else{
-                patrimonio.setStatus("EM_MANUTENCAO");
-                patrimonio.setDataSaida(Calendar.getInstance());
-                PatrimonioAccessService.update(patrimonio);
-                return true;
-        }
-    }
-    
-    /**
-     * Aluga um patrimonio para terceiros
-     * @param id
-     * @return true ou false dependendo se for alugado corretamente
-     * @author Simonetti
-     */
-    public static boolean alugaPatrimonio(String id){
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-        if(patrimonio.getStatus() != PatrimonioStatusEnum.EM_POSSE){
-            return false;
-            }else{
-                patrimonio.setStatus("ALUGADO");
-                patrimonio.setDataSaida(Calendar.getInstance());
-                PatrimonioAccessService.update(patrimonio);
-                return true;
-        }
-    }
+
     
     /**
      * Recebe um patrimonio que estava fora da fazenda

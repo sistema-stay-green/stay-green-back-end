@@ -31,7 +31,7 @@ public class PatrimonioTestClass {
         //Double b = new Double(15);
         //Calendar dataCompra = Calendar.getInstance();
         //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
-        System.out.println(JSON.stringify(PatrimonioAccessService.getPatrimonioById("12")));
+        //System.out.println(JSON.stringify(PatrimonioAccessService.getPatrimonioById("12")));
     }
     
     public static void testDelete(Integer id){
