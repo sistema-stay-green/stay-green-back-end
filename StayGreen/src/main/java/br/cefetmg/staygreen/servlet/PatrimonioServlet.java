@@ -5,9 +5,23 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
+import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,21 +43,127 @@ public class PatrimonioServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @author Simonetti, Mei
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
+        String resposta = "";
+        Patrimonio patrimonio;
+        ArrayList<Patrimonio> patrimonios;
+        
+            switch(request.getParameter("action")){
+                
+                //Valores iniciais do retorno: S -> Sem problemas
+                //                             R -> Comando redundante
+                //                             I -> Comando ilegal
+                //                             E -> Patrimonio(s) encontrado(s)
+                //                             N -> Nenhum patrimonio encontrado/não recebido
+                
+                case "c": //Caso de compra
+
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    Calendar currentTime = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
+
+                    PatrimonioProcessService.compraPatrimonio(
+                            patrimonio.getNome(), patrimonio.getTipo(),
+                            patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
+                            patrimonio.getValorCompra(), currentTime
+                    );
+                    
+                    patrimonio = PatrimonioAccessService.getLastInsertedPatrimonio();
+                    
+                    if(patrimonio != null)
+                        resposta = JSON.stringify(patrimonio);
+                            
+                    
+                    break;
+
+                case "e": //Caso de entrada
+                    PatrimonioProcessService.recebePatrimonio(request.getParameter("id"));
+                    break;
+
+                case "p": //Caso de pesquisa
+
+                    switch(request.getParameter("pesquisarPor")){
+
+                        case "id":
+                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                            
+                            if (patrimonio != null) {
+                                    resposta += JSON.stringify(patrimonio);
+                            } 
+                            break;
+
+                        case "nome":
+                            
+                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
+                            
+                            if (patrimonios != null) {                               
+                                    resposta += JSON.stringify(patrimonios);
+                            }
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
+                    }
+                    break;
+
+                case "r": //Caso de retorno de todos os patrimonios
+                    patrimonios = PatrimonioAccessService.get("");
+                            
+                    if (patrimonios != null) {
+                            resposta = JSON.stringify(patrimonios);             
+                    }
+                    break;
+                    
+                case "u": 
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    
+                    Calendar dataCompra = null;
+                    Calendar dataBaixa = null;
+                    Calendar dataSaida = null;
+                    Calendar dataRetorno = null;
+                    
+                    if(request.getParameter("dataCompra")!=null || request.getParameter("dataCompra") == "")
+                        dataCompra = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
+                    if(request.getParameter("dataBaixa")!=null || request.getParameter("dataBaixa") == "")    
+                        dataBaixa = PatrimonioProcessService.dataParse(request.getParameter("dataBaixa"));
+                    if(request.getParameter("dataSaida")!=null || request.getParameter("dataSaida") == "")    
+                        dataSaida = PatrimonioProcessService.dataParse(request.getParameter("dataSaida"));
+                    if(request.getParameter("dataRetorno")!=null || request.getParameter("dataRetorno") == "")    
+                        dataRetorno = PatrimonioProcessService.dataParse(request.getParameter("dataRetorno"));
+                    
+                    if(dataCompra!=null)
+                        patrimonio.setDataCompra(dataCompra);
+                    if(dataBaixa!=null)
+                        patrimonio.setDataBaixa(dataBaixa);
+                    if(dataSaida!=null)
+                        patrimonio.setDataSaida(dataSaida);
+                    if(dataRetorno!=null)
+                        patrimonio.setDataRetorno(dataRetorno);
+                    
+                    if(patrimonio != null){
+                        PatrimonioAccessService.update(patrimonio);
+                    }
+                    break;
+                    
+                case "d":
+                    patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                    if(patrimonio != null){
+                        PatrimonioAccessService.delete(patrimonio);
+                    }
+                    
+                    break;
+
+                default: //Caso base
+                    throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
+            }
+        
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PatrimonioServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PatrimonioServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
+            out.println(resposta);
         }
     }
 
@@ -60,19 +180,6 @@ public class PatrimonioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        // To-do
-        String action = request.getParameter("action");
-                switch(action){
-                    case "venda":
-                        String idPatrimonio = request.getParameter("id");
-                        PatrimonioProcessService.vendaPatrimonio(idPatrimonio);
-                        break;
-                    case "compra":
-                        break;
-                        
-                        
-                }
     }
 
     /**

@@ -1,4 +1,5 @@
-﻿
+
+
 DROP DATABASE IF EXISTS `staygreen`;
 
 CREATE DATABASE `staygreen` DEFAULT CHARACTER SET utf8;

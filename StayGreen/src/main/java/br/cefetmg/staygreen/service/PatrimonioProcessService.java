@@ -8,8 +8,13 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
+import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Classe com a lógica principal de manipulação dos patrimônios da empresa.
@@ -26,6 +31,7 @@ public class PatrimonioProcessService {
         OBJECT_SEPARATOR = "¢";
     }
     
+    @Deprecated
     public static String getPatrimonioByNome(String name){
         
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
@@ -42,7 +48,7 @@ public class PatrimonioProcessService {
      * @return valor atual (dia do acesso)
      * @author Simonetti
      */
-    private static Double desvalorizaPatrimonio(String id){
+    public static Double desvalorizaPatrimonio(String id){
         
         // Instancia do patrimÃ´nio, desvalorizaÃ§Ã£o e Valor de compra
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
@@ -59,23 +65,35 @@ public class PatrimonioProcessService {
         
 	    Integer diferencaData = anoAtual-anoCompra;
 
-        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual) * valorCompra);
+        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual)
+                * valorCompra);
         
-        return valorAtual;
+        if(valorAtual <= 0)
+            
+            return 0.1*valorCompra;
+            
+            else
+                
+                return valorAtual;
     }
+    
+    /*public static Double depreciacaoAcelerada(String id){
+        PatrimonioAccessService.getPatrimonioById(id);
+        
+    }*/
     
     /**
      * Vende um patrimonio
      * @param id
-     * @return valor de venda do patrimonio
+     * @return true ou false dependendo se o patrimonio já estiver vendido
      * @author Simonetti
      */
-    public static Double vendaPatrimonio(String id){
+    public static boolean vendaPatrimonio(String id){
         //InstÃ¢ncia do objeto patrimÃ´nio a partir da sua Id
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
         //VerificaÃ§Ã£o 
         if(patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
-            System.out.println("PatrimÃ´nio jÃ¡ foi vendido!");
+            return false;
             else {
                 Calendar dataBaixa = Calendar.getInstance();
                 
@@ -85,9 +103,8 @@ public class PatrimonioProcessService {
                 
                 PatrimonioAccessService.update(patrimonio);
                 
-                return PatrimonioProcessService.desvalorizaPatrimonio(id);          
+                return true;          
         }
-        return null;
     }
     
     /**
@@ -100,8 +117,9 @@ public class PatrimonioProcessService {
      * @param dataCompra
      * @author Simonetti
      */
-    public static void compraPatrimonio( String nome, String tipo, String finalidade,
-        Double indiceDepreciacao, Double valorCompra, Calendar dataCompra){
+    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, 
+            String finalidade,Double indiceDepreciacao, Double valorCompra,
+            Calendar dataCompra){
         
         Patrimonio novoPatrimonio = new Patrimonio();
         
@@ -122,6 +140,39 @@ public class PatrimonioProcessService {
         PatrimonioAccessService.insert(novoPatrimonio);      
 
     }
+
+    
+    /**
+     * Recebe um patrimonio que estava fora da fazenda
+     * @param id
+     * @return true ou false dependendo se for alugado corretamente
+     * @author Simonetti
+     */
+    public static boolean recebePatrimonio(String id){
+       Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
+       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE || 
+               patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
+            return false;
+            else{
+                patrimonio.setStatus("EM_POSSE");
+                patrimonio.setDataRetorno(Calendar.getInstance());
+                //patrimonio.setDataSaida(null);
+                PatrimonioAccessService.update(patrimonio);
+                return true;
+       }
+       
+    }
+    
+    public static Calendar dataParse(String data){
+        String[] dataSplited;
+        dataSplited = data.split("-");
+        Calendar dataParsed = Calendar.getInstance();
+        dataParsed.set(Calendar.YEAR, Integer.parseInt(dataSplited[0]));
+        dataParsed.set(Calendar.MONTH, Integer.parseInt(dataSplited[1])-1);
+        dataParsed.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dataSplited[2]));
+        
+        return dataParsed;
+    }
     
     /**
      * Concatenates values from objects Patrimonio into a new String
@@ -140,7 +191,6 @@ public class PatrimonioProcessService {
         
         return output;
     }
-    
     
     /**
      * Concatenates values from a object Patrimonio into a new String

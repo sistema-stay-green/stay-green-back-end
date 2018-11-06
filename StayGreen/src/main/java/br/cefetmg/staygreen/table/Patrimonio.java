@@ -21,37 +21,36 @@ public class Patrimonio {
     
     // Attributes
     @Id
-    private Integer id;
-    private String nome;
-    private String tipo;
-    private String finalidade;
-    private PatrimonioStatusEnum status;
-    private Double indiceDepreciacao;
-    private Double valorCompra;
-    private Calendar dataCompra;
-    private Calendar dataSaida;
-    private Calendar dataRetorno;
-    private Calendar dataBaixa;
-    
+    private Integer idPatrimonio;
+    private String nomePatrimonio;
+    private PatrimonioTipoEnum tipoPatrimonio;
+    private String finalidadePatrimonio;
+    private PatrimonioStatusEnum statusPatrimonio;
+    private Double indDeprecPatrimonio;
+    private Double valorCompraPatrimonio;
+    private Calendar dataCompraPatrimonio;
+    private Calendar dataSaidaPatrimonio;
+    private Calendar dataRetornoPatrimonio;
+    private Calendar dataBaixaPatrimonio;
     
     // Constructors
 
     /**
      *  Cria um patrimônio com um Id e Nome 
-     * @param id Id único da linha na tabela
-     * @param nome Nome do patrimônio
+     * @param idPatrimonio Id único da linha na tabela
+     * @param nomePatrimonio Nome do patrimônio
      */
-    public Patrimonio(Integer id, String nome) {
-        this.id = id;
-        this.nome = nome;
+    public Patrimonio(Integer idPatrimonio, String nomePatrimonio) {
+        this.idPatrimonio = idPatrimonio;
+        this.nomePatrimonio = nomePatrimonio;
     }
     
     /**
      * Cria um patrimônio com um Nome
-     * @param nome Nome do patrimônio
+     * @param nomePatrimonio Nome do patrimônio
      */
-    public Patrimonio(String nome){
-        this(null, nome);
+    public Patrimonio(String nomePatrimonio){
+        this(null, nomePatrimonio);
     }
     
     /**
@@ -61,120 +60,132 @@ public class Patrimonio {
         this(null, null);
     }
     
+    public void embedPatrimonioData(PatrimonioData patrimonioData){
+        
+        if(patrimonioData.getDataBaixa() != null)
+            this.dataBaixaPatrimonio = patrimonioData.getDataBaixa();
+        
+        if(patrimonioData.getDataCompra() != null)
+            this.dataCompraPatrimonio = patrimonioData.getDataCompra();
+        
+        if(patrimonioData.getDataRetorno() != null)
+            this.dataRetornoPatrimonio = patrimonioData.getDataRetorno();
+        
+        if(patrimonioData.getDataSaida() != null)
+            this.dataSaidaPatrimonio = patrimonioData.getDataSaida();
+    }
+    
     // Getter and Setter
     public Integer getId() {
-        return id;
+        return idPatrimonio;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(Integer idPatrimonio) {
+        this.idPatrimonio = idPatrimonio;
     }
 
     public String getNome() {
-        return nome;
+        return nomePatrimonio;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nomePatrimonio   ) {
+        this.nomePatrimonio = nomePatrimonio;
     }
 
     public String getFinalidade() {
-        return finalidade;
+        return finalidadePatrimonio;
     }
 
-    public void setFinalidade(String finalidade) {
-        this.finalidade = finalidade;
+    public void setFinalidade(String finalidadePatrimonio) {
+        this.finalidadePatrimonio = finalidadePatrimonio;
     }
 
     public Enum getStatus() {
-        return status;
+        return statusPatrimonio;
     }
 
-    public void setStatus(PatrimonioStatusEnum status) {
-        this.status = status;
+    public void setStatus(PatrimonioStatusEnum statusPatrimonio) {
+        this.statusPatrimonio = statusPatrimonio;
     }
     
-    public void setStatus(String status){
-        
-        try {
-            this.status = PatrimonioStatusEnum.valueOf(status);
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception + " at Patrimonio.setStatus()");
-            System.out.println(" !!! ERRO !!! O valor inserido não corresponde "
-                    + "a um estado possível de PatrimonioStatusEnum");
-        }
+    public void setStatus(String statusPatrimonio){
+        this.statusPatrimonio = PatrimonioStatusEnum.valueOf(statusPatrimonio);
     }
 
     public Double getIndiceDepreciacao() {
-        return indiceDepreciacao;
+        return indDeprecPatrimonio;
     }
 
-    public void setIndiceDepreciacao(Double indiceDepreciacao) {
-        this.indiceDepreciacao = indiceDepreciacao;
+    public void setIndiceDepreciacao(Double indDeprecPatrimonio) {
+        this.indDeprecPatrimonio = indDeprecPatrimonio;
     }
 
     public Double getValorCompra() {
-        return valorCompra;
+        return valorCompraPatrimonio;
     }
 
-    public void setValorCompra(Double valorCompra) {
-        this.valorCompra = valorCompra;
+    public void setValorCompra(Double valorCompraPatrimonio) {
+        this.valorCompraPatrimonio = valorCompraPatrimonio;
     }
 
     public Calendar getDataCompra() {
-        return dataCompra;
+        return dataCompraPatrimonio;
     }
 
-    public void setDataCompra(Calendar dataCompra) {
-        this.dataCompra = dataCompra;
+    public void setDataCompra(Calendar dataCompraPatrimonio) {
+        this.dataCompraPatrimonio = dataCompraPatrimonio;
     }
     
-    public void setDataCompra(Date dataCompra) {
-        this.dataCompra = Data.dateToCalendar(dataCompra);
+    public void setDataCompra(Date dataCompraPatrimonio) {
+        this.dataCompraPatrimonio = Data.dateToCalendar(dataCompraPatrimonio);
     }
 
     public Calendar getDataSaida() {
-        return dataSaida;
+        return dataSaidaPatrimonio;
     }
 
-    public void setDataSaida(Calendar dataSaida) {
-        this.dataSaida = dataSaida;
+    public void setDataSaida(Calendar dataSaidaPatrimonio) {
+        this.dataSaidaPatrimonio = dataSaidaPatrimonio;
     }
     
-    public void setDataSaida(Date dataSaida) {
-        this.dataSaida = Data.dateToCalendar(dataSaida);
+    public void setDataSaida(Date dataSaidaPatrimonio) {
+        this.dataSaidaPatrimonio = Data.dateToCalendar(dataSaidaPatrimonio);
     }
     
     public Calendar getDataRetorno() {
-        return dataRetorno;
+        return dataRetornoPatrimonio;
     }
     
-    public void setDataRetorno(Calendar dataRetorno) {
-        this.dataRetorno = dataRetorno;
+    public void setDataRetorno(Calendar dataRetornoPatrimonio) {
+        this.dataRetornoPatrimonio = dataRetornoPatrimonio;
     }
     
-    public void setDataRetorno(Date dataRetorno) {
-        this.dataRetorno = Data.dateToCalendar(dataRetorno);
+    public void setDataRetorno(Date dataRetornoPatrimonio) {
+        this.dataRetornoPatrimonio = Data.dateToCalendar(dataRetornoPatrimonio);
     }
 
     public Calendar getDataBaixa() {
-        return dataBaixa;
+        return dataBaixaPatrimonio;
     }
 
-    public void setDataBaixa(Calendar dataBaixa) {
-        this.dataBaixa = dataBaixa;
+    public void setDataBaixa(Calendar dataBaixaPatrimonio) {
+        this.dataBaixaPatrimonio = dataBaixaPatrimonio;
     }
     
-    public void setDataBaixa(Date dataBaixa) {
-        this.dataBaixa = Data.dateToCalendar(dataBaixa);
+    public void setDataBaixa(Date dataBaixaPatrimonio) {
+        this.dataBaixaPatrimonio = Data.dateToCalendar(dataBaixaPatrimonio);
     }
 
-    public String getTipo() {
-        return tipo;
+    public PatrimonioTipoEnum getTipo() {
+        return tipoPatrimonio;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo(PatrimonioTipoEnum tipoPatrimonio) {
+        this.tipoPatrimonio = tipoPatrimonio;
+    }
+    
+    public void setTipo(String tipoPatrimonio){
+        this.tipoPatrimonio = PatrimonioTipoEnum.valueOf(tipoPatrimonio);
     }
 }
 
