@@ -15,10 +15,10 @@ import br.cefetmg.staygreen.annotation.Tabela;
 @Tabela("Insumo")
 public class Insumo {
     @Id
-    private Long id;
+    private Long idInsumo;
     private String nomeInsumo;
     private String finalidadeInsumo;
-    private Double valorUnitInsumo;
+    private Double valorCompraInsumo;
     private Integer quantEstoqueInsumo;
     private Integer pontoAvisoInsumo;
 
@@ -26,21 +26,21 @@ public class Insumo {
         this(null, null, null, null, null, null);
     }
 
-    public Insumo(Long id, String nomeInsumo, String finalidadeInsumo, Double valorUnitInsumo, Integer quantEstoqueInsumo, Integer pontoAvisoInsumo) {
-        this.id = id;
+    public Insumo(Long idInsumo, String nomeInsumo, String finalidadeInsumo, Double valorCompraInsumo, Integer quantEstoqueInsumo, Integer pontoAvisoInsumo) {
+        this.idInsumo = idInsumo;
         this.nomeInsumo = nomeInsumo;
         this.finalidadeInsumo = finalidadeInsumo;
-        this.valorUnitInsumo = valorUnitInsumo;
+        this.valorCompraInsumo = valorCompraInsumo;
         this.quantEstoqueInsumo = quantEstoqueInsumo;
         this.pontoAvisoInsumo = pontoAvisoInsumo;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdInsumo() {
+        return idInsumo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdInsumo(Long idInsumo) {
+        this.idInsumo = idInsumo;
     }
 
     public String getNomeInsumo() {
@@ -60,11 +60,11 @@ public class Insumo {
     }
 
     public Double getValorUnitInsumo() {
-        return valorUnitInsumo;
+        return valorCompraInsumo;
     }
 
-    public void setValorUnitInsumo(Double valorUnitInsumo) {
-        this.valorUnitInsumo = valorUnitInsumo;
+    public void setValorUnitInsumo(Double valorCompraInsumo) {
+        this.valorCompraInsumo = valorCompraInsumo;
     }
 
     public Integer getQuantEstoqueInsumo() {
@@ -81,6 +81,15 @@ public class Insumo {
 
     public void setPontoAvisoInsumo(Integer pontoAvisoInsumo) {
         this.pontoAvisoInsumo = pontoAvisoInsumo;
+    }
+
+    @Override
+    public String toString() {
+        return "Insumo{" + "id=" + idInsumo + ", nomeInsumo=" + nomeInsumo
+                + ", finalidadeInsumo=" + finalidadeInsumo
+                + ", valorCompraInsumo=" + valorCompraInsumo
+                + ", quantEstoqueInsumo=" + quantEstoqueInsumo
+                + ", pontoAvisoInsumo=" + pontoAvisoInsumo + '}';
     }
     
     
