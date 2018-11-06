@@ -24,6 +24,15 @@ public class VendaUsuario {
     private Integer tempoEntregaVenda;
     private Integer numeroVenda;
 
+    /**
+     * Cria uma Venda
+     * @param id id da venda
+     * @param idTransacao id da venda na tabela transação
+     * @param idComprador id do comprador
+     * @param freteVenda preço do frete da venda
+     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param numeroVenda numero da venda
+     */
     public VendaUsuario(Long id, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
         this.id = id;
         this.idTransacao = idTransacao;
@@ -33,12 +42,27 @@ public class VendaUsuario {
         this.numeroVenda = numeroVenda;
     }
 
+    /**
+     * Cria uma venda sem o id
+     * @param idTransacao id da venda na tabela transação
+     * @param idComprador id do comprador
+     * @param freteVenda preço do frete da venda
+     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param numeroVenda numero da venda
+     */
     public VendaUsuario(Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
         this.freteVenda = freteVenda;
         this.tempoEntregaVenda = tempoEntregaVenda;
         this.numeroVenda = numeroVenda;
+    }
+
+    /**
+     * Cria uma venda com todos os campos nulos
+     */
+    public VendaUsuario() {
+        this(null, null, null, null, null);
     }
 
     public Long getId() {
@@ -88,5 +112,18 @@ public class VendaUsuario {
     public void setNumeroVenda(Integer numeroVenda) {
         this.numeroVenda = numeroVenda;
     }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "Id: " + this.id 
+                + ", Id da Transação: " + this.idTransacao
+                + ", Id do Comprador: " + this.idComprador
+                + ", Frete da Compra: " + this.freteVenda
+                + ", Tempo de entrega: " + this.tempoEntregaVenda
+                + ", Numero da Venda: " + this.numeroVenda
+                + "}";
+    }
+    
     
 }
