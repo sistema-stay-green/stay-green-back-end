@@ -16,7 +16,7 @@ import br.cefetmg.staygreen.annotation.Tabela;
 @Tabela("produto")
 public class Produto {
     @Id
-    private Long id;
+    private Long idProduto;
     private String nomeProduto;
     private String descrProduto;
     private UnidadesMedidaProduto unidMedProduto;
@@ -26,7 +26,7 @@ public class Produto {
     private String fotoMercadoria;
 
     public Produto(Long id, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
-        this.id = id;
+        this.idProduto = id;
         this.nomeProduto = nomeProduto;
         this.descrProduto = descProduto;
         this.unidMedProduto = unidMedProduto;
@@ -57,12 +57,12 @@ public class Produto {
         this(null, null, null, null, null, null, null);
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdProduto() {
+        return idProduto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
     }
 
     public String getNomeProduto() {

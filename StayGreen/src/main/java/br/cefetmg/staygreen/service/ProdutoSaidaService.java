@@ -112,7 +112,7 @@ public class ProdutoSaidaService {
             if (result.next()) {
                 do {
                     Produto produto = new Produto();
-                    produto.setId(Long.parseLong(result.getString(ID_COLUMN)));
+                    produto.setIdProduto(Long.parseLong(result.getString(ID_COLUMN)));
                     produto.setNomeProduto(result.getString(NOME_PRODUTO_COLUMN));
                     produto.setDescrProduto(result.getString(DESCRICAO_PRODUTO_COLUMN));
                     produto.setUnidMedProduto(UnidadesMedidaProduto.converter(result.getString(UNIDADE_MEDIDA_PRODUTO_COLUMN)));

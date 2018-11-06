@@ -41,8 +41,8 @@ public class ProdutoEntradaService {
 
     public static void deletAR(Produto produto) {
 
-        if (produto.getId() != null) {
-            SQL.delete((int) produto.getId().longValue(), Produto.class);
+        if (produto.getIdProduto() != null) {
+            SQL.delete((int) produto.getIdProduto().longValue(), Produto.class);
         } else {
             System.out.println("!!! ERRO !!! Não foi possível deletar pois"
                     + " o Produto recebido não possui um Id definido.");

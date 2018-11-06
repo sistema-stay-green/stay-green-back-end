@@ -6,7 +6,6 @@
 package teste_vendas;
 
 import br.cefetmg.staygreen.table.Produto;
-import br.cefetmg.staygreen.util.Reflection;
 import br.cefetmg.staygreen.util.SQL;
 import java.util.List;
 /**
