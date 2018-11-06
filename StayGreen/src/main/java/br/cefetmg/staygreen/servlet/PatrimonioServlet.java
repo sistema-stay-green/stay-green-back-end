@@ -12,10 +12,16 @@ import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -58,7 +64,7 @@ public class PatrimonioServlet extends HttpServlet {
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
-                    Calendar currentTime = Calendar.getInstance();
+                    Calendar currentTime = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
 
                     PatrimonioProcessService.compraPatrimonio(
                             patrimonio.getNome(), patrimonio.getTipo(),
@@ -66,53 +72,16 @@ public class PatrimonioServlet extends HttpServlet {
                             patrimonio.getValorCompra(), currentTime
                     );
                     
-                    try{
-                    ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-                    if(lastId.next()){
-                        Patrimonio patrimonioReturn = PatrimonioAccessService.getPatrimonioById(
-                                Integer.toString(lastId.getInt("LAST_INSERT_ID")));
-                        resposta = JSON.stringify(patrimonioReturn);
-                    }
-                    }catch(SQLException ex){
-                        System.out.println(ex + " at case Compra");
-                    }
+                    patrimonio = PatrimonioAccessService.getLastInsertedPatrimonio();
+                    
+                    if(patrimonio != null)
+                        resposta = JSON.stringify(patrimonio);
+                            
+                    
                     break;
 
-                case "s": //Caso de saída
-
-                    switch(request.getParameter("tipoSaida")){
-
-                        case "ALUGADO":
-                            if(PatrimonioProcessService.alugaPatrimonio(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "I";
-                            break;
-
-                        case "EM_MANUTENCAO":
-                            if(PatrimonioProcessService.colocaEmManutencao(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "I";
-                            break;
-                        
-                        case "VENDA": //Caso de venda
-
-                            if(PatrimonioProcessService.vendaPatrimonio(request.getParameter("id")))
-                                resposta = "S";
-                                else
-                                    resposta = "R";       
-                            break;
-
-                        default:
-                            throw new IllegalArgumentException("Parametro 'tipoSaida' possui um valor inválido.");
-                    }
-
                 case "e": //Caso de entrada
-                    if(PatrimonioProcessService.recebePatrimonio(request.getParameter("id")))
-                        resposta = "S";
-                        else
-                            resposta = "I";
+                    PatrimonioProcessService.recebePatrimonio(request.getParameter("id"));
                     break;
 
                 case "p": //Caso de pesquisa
@@ -120,42 +89,20 @@ public class PatrimonioServlet extends HttpServlet {
                     switch(request.getParameter("pesquisarPor")){
 
                         case "id":
-                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("id"));
+                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
                             
-                            if (patrimonios != null) {
-                                
-                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
-                                resposta += "E";
-                                
-                                // Caso Stringfy não funcione para ArrayList:
-                                for (Patrimonio currentPatrimonio : patrimonios) {
-                                    resposta += JSON.stringify(currentPatrimonio);
-                                }
-                                
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
-                            } else
-                                resposta = "N";
+                            if (patrimonio != null) {
+                                    resposta += JSON.stringify(patrimonio);
+                            } 
                             break;
 
                         case "nome":
                             
                             patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
                             
-                            if (patrimonios != null) {
-                                
-                                // Caso o patrimonio seja diferente de null insere o valor E (consultar tabela no inicio do switch de casos)
-                                resposta += "E";
-                                
-                                // Caso Stringfy não funcione para ArrayList:
-                                for (Patrimonio currentPatrimonio : patrimonios) {
-                                    resposta += JSON.stringify(currentPatrimonio);
-                                }
-                                
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
-                            } else
-                                resposta = "N";
+                            if (patrimonios != null) {                               
+                                    resposta += JSON.stringify(patrimonios);
+                            }
                             break;
 
                         default:
@@ -166,37 +113,47 @@ public class PatrimonioServlet extends HttpServlet {
                 case "r": //Caso de retorno de todos os patrimonios
                     patrimonios = PatrimonioAccessService.get("");
                             
-                        if (patrimonios != null) {
-                            // Caso Stringfy não funcione para ArrayList:
-                            resposta += "E";
-                            
-                            for (Patrimonio currentPatrimonio : patrimonios) {
-                                resposta += JSON.stringify(currentPatrimonio);
-                            }
-                                
-                                // Caso funcione:
-                                //resposta = JSON.stringify(patrimonios);
-                        } else
-                            resposta = "N";
+                    if (patrimonios != null) {
+                            resposta = JSON.stringify(patrimonios);             
+                    }
                     break;
                     
                 case "u": 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    
+                    Calendar dataCompra = null;
+                    Calendar dataBaixa = null;
+                    Calendar dataSaida = null;
+                    Calendar dataRetorno = null;
+                    
+                    if(request.getParameter("dataCompra")!=null || request.getParameter("dataCompra") == "")
+                        dataCompra = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
+                    if(request.getParameter("dataBaixa")!=null || request.getParameter("dataBaixa") == "")    
+                        dataBaixa = PatrimonioProcessService.dataParse(request.getParameter("dataBaixa"));
+                    if(request.getParameter("dataSaida")!=null || request.getParameter("dataSaida") == "")    
+                        dataSaida = PatrimonioProcessService.dataParse(request.getParameter("dataSaida"));
+                    if(request.getParameter("dataRetorno")!=null || request.getParameter("dataRetorno") == "")    
+                        dataRetorno = PatrimonioProcessService.dataParse(request.getParameter("dataRetorno"));
+                    
+                    if(dataCompra!=null)
+                        patrimonio.setDataCompra(dataCompra);
+                    if(dataBaixa!=null)
+                        patrimonio.setDataBaixa(dataBaixa);
+                    if(dataSaida!=null)
+                        patrimonio.setDataSaida(dataSaida);
+                    if(dataRetorno!=null)
+                        patrimonio.setDataRetorno(dataRetorno);
+                    
                     if(patrimonio != null){
-                        
                         PatrimonioAccessService.update(patrimonio);
-                        resposta = "S";
-                        }else
-                            resposta = "N";
+                    }
                     break;
                     
                 case "d":
-                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
                     if(patrimonio != null){
                         PatrimonioAccessService.delete(patrimonio);
-                        resposta = "S";
-                        }else
-                            resposta = "N";
+                    }
                     
                     break;
 

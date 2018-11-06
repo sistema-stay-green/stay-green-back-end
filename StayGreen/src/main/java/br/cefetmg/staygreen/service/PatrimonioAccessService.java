@@ -162,14 +162,14 @@ public class PatrimonioAccessService {
         return patrimonios;
     }
     
-    public Patrimonio getLastInsertedPatrimonio(){
+    public static Patrimonio getLastInsertedPatrimonio(){
         
         try{
             ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
             
             if(lastId.next())
                 return PatrimonioAccessService.getPatrimonioById(
-                        Integer.toString(lastId.getInt("LAST_INSERT_ID")));
+                        Integer.toString(lastId.getInt("LAST_INSERT_ID()")));
             
         } catch(SQLException ex){
             System.out.println(ex + " at case Compra");

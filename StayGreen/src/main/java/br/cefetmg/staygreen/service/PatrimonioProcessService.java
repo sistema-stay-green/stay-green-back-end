@@ -9,8 +9,12 @@ package br.cefetmg.staygreen.service;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Classe com a lógica principal de manipulação dos patrimônios da empresa.
@@ -61,7 +65,8 @@ public class PatrimonioProcessService {
         
 	    Integer diferencaData = anoAtual-anoCompra;
 
-        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual) * valorCompra);
+        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual)
+                * valorCompra);
         
         if(valorAtual <= 0)
             
@@ -112,8 +117,9 @@ public class PatrimonioProcessService {
      * @param dataCompra
      * @author Simonetti
      */
-    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, String finalidade,
-        Double indiceDepreciacao, Double valorCompra, Calendar dataCompra){
+    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, 
+            String finalidade,Double indiceDepreciacao, Double valorCompra,
+            Calendar dataCompra){
         
         Patrimonio novoPatrimonio = new Patrimonio();
         
@@ -134,42 +140,7 @@ public class PatrimonioProcessService {
         PatrimonioAccessService.insert(novoPatrimonio);      
 
     }
-    
-    /**
-     * Coloca um patrimonio em manutencao
-     * @param id
-     * @return true ou false dependendo se foi para manutenção corretamente
-     * @author Simonetti
-     */
-    public static boolean colocaEmManutencao(String id){
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-        if(patrimonio.getStatus() != PatrimonioStatusEnum.EM_POSSE){
-            return false;
-            }else{
-                patrimonio.setStatus("EM_MANUTENCAO");
-                patrimonio.setDataSaida(Calendar.getInstance());
-                PatrimonioAccessService.update(patrimonio);
-                return true;
-        }
-    }
-    
-    /**
-     * Aluga um patrimonio para terceiros
-     * @param id
-     * @return true ou false dependendo se for alugado corretamente
-     * @author Simonetti
-     */
-    public static boolean alugaPatrimonio(String id){
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-        if(patrimonio.getStatus() != PatrimonioStatusEnum.EM_POSSE){
-            return false;
-            }else{
-                patrimonio.setStatus("ALUGADO");
-                patrimonio.setDataSaida(Calendar.getInstance());
-                PatrimonioAccessService.update(patrimonio);
-                return true;
-        }
-    }
+
     
     /**
      * Recebe um patrimonio que estava fora da fazenda
@@ -179,7 +150,8 @@ public class PatrimonioProcessService {
      */
     public static boolean recebePatrimonio(String id){
        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE)
+       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE || 
+               patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
             return false;
             else{
                 patrimonio.setStatus("EM_POSSE");
@@ -189,6 +161,17 @@ public class PatrimonioProcessService {
                 return true;
        }
        
+    }
+    
+    public static Calendar dataParse(String data){
+        String[] dataSplited;
+        dataSplited = data.split("-");
+        Calendar dataParsed = Calendar.getInstance();
+        dataParsed.set(Calendar.YEAR, Integer.parseInt(dataSplited[0]));
+        dataParsed.set(Calendar.MONTH, Integer.parseInt(dataSplited[1])-1);
+        dataParsed.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dataSplited[2]));
+        
+        return dataParsed;
     }
     
     /**
