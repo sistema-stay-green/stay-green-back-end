@@ -18,6 +18,8 @@ import br.cefetmg.staygreen.table.VendaUsuario;
 import br.cefetmg.staygreen.table.TipoTransacao;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Calendar;
 
@@ -31,7 +33,7 @@ public class DadosVendasServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         
         Long idItemTransacao = Long.parseLong(request.getParameter("idItemTransacao"));
@@ -47,8 +49,7 @@ public class DadosVendasServlet extends HttpServlet {
         
         Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
         SQL.insert(transacao);
-        Integer idTransacao = SQL.getLastInsertId();
-      
+        Long idTransacao = new Long(SQL.getLastInsertId());
         String nomeComprador = request.getParameter("nomeComprador");
         String enderecoComprador = request.getParameter("enderecoComprador");
         String cepComprador = request.getParameter("cepComprador");
@@ -58,13 +59,32 @@ public class DadosVendasServlet extends HttpServlet {
         
         Comprador comprador = new Comprador(nomeComprador, enderecoComprador, cepComprador, modoPagamento);
         SQL.insert(comprador);
-        Integer idComprador = SQL.getLastInsertId();
+        Long idComprador = new Long(SQL.getLastInsertId());
         
         Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
         Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
         
-        //VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda);
-        //SQL.insert(venda);
+        ResultSet resultSetAux = SQL.query("SELECT COUNT(*) AS total FROM VendaUsuario");
+        Integer tabelaVazia = 0;
+        while(resultSetAux.next()){
+            tabelaVazia = resultSetAux.getInt("total");
+        }
+        resultSetAux = SQL.query("SELECT MAX(id) as id FROM VendaUsuario");
+        
+        Integer numeroVendaAux = 0;
+        while(resultSetAux.next()){
+            numeroVendaAux = resultSetAux.getInt("id");
+        }
+        
+        Integer numeroVenda;
+        if(tabelaVazia == 0){
+            numeroVenda = 1;
+        } else {
+            numeroVenda = numeroVendaAux + 1;
+        }
+        
+        VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda);
+        SQL.insert(venda);
      
     }
 
