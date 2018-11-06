@@ -45,9 +45,10 @@ public class DadosVendasServlet extends HttpServlet {
         Calendar dataTransacao = Calendar.getInstance();
         dataTransacao.set(ano, mes, dia);
         
-        Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
-        Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
-        
+        Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
+        SQL.insert(transacao);
+        Integer idTransacao = SQL.getLastInsertId();
+      
         String nomeComprador = request.getParameter("nomeComprador");
         String enderecoComprador = request.getParameter("enderecoComprador");
         String cepComprador = request.getParameter("cepComprador");
@@ -55,13 +56,16 @@ public class DadosVendasServlet extends HttpServlet {
         
         ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
         
-        Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
         Comprador comprador = new Comprador(nomeComprador, enderecoComprador, cepComprador, modoPagamento);
-        //VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda); ERRO
-        
-        SQL.insert(transacao);
-        //SQL.insert(venda);
         SQL.insert(comprador);
+        Integer idComprador = SQL.getLastInsertId();
+        
+        Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
+        Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
+        
+        //VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda);
+        //SQL.insert(venda);
+     
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
