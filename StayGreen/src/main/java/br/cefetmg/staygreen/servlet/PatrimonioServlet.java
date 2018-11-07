@@ -9,19 +9,9 @@ import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
-import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Mei
+ * @author Mei Fagundes
  */
 @WebServlet(name = "PatrimonioServlet", urlPatterns = {"/PatrimonioServlet"})
 public class PatrimonioServlet extends HttpServlet {
@@ -43,7 +33,7 @@ public class PatrimonioServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * @author Simonetti, Mei
+     * @author Samuel Simonetti, Mei Fagundes
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,106 +45,86 @@ public class PatrimonioServlet extends HttpServlet {
         
             switch(request.getParameter("action")){
                 
-                //Valores iniciais do retorno: S -> Sem problemas
-                //                             R -> Comando redundante
-                //                             I -> Comando ilegal
-                //                             E -> Patrimonio(s) encontrado(s)
-                //                             N -> Nenhum patrimonio encontrado/não recebido
+                //Valores iniciais do retorno: S -> Succeded
+                //                             F -> Failed
+                //                             N -> Not found
                 
                 case "c": //Caso de compra
 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
-                    Calendar currentTime = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
-
-                    PatrimonioProcessService.compraPatrimonio(
-                            patrimonio.getNome(), patrimonio.getTipo(),
-                            patrimonio.getFinalidade(), patrimonio.getIndiceDepreciacao(),
-                            patrimonio.getValorCompra(), currentTime
-                    );
                     
-                    patrimonio = PatrimonioAccessService.getLastInsertedPatrimonio();
-                    
-                    if(patrimonio != null)
-                        resposta = JSON.stringify(patrimonio);
-                            
-                    
+                    if (patrimonio != null) {
+                        if (PatrimonioAccessService.insert(patrimonio)){
+                            patrimonio = PatrimonioAccessService.
+                                    getLastInsertedPatrimonio();
+                            resposta = JSON.stringify(patrimonio);
+                        }
+                        else
+                            resposta = "F";
+                    }
+                    else
+                        resposta = "F";
                     break;
 
-                case "e": //Caso de entrada
-                    PatrimonioProcessService.recebePatrimonio(request.getParameter("id"));
-                    break;
+                case "s": //Caso de pesquisa
 
-                case "p": //Caso de pesquisa
-
-                    switch(request.getParameter("pesquisarPor")){
+                    switch(request.getParameter("s")){
 
                         case "id":
-                            patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                            patrimonio = PatrimonioAccessService.
+                                    getPatrimonioById(request.getParameter("id"));
                             
-                            if (patrimonio != null) {
-                                    resposta += JSON.stringify(patrimonio);
-                            } 
+                            if (patrimonio != null)
+                                resposta += JSON.stringify(patrimonio);
+                            else
+                                resposta = "N";
                             break;
 
                         case "nome":
+                            patrimonios = PatrimonioAccessService.
+                                    getPatrimoniosByNome(request.getParameter("name"));
                             
-                            patrimonios = PatrimonioAccessService.getPatrimoniosByNome(request.getParameter("name"));
-                            
-                            if (patrimonios != null) {                               
-                                    resposta += JSON.stringify(patrimonios);
-                            }
+                            if (patrimonios != null)                  
+                                resposta += JSON.stringify(patrimonios);
+                            else
+                                resposta = "N";
                             break;
 
                         default:
-                            throw new IllegalArgumentException("Parametro 'pesquisarPor' possui um valor inválido.");
+                            throw new IllegalArgumentException("Parametro 's' possui um valor inválido.");
                     }
                     break;
 
                 case "r": //Caso de retorno de todos os patrimonios
-                    patrimonios = PatrimonioAccessService.get("");
+                    
+                    patrimonios = PatrimonioAccessService.getAll();
                             
-                    if (patrimonios != null) {
-                            resposta = JSON.stringify(patrimonios);             
-                    }
+                    if (patrimonios != null)
+                            resposta = JSON.stringify(patrimonios);
                     break;
                     
                 case "u": 
                     patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
                     
-                    Calendar dataCompra = null;
-                    Calendar dataBaixa = null;
-                    Calendar dataSaida = null;
-                    Calendar dataRetorno = null;
-                    
-                    if(request.getParameter("dataCompra")!=null || request.getParameter("dataCompra") == "")
-                        dataCompra = PatrimonioProcessService.dataParse(request.getParameter("dataCompra"));
-                    if(request.getParameter("dataBaixa")!=null || request.getParameter("dataBaixa") == "")    
-                        dataBaixa = PatrimonioProcessService.dataParse(request.getParameter("dataBaixa"));
-                    if(request.getParameter("dataSaida")!=null || request.getParameter("dataSaida") == "")    
-                        dataSaida = PatrimonioProcessService.dataParse(request.getParameter("dataSaida"));
-                    if(request.getParameter("dataRetorno")!=null || request.getParameter("dataRetorno") == "")    
-                        dataRetorno = PatrimonioProcessService.dataParse(request.getParameter("dataRetorno"));
-                    
-                    if(dataCompra!=null)
-                        patrimonio.setDataCompra(dataCompra);
-                    if(dataBaixa!=null)
-                        patrimonio.setDataBaixa(dataBaixa);
-                    if(dataSaida!=null)
-                        patrimonio.setDataSaida(dataSaida);
-                    if(dataRetorno!=null)
-                        patrimonio.setDataRetorno(dataRetorno);
-                    
-                    if(patrimonio != null){
-                        PatrimonioAccessService.update(patrimonio);
+                    if (patrimonio != null){
+                        if (PatrimonioAccessService.update(patrimonio))
+                            resposta = "S";
+                        else
+                            resposta = "N";
                     }
+                    else
+                        resposta = "F";
                     break;
                     
                 case "d":
                     patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
-                    if(patrimonio != null){
-                        PatrimonioAccessService.delete(patrimonio);
-                    }
-                    
+                    if(patrimonio != null)
+                        if (PatrimonioAccessService.delete(patrimonio))
+                            resposta = "S";
+                        else
+                            resposta = "N";
+                    else
+                        resposta = "F";
                     break;
 
                 default: //Caso base
