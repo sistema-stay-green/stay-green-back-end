@@ -17,15 +17,15 @@ import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.table.VendaUsuario;
 import br.cefetmg.staygreen.table.TipoTransacao;
 import br.cefetmg.staygreen.table.Transacao;
-import br.cefetmg.staygreen.util.JSON;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Servlet que recebe informações via POST e envia para o BD
- * @version 1.0
+ * @version 1.2
  * @author João Pedro
  */
 @WebServlet(name = "DadosVendasServlet", urlPatterns = {"/DadosVendasServlet"})
@@ -47,9 +47,11 @@ public class DadosVendasServlet extends HttpServlet {
         Calendar dataTransacao = Calendar.getInstance();
         dataTransacao.set(ano, mes, dia);
         
-        Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
+        Transacao transacao = new Transacao(idItemTransacao, valorTransacao,
+                quantTransacao, dataTransacao, tipoTransacao);
         SQL.insert(transacao);
         Long idTransacao = new Long(SQL.getLastInsertId());
+
         String nomeComprador = request.getParameter("nomeComprador");
         String enderecoComprador = request.getParameter("enderecoComprador");
         String cepComprador = request.getParameter("cepComprador");
@@ -57,7 +59,8 @@ public class DadosVendasServlet extends HttpServlet {
         
         ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
         
-        Comprador comprador = new Comprador(nomeComprador, enderecoComprador, cepComprador, modoPagamento);
+        Comprador comprador = new Comprador(nomeComprador, enderecoComprador,
+                cepComprador, modoPagamento);
         SQL.insert(comprador);
         Long idComprador = new Long(SQL.getLastInsertId());
         
@@ -69,23 +72,21 @@ public class DadosVendasServlet extends HttpServlet {
         while(resultSetAux.next()){
             tabelaVazia = resultSetAux.getInt("total");
         }
-        resultSetAux = SQL.query("SELECT MAX(id) as id FROM VendaUsuario");
-        
-        Integer numeroVendaAux = 0;
-        while(resultSetAux.next()){
-            numeroVendaAux = resultSetAux.getInt("id");
-        }
-        
+              
         Integer numeroVenda;
         if(tabelaVazia == 0){
             numeroVenda = 1;
         } else {
+            Integer numeroVendaAux = 0;
+            resultSetAux = SQL.query("SELECT MAX(idVenda) AS id FROM VendaUsuario");
+            while(resultSetAux.next())
+                numeroVendaAux = resultSetAux.getInt("id");
             numeroVenda = numeroVendaAux + 1;
         }
         
-        VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda);
+        VendaUsuario venda = new VendaUsuario(idTransacao, idComprador,
+                freteVenda, tempoEntregaVenda, numeroVenda);
         SQL.insert(venda);
-     
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -100,7 +101,11 @@ public class DadosVendasServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DadosVendasServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -114,7 +119,11 @@ public class DadosVendasServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(DadosVendasServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

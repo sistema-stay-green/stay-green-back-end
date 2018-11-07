@@ -22,7 +22,7 @@ public class Comprador {
     private String nomeComprador;
     private String enderecoComprador;
     private String cepComprador;
-    private ModosPagamento modoPagamento;
+    private ModosPagamento modoPagamentoComprador;
 
     /**
      * Cria um Comprador com todos os atribútos inicializados
@@ -37,7 +37,7 @@ public class Comprador {
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
         this.cepComprador = cepComprador;
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
     
     /**
@@ -51,7 +51,7 @@ public class Comprador {
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
         this.cepComprador = cepComprador;
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
     
     /**
@@ -94,11 +94,11 @@ public class Comprador {
     }
 
     public ModosPagamento getModoPagamento() {
-        return modoPagamento;
+        return modoPagamentoComprador;
     }
 
     public void setModoPagamento(ModosPagamento modoPagamento) {
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Comprador {
                 + "Nome: " + this.nomeComprador
                 + "Endereço: " + this.enderecoComprador
                 + "CEP: " + this.cepComprador
-                + "Modo de pagamento: " + this.modoPagamento
+                + "Modo de pagamento: " + this.modoPagamentoComprador
                 + "}";
     }
     
