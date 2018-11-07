@@ -67,6 +67,16 @@ public class TransacaoEAluguelService {
     }
     
     /**
+     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * @param dataFinal
+     * @return int TempoEmAnosFuturos, diferençca de tempo entre agora e uma 
+     * data no futuro
+     */
+    public static int tempoEmAnosFuturos(Calendar dataFinal){
+        return dataFinal.get(Calendar.YEAR)-dataAtual().get(Calendar.YEAR);
+    }
+    
+    /**
      * Calcula a data Atual
      */
     private static Calendar dataAtual(){
