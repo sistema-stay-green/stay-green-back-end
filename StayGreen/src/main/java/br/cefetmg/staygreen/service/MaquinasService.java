@@ -8,7 +8,7 @@ package br.cefetmg.staygreen.service;
 import br.cefetmg.staygreen.table.Aluguel;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import br.cefetmg.staygreen.table.TipoTransacao;
-import br.cefetmg.staygreen.table.Transacao
+import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
