@@ -45,10 +45,12 @@ public class AluguelAccessService {
      */
     public static Aluguel getAluguelFromId(String idAluguel) {
         
-        ArrayList<Aluguel> alugueis = get("SELECT * FROM aluguel WHERE idAluguel=" + idAluguel);
+        ArrayList<Aluguel> alugueis = get("SELECT * FROM aluguel WHERE idAlugue"
+                + "l=" + idAluguel);
         
         if (alugueis == null){
-            System.out.println("Nenhum aluguel encontrado com o Id: " + idAluguel);
+            System.out.println("Nenhum aluguel encontrado com o Id: " + 
+                    idAluguel);
             return null;
         }
         
@@ -62,10 +64,12 @@ public class AluguelAccessService {
      */
     public static Aluguel getAluguelFromIdItem(String idMaquinaAluguel) {
         
-        ArrayList<Aluguel> alugueis = get("SELECT * FROM aluguel WHERE idMaquinaAluguel=" + idMaquinaAluguel);
+        ArrayList<Aluguel> alugueis = get("SELECT * FROM aluguel WHERE "
+                + "idMaquinaAluguel=" + idMaquinaAluguel);
        
         if (alugueis == null){
-            System.out.println("Nenhum aluguel encontrado com o maquina de id: " + idMaquinaAluguel);
+            System.out.println("Nenhum aluguel encontrado com o maquina de id: "
+                    + idMaquinaAluguel);
             return null;
         }
         
@@ -104,7 +108,8 @@ public class AluguelAccessService {
             
             if(result.next()) {
                 do{
-                    Aluguel aluguel=new Aluguel(result.getLong(ID_ALUGUEL_COLUMN), 
+                    Aluguel aluguel=new Aluguel(result.
+                            getLong(ID_ALUGUEL_COLUMN), 
                             result.getLong(ID_MAQUINA_COLUMN), 
                             result.getDouble(VALOR_COLUMN),
                             result.getInt(PERIODO_COLUMN), null);

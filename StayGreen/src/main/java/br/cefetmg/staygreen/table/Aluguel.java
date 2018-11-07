@@ -35,7 +35,8 @@ public class Aluguel {
      * @param dataInicialAluguel Data do emprestimo da produto
      */
     
-    public Aluguel(Long idAluguel, Long idMaquina, double valorAluguel, int periodoAluguel, Calendar dataInicialAluguel) {
+    public Aluguel(Long idAluguel, Long idMaquina, double valorAluguel, 
+            int periodoAluguel, Calendar dataInicialAluguel) {
         this.idAluguel = idAluguel;
         this.idMaquina = idMaquina;
         this.valorAluguel = valorAluguel;
@@ -53,7 +54,7 @@ public class Aluguel {
 
     /**
      *
-     * @return
+     * @return o idAluguel, Id único da linha na tabela
      */
     public Long getIdAluguel() {
         return idAluguel;
@@ -69,7 +70,7 @@ public class Aluguel {
 
     /**
      *
-     * @return
+     * @return o Id da maquina, localizado na tabela Patrimonio
      */
     public Long getIdMaquina() {
         return idMaquina;
@@ -85,7 +86,7 @@ public class Aluguel {
 
     /**
      *
-     * @return
+     * @return ValorAluguel, valor mensal recebido com o aluguel
      */
     public double getValorAluguel() {
         return valorAluguel;
@@ -101,7 +102,7 @@ public class Aluguel {
 
     /**
      *
-     * @return
+     * @return PeriodoAluguel, periodo total que o aluguel está demarcado
      */
     public int getPeriodoAluguel() {
         return periodoAluguel;
@@ -117,7 +118,7 @@ public class Aluguel {
 
     /**
      *
-     * @return
+     * @return DataInicialAluguel, data do emprestimo da produto
      */
     public Calendar getDataInicialAluguel() {
         return dataInicialAluguel;
@@ -154,7 +155,8 @@ public class Aluguel {
      * @return a data que o proximo pagamento deve ser efetuado
      */
     public Calendar getProximoPagamento() {
-        return TransacaoEAluguelService.calculaProximoPagamento(dataInicialAluguel);
+        return TransacaoEAluguelService.
+                calculaProximoPagamento(dataInicialAluguel);
     }
     
     /**
@@ -162,6 +164,7 @@ public class Aluguel {
      * @return a data que o contrato do aluguel acaba
      */
     public Calendar getDataFinalAluguel() {
-        return TransacaoEAluguelService.calculaDataFinal(dataInicialAluguel, periodoAluguel);
+        return TransacaoEAluguelService.calculaDataFinal(dataInicialAluguel,
+                periodoAluguel);
     }
 }

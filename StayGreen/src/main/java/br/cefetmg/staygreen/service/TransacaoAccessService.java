@@ -47,7 +47,8 @@ public class TransacaoAccessService {
      */
     public static Transacao getTransacaoFromId(String id) {
         
-        ArrayList<Transacao> transacoes = get("SELECT * FROM transacao WHERE id=" + id);
+        ArrayList<Transacao> transacoes = get("SELECT * FROM transacao WHERE id"
+                + "=" + id);
         
         if (transacoes == null){
             System.out.println("Nenhuma transacao encontrada com o Id: " + id);
@@ -64,10 +65,12 @@ public class TransacaoAccessService {
      */
     public static Transacao getTransacaoFromIdItem(String idItemTransacao) {
         
-        ArrayList<Transacao> transacoes = get("SELECT * FROM transacao WHERE idItemTransacao=" + idItemTransacao);
+        ArrayList<Transacao> transacoes = get("SELECT * FROM transacao WHERE id"
+                + "ItemTransacao=" + idItemTransacao);
        
         if (transacoes == null){
-            System.out.println("Nenhuma transacao encontrada com o item de id: " + idItemTransacao);
+            System.out.println("Nenhuma transacao encontrada com o item de id: "
+                    + idItemTransacao);
             return null;
         }
         
@@ -157,7 +160,8 @@ public class TransacaoAccessService {
     }
     
     /**
-     * Atualiza as transações no DB correspondentes aos objetos Transação recebidos
+     * Atualiza as transações no DB correspondentes aos objetos Transação 
+     * recebidos
      * @param transacoes
      */
     public static void updateAll(ArrayList<Transacao> transacoes){        

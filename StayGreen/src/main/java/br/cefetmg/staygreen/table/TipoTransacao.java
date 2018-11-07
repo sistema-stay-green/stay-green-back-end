@@ -16,6 +16,9 @@ public enum TipoTransacao {
     INSUMO,
     PRODUTO;
     
+    /**
+     * @return o TipoTransacao
+     */
     public int getTipoTransacao(){
         
         switch (this) {

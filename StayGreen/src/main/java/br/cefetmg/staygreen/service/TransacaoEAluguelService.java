@@ -25,7 +25,8 @@ public class TransacaoEAluguelService {
      * @param tipo
      * @return 
      */
-    public static double calculaValorTotal(double valor, int quantTransacao, int tipo){
+    public static double calculaValorTotal(double valor, int quantTransacao, 
+            int tipo){
         double valorTotal=valor*quantTransacao;
         
         if(tipo<0){
@@ -78,7 +79,8 @@ public class TransacaoEAluguelService {
      * @param dataEmprestimo
      * @return 
      */
-    public static double calculaValorRecebido(double taxaMensal, Calendar dataEmprestimo){
+    public static double calculaValorRecebido(double taxaMensal, 
+            Calendar dataEmprestimo){
         return tempoEmMeses(dataEmprestimo)*taxaMensal;
     }
     
@@ -95,10 +97,12 @@ public class TransacaoEAluguelService {
         int diaInicial = dataEmprestimo.get(Calendar.DAY_OF_MONTH);
         int diaAtual = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         if (diaAtual>diaInicial) { 
-            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), (Calendar.getInstance().get(Calendar.MONTH)+1), diaInicial);
+            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), 
+                    (Calendar.getInstance().get(Calendar.MONTH)+1), diaInicial);
         }
         else
-            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), diaInicial);
+            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), 
+                    Calendar.getInstance().get(Calendar.MONTH), diaInicial);
         return dataProxPagamento;
     }
     
@@ -108,7 +112,8 @@ public class TransacaoEAluguelService {
      * @param periodoAluguel
      * @return 
      */
-    public static Calendar calculaDataFinal(Calendar dataInicial, int periodoAluguel){
+    public static Calendar calculaDataFinal(Calendar dataInicial, 
+            int periodoAluguel){
         Calendar dataFimContrato;
         dataFimContrato = Calendar.getInstance();
         
@@ -126,7 +131,8 @@ public class TransacaoEAluguelService {
      * @param valorCompra
      * @return 
      */
-    public static double calculaValorAtual(Calendar dataInicial, double indiceDepreciacao, double valorCompra){
+    public static double calculaValorAtual(Calendar dataInicial, 
+            double indiceDepreciacao, double valorCompra){
         double valorAtual=valorCompra;
         
         for (int i = 0; i < tempoEmAnos(dataInicial); i++) {

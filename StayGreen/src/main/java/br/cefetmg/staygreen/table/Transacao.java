@@ -9,7 +9,6 @@ import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Gabriel Cruz
@@ -32,12 +31,15 @@ public class Transacao {
      *  Cria uma produto com todos os parametros
      * @param id Id único da linha na tabela
      * @param idItemTransacao Id do elemento localizado em outra tabela
-     * @param valorTransacao Valor total da transação (valor individual * quantidade de elementos)
+     * @param valorTransacao Valor total da transação (valor individual vezes
+     * quantidade de elementos)
      * @param quantTransacao a quantidade de produtos vendida ou comprada
      * @param tipoTransacao Tipo do produto a ser transacionado
      * @param dataTransacao Data de transação do produto
      */
-    public Transacao(Long id, Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacao tipoTransacao) {
+    public Transacao(Long id, Long idItemTransacao, double valorTransacao, 
+            int quantTransacao, Calendar dataTransacao, 
+            TipoTransacao tipoTransacao) {
         this.id = id;
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
@@ -56,8 +58,7 @@ public class Transacao {
     //Sets e Gets
 
     /**
-     *
-     * @return
+     * @return o Long idItemTransacao, Id do elemento localizado em outra tabela
      */
 
     public Long getIdItemTransacao() {
@@ -74,7 +75,7 @@ public class Transacao {
 
     /**
      *
-     * @return
+     * @return o double valorTransacao, que é o valor total da transação
      */
     public double getValorTransacao() {
         return valorTransacao;
@@ -90,7 +91,7 @@ public class Transacao {
 
     /**
      *
-     * @return
+     * @return o int quantTransacao,a quantidade de produtos vendida ou comprada
      */
     public int getQuantTransacao() {
         return quantTransacao;
@@ -106,7 +107,7 @@ public class Transacao {
 
     /**
      *
-     * @return
+     * @return o tipoTransacao, tipo do produto a ser transacionado
      */
     public TipoTransacao getTipoTransacao() {
         return tipoTransacao;
@@ -143,7 +144,7 @@ public class Transacao {
     
     /**
      *
-     * @return
+     * @return o Calendar dataTransacao, data de transação do produto
      */
     public Calendar getDataTransacao() {
         return dataTransacao;
@@ -159,7 +160,7 @@ public class Transacao {
 
     /**
      *
-     * @return
+     * @return o Id único da linha na tabela
      */
     public Long getId() {
         return id;
@@ -177,10 +178,11 @@ public class Transacao {
      *
      * @param valorIndividual
      * @param tipo
-     * @return
+     * @return e calcula o double valorTotal
      */
     public double getValorTotal(double valorIndividual, int tipo){
-        return TransacaoEAluguelService.calculaValorTotal(valorIndividual, quantTransacao, tipo);
+        return TransacaoEAluguelService.calculaValorTotal(valorIndividual, 
+                quantTransacao, tipo);
     }
     
     

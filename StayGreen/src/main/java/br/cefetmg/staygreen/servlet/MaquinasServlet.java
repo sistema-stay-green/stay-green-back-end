@@ -60,6 +60,9 @@ public class MaquinasServlet extends HttpServlet {
                     case "d":
                         MaquinasService.Descarte(maquina);
                         break;
+                    case "m":
+                        MaquinasService.Manuntenir(maquina);
+                        break;
                 }
             } 
             

@@ -19,6 +19,14 @@ import java.util.Calendar;
  */
 
 public class MaquinasService {
+
+    /**
+     * Usado ao comprar uma maquina. 
+     * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
+     * tabela transação
+     * @param maquina
+     * @param quantidade
+     */
     public static void Compra(Patrimonio maquina, int quantidade){
         Calendar dataCompra= Calendar.getInstance();
         maquina.setDataCompra(dataCompra);
@@ -43,6 +51,13 @@ public class MaquinasService {
         PatrimonioAccessService.insert(maquina);
     }
     
+    /**
+     * Usado ao vender uma maquina. 
+     * Muda o Estado da maquina para VENDIDO e adiciona uma nova transação à 
+     * tabela transação
+     * @param maquina
+     * @param quantidade
+     */
     public static void Venda(Patrimonio maquina, int quantidade){
         if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
             System.out.println("Maquina já vendida");
@@ -71,6 +86,13 @@ public class MaquinasService {
         }
     }
     
+    /**
+     * Usado ao alugar uma maquina. 
+     * Muda o Estado da maquina para ALUGADO e adiciona um novo aluguel à 
+     * tabela aluguel
+     * @param maquina
+     * @param request
+     */
     public static void Aluguel(Patrimonio maquina, HttpServletRequest request){
         if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
             System.out.println("Maquina já foi alugada");
@@ -89,12 +111,32 @@ public class MaquinasService {
             PatrimonioAccessService.update(maquina);
         }
     }
+
+    /**
+     * Usado ao descartar uma maquina. 
+     * Muda o Estado da maquina para DESCARTADO
+     * @param maquina
+     */
     public static void Descarte(Patrimonio maquina){
         if(maquina.getStatus() == PatrimonioStatusEnum.DESCARTADO){
-            System.out.println("Maquina tinha sido descartada");
+            System.out.println("Maquina já foi descartada");
         }
         else {
             PatrimonioAccessService.delete(maquina);
+        }
+    }
+    
+    /**
+     * Usado ao manutenir uma maquina. 
+     * Muda o Estado da maquina para EM_MANUTENCAO
+     * @param maquina
+     */
+    public static void Manuntenir(Patrimonio maquina){
+        if(maquina.getStatus() == PatrimonioStatusEnum.EM_MANUTENCAO){
+            System.out.println("Maquina já está em manutenção");
+        }
+        else {
+            maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
         }
     }
 }
