@@ -6,7 +6,6 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,9 +19,6 @@ import java.util.ArrayList;
 public class PatrimonioAccessService {
     
     // Atributos estáticos
-    
-    // Objetos de manipulação interna.
-    private static ResultSet result;
     
     // Constantes que representam os nomes das colunas na tabela do DB SQL.
     private static final String ID_COLUMN;
@@ -60,6 +56,7 @@ public class PatrimonioAccessService {
      * Pesquisa na DB 'staygreen' usando o Id recebido.
      * @param id
      * @return Retorna um objeto Patrimonio que corresponde ao Id recebido.
+     * @author Mei Fagundes
      */
     public static Patrimonio getPatrimonioById(String id){
         
@@ -77,6 +74,7 @@ public class PatrimonioAccessService {
      * Pesquisa na DB 'staygreen' usando o Nome recebido.
      * @param nome
      * @return Retorna objetos Patrimonio que correspondam ao Nome recebido.
+     * @author Mei Fagundes
      */
     public static ArrayList<Patrimonio> getPatrimoniosByNome(String nome){
         
@@ -86,7 +84,6 @@ public class PatrimonioAccessService {
             System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Nome: " + nome);
             return null;
         }
-        
         return patrimonios;
     }
     
@@ -94,6 +91,7 @@ public class PatrimonioAccessService {
      * Pesquisa na DB 'staygreen' usando o Tipo recebido.
      * @param tipo
      * @return Retorna objetos Patrimonio que correspondam ao Tipo recebido. 
+     * @author Mei Fagundes
      */
     public static ArrayList<Patrimonio> getPatrimoniosByTipo(String tipo){
         
@@ -103,8 +101,16 @@ public class PatrimonioAccessService {
             System.out.println("!!! AVISO !!! Nenhum patrimonio encontrado com o Tipo: " + tipo);
             return null;
         }
-        
         return patrimonios;
+    }
+    
+    /**
+     *  Pesquisa todos os Patrimonios na DB 'staygreen'.
+     * @return Retorna todos os objetos Patrimonio na DB 'staygreen'.
+     * @author Mei Fagundes
+     */
+    public static ArrayList<Patrimonio> getAll(){
+        return get("");
     }
     
     /**
@@ -114,6 +120,7 @@ public class PatrimonioAccessService {
      */
     public static ArrayList<Patrimonio> get(String queryCondition){
         
+        ResultSet result;
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
         
         try {
@@ -162,6 +169,10 @@ public class PatrimonioAccessService {
         return patrimonios;
     }
     
+    /**
+     * Tenta Recupera o ultimo Patrimonio inserido na DB 'staygreen'.
+     * @return Retorna o ultimo Patrimonio inserido na DB 'staygreen'.
+     */
     public static Patrimonio getLastInsertedPatrimonio(){
         
         try{
@@ -181,57 +192,64 @@ public class PatrimonioAccessService {
     /**
      * Insere um objeto Patrimonio na DB 'staygreen'
      * @param patrimonio
+     * @return Retorna o Patrimonio inserido com o Id atualizado.
      */
-    public static Patrimonio insert(Patrimonio patrimonio){
+    public static Boolean insert(Patrimonio patrimonio){
         
-        SQL.insert(patrimonio);
-        return getPatrimonioById(Integer.toString(SQL.getLastInsertId()));
+        return SQL.insert(patrimonio);
     }
     
     /**
      * Insere vários objetos Patrimonio na DB 'staygreen'
      * @param patrimonios
+     * @return Retorna o êxito da operação.
      */
-    public static ArrayList<Patrimonio> insertAll(ArrayList<Patrimonio> patrimonios){
+    public static Boolean insertAll(ArrayList<Patrimonio> patrimonios){
         
+        Boolean result = false;
         for (int i = 0; i < patrimonios.size(); i++) {
-            patrimonios.set(i, insert(patrimonios.get(i)));
+            result = insert(patrimonios.get(i));
         }
-        
-        return patrimonios;
+        return result;
     }
     
     /**
      * Atualiza o patrimonio na DB correspondente ao objeto Patrimonio recebido
      * @param patrimonio
+     * @return Retorna o êxito da operação.
      */
-    public static void update(Patrimonio patrimonio){
+    public static Boolean update(Patrimonio patrimonio){
         
-            SQL.update(patrimonio);
+        return SQL.update(patrimonio);
     }
     
     /**
      * Atualiza os patrimonios na DB correspondentes aos objetos Patrimonio recebidos
      * @param patrimonios
+     * @return Retorna o êxito da operação.
      */
-    public static void updateAll(ArrayList<Patrimonio> patrimonios){
+    public static Boolean updateAll(ArrayList<Patrimonio> patrimonios){
         
+        Boolean result = false;
         for (Patrimonio patrimonio : patrimonios) {
-            SQL.update(patrimonio);
+            result = SQL.update(patrimonio);
         }
+        return result;
     }
     
     /**
      * Deleta o Patrimonio do DB através de seu Id.
      * @param patrimonio
+     * @return Retorna o êxito da operação.
      */
-    public static void delete(Patrimonio patrimonio){
+    public static Boolean delete(Patrimonio patrimonio){
         
         if (patrimonio.getId() != null) {
-            SQL.delete(patrimonio.getId(), Patrimonio.class);
+            return SQL.delete(patrimonio.getId(), Patrimonio.class);
         } else{
             System.out.println("!!! ERRO !!! Não foi possível deletar pois"
                     + " o Patrimonio recebido não possui um Id definido.");
+            return false;
         }
     }
 }
