@@ -160,6 +160,11 @@ public class Transacao {
     public double getValorTotal(double valorIndividual, int tipo){
         return TransacaoEAluguelService.calculaValorTotal(valorIndividual, quantTransacao, tipo);
     }
+
+    @Override
+    public String toString() {
+        return "Transacao{" + "id=" + id + ", idItemTransacao=" + idItemTransacao + ", valorTransacao=" + valorTransacao + ", quantTransacao=" + quantTransacao + ", dataTransacao=" + dataTransacao + ", tipoTransacao=" + tipoTransacao + '}';
+    }
     
     
 }

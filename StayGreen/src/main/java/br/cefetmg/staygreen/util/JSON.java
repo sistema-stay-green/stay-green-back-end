@@ -49,7 +49,6 @@ public final class JSON {
      */
     public static <T> T parse(String json, Class<T> objClass) {
         try {
-            System.out.println(json);
             return GSON.fromJson(json, objClass);
         } catch (JsonSyntaxException jsex) {
             System.out.println("Erro na conversão: " + jsex);
