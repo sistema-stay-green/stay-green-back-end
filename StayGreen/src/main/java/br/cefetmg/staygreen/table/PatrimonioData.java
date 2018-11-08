@@ -38,7 +38,7 @@ public class PatrimonioData {
         
         try{
             if (dataCompra != null)
-                return Data.getCalendarFromDateTimeString(dataCompra);
+                return Data.getCalendarFromDateString(dataCompra);
         } catch(ParseException parseException){
             System.out.println("ERRO! " + parseException + " at getDataCompra.");
         }
@@ -53,7 +53,7 @@ public class PatrimonioData {
         
         try{
             if (dataSaida != null)
-                return Data.getCalendarFromDateTimeString(dataSaida);
+                return Data.getCalendarFromDateString(dataSaida);
         } catch(ParseException parseException){
             System.out.println("ERRO! " + parseException + " at getDataSaida.");
         }
@@ -68,7 +68,7 @@ public class PatrimonioData {
         
         try{
             if (dataBaixa != null)
-                return Data.getCalendarFromDateTimeString(dataBaixa);
+                return Data.getCalendarFromDateString(dataBaixa);
         } catch(ParseException parseException){
             System.out.println("ERRO! " + parseException + " at getDataBaixa.");
         }
@@ -83,7 +83,7 @@ public class PatrimonioData {
         
         try{
             if (dataRetorno != null)
-                return Data.getCalendarFromDateTimeString(dataRetorno);
+                return Data.getCalendarFromDateString(dataRetorno);
         } catch(ParseException parseException){
             System.out.println("ERRO! " + parseException + " at getDataRetorno.");
         }
