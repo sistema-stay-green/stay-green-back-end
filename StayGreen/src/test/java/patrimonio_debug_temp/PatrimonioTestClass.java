@@ -32,7 +32,7 @@ public class PatrimonioTestClass {
         //testDelete(2);
         //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
         //testGetCalendarFromDateTimeString();
-        testEmbedPatrimonioData();
+        //testEmbedPatrimonioData();
     }
     
     public static void testEmbedPatrimonioData(){
