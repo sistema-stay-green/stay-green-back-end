@@ -38,14 +38,13 @@ public class MaquinasServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
-            String resposta = "";
             Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"),
                     Patrimonio.class);   
-            int quantidade=Integer.parseInt(request.
-                                getParameter("quantAluguel"));
-/*          Patrimonio maquina = new Patrimonio(21,"Tratorzinho",
-                    "Trator para as crianças aprenderem a profissão","EM_POSSE",
-                    10.0, 10000.0, Calendar.getInstance());// Dados recebidos */
+            String dataCompra = request.getParameter("dataCompra"),
+                   dataSaida = request.getParameter("dataSaida"),
+                   dataRetorno = request.getParameter("dataRetorno"),
+                   dataBaixa = request.getParameter("dataBaixa");
+            int quantidade = 1;
             if(maquina != null) {
                 switch(request.getParameter("acao")){
                     case "c":
