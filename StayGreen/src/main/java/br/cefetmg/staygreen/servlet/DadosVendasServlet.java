@@ -6,15 +6,20 @@
 package br.cefetmg.staygreen.servlet;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
+import javax.servlet.ServletException; 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.table.Comprador;
+import br.cefetmg.staygreen.table.ModosPagamento;
 import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.table.VendaUsuario;
+import br.cefetmg.staygreen.table.TipoTransacao;
+import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
+import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Servlet que recebe informações via POST e envia para o BD
@@ -24,18 +29,39 @@ import br.cefetmg.staygreen.util.JSON;
 @WebServlet(name = "DadosVendasServlet", urlPatterns = {"/DadosVendasServlet"})
 public class DadosVendasServlet extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         
-        String vendaJSON = request.getParameter("venda");
-        String clienteJSON = request.getParameter("cliente");
+        Long idItemTransacao = Long.parseLong(request.getParameter("idItemTransacao"));
+        Double valorTransacao = Double.parseDouble(request.getParameter("valorTransacao"));
+        Integer quantTransacao = Integer.parseInt(request.getParameter("quantTransacao"));
+        Integer dia = Integer.parseInt(request.getParameter("dia"));
+        Integer mes = Integer.parseInt(request.getParameter("mes"));
+        Integer ano = Integer.parseInt(request.getParameter("ano"));
+        TipoTransacao tipoTransacao = TipoTransacao.PRODUTO;
         
-        VendaUsuario venda = JSON.parse(vendaJSON, VendaUsuario.class);
-        Comprador cliente = JSON.parse(clienteJSON, Comprador.class);
+        Calendar dataTransacao = Calendar.getInstance();
+        dataTransacao.set(ano, mes, dia);
         
-        SQL.insert(cliente);
-        SQL.insert(venda);
+        Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
+        Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
+        
+        String nomeComprador = request.getParameter("nomeComprador");
+        String enderecoComprador = request.getParameter("enderecoComprador");
+        String cepComprador = request.getParameter("cepComprador");
+        String modoPagamentoString = request.getParameter("modoPagamento");
+        
+        ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
+        
+        Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
+        Comprador comprador = new Comprador(nomeComprador, enderecoComprador, cepComprador, modoPagamento);
+        //VendaUsuario venda = new VendaUsuario(idTransacao, idComprador, freteVenda, tempoEntregaVenda, numeroVenda); ERRO
+        
+        SQL.insert(transacao);
+        //SQL.insert(venda);
+        SQL.insert(comprador);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

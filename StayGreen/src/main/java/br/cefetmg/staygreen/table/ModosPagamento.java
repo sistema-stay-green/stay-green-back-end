@@ -12,5 +12,5 @@ package br.cefetmg.staygreen.table;
 public enum ModosPagamento {
     CARTAO_CREDITO,
     CARTAO_DEBITO,
-    BOLETO
+    BOLETO;
 }

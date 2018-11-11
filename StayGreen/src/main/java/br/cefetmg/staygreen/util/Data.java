@@ -15,13 +15,10 @@ import java.util.Calendar;
  */
 public class Data {
     
-    private static final Calendar CALENDAR;
     private static final SimpleDateFormat DATE_FORMAT;
     private static final SimpleDateFormat DATE_TIME_FORMAT;
     
     static {
-        
-        CALENDAR = Calendar.getInstance();
         DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
         DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
     }
@@ -36,8 +33,9 @@ public class Data {
         
         if(date != null){
             
-            CALENDAR.setTime(date);
-            return CALENDAR;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return calendar;
         }else
             return null;
     }
@@ -54,8 +52,9 @@ public class Data {
     public static Calendar getCalendarFromDateTimeString(String dateTime) 
             throws ParseException{
         
-        CALENDAR.setTime(DATE_TIME_FORMAT.parse(dateTime));
-        return CALENDAR;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DATE_TIME_FORMAT.parse(dateTime));
+        return calendar;
     }
     
     /**
@@ -70,7 +69,8 @@ public class Data {
     public static Calendar getCalendarFromDateString(String date) 
             throws ParseException{
         
-        CALENDAR.setTime(DATE_FORMAT.parse(date));
-        return CALENDAR;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DATE_FORMAT.parse(date));
+        return calendar;
     }
 }
