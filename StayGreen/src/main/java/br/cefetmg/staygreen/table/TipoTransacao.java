@@ -31,4 +31,19 @@ public enum TipoTransacao {
                 return -1;
         }
     }
+
+    /**
+     * Converte algum objeto generico (geralmente String) no ENUM TipoTransacao.
+     * @param id
+     * @return ENUM TipoTransacao
+     * @author Arthur
+     */
+    public static TipoTransacao converter(Object id) {
+        for (TipoTransacao tipo : values()) {
+            if (tipo.toString().equals(id)) {
+                return tipo;
+            }
+        }
+        return null;
+    }
 }

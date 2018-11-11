@@ -42,7 +42,12 @@ public class InsumoService {
 
         TABLE_NAME = SQL.getNomeTabela(Insumo.class);
     }
-
+    /**
+     * Método que busca um insumo no BD pelo NOME.
+     * @param nome
+     * @return Obejeto do tipo Insumo com a primeira ocorrencia
+     * do NOME passado por parâmetro.
+     */
     public static Insumo getInsumoPorNome(String nome) {
 
         ArrayList<Insumo> insumos = get("WHERE `nomeInsumo`='" + nome + "'");
@@ -56,6 +61,12 @@ public class InsumoService {
 
     }
 
+    /**
+     * Método que busca um insumo no BD pelo ID.
+     * @param id
+     * @return Obejeto do tipo Insumo com a primeira ocorrencia
+     * da ID passada por parâmetro.
+     */
     public static Insumo getInsumoPorId(String id) {
 
         ArrayList<Insumo> insumos = get("WHERE `idInsumo`='" + id + "'");
@@ -69,6 +80,12 @@ public class InsumoService {
         return insumos.get(0);
     }
 
+    /**
+     * Método que busca vários insumos no BD pelo NOME.
+     * @param nome
+     * @return ArrayList de objetos do tipo Insumo com todas as ocorrencias
+     * do NOME passado por parâmetro.
+     */
     public static ArrayList<Insumo> getInsumosPorNome(String nome) {
 
         ArrayList<Insumo> insumos = get("WHERE `nomeInsumo`='" + nome + "'");
@@ -82,6 +99,12 @@ public class InsumoService {
         return insumos;
     }
 
+    /**
+     * Método que busca vários insumos no BD pelo ID.
+     * @param id
+     * @return ArrayList de objetos do tipo Insumo com todas as ocorrencias
+     * da ID passada por parâmetro.
+     */
     public static ArrayList<Insumo> getInsumosPorId(Long id) {
 
         ArrayList<Insumo> insumos = get("WHERE `idInsumo`='" + id + "'");
@@ -95,14 +118,20 @@ public class InsumoService {
         return insumos;
     }
 
-    public static ArrayList<Insumo> get(String queryCondition) {
+    /**
+     * Método que busca vários insumos no BD pelo CONDICAO.
+     * @param condicao
+     * @return ArrayList de objetos do tipo Insumo com todas as ocorrencias
+     * da CONDICAO passado por parâmetro.
+     */
+    public static ArrayList<Insumo> get(String condicao) {
 
         ArrayList<Insumo> insumos = new ArrayList<>();
 
         try {
 
             result = SQL.query("SELECT * FROM " + TABLE_NAME
-                    + " " + queryCondition);
+                    + " " + condicao);
 
             if (result.next()) {
                 do {
@@ -124,7 +153,7 @@ public class InsumoService {
                 } while (result.next());
             } else {
                 System.out.println("NENHUM INSUMO COM CONDIÇÃO: "
-                        + queryCondition + " FOI ENCONTRADO NO BANCO DE DADOS");
+                        + condicao + " FOI ENCONTRADO NO BANCO DE DADOS");
                 return null;
             }
 
@@ -136,44 +165,60 @@ public class InsumoService {
         return insumos;
     }
 
-    public static void AdicionarInsumo(Insumo insumo) {
-        SQL.insert(insumo);
-        System.out.println(insumo.toString());
+    /**
+     * Método para adicionar um insumo no BD.
+     * @param insumo
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean AdicionarInsumo(Insumo insumo) {
+        return SQL.insert(insumo);
     }
 
-    public static void AdicionarInsumos(ArrayList<Insumo> insumos) {
-
-        for (Insumo insumo : insumos) {
-            SQL.insert(insumo);
-        }
+    /**
+     * Método para atualizar um insumo no BD.
+     * @param insumo
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean atualizarInsumo(Insumo insumo) {
+        return SQL.update(insumo);
     }
 
-    public static void atualizarInsumo(Insumo insumo) {
-
-        SQL.update(insumo);
-    }
-
-    public static void atualizarInsumos(ArrayList<Insumo> insumos) {
-
-        for (Insumo insumo : insumos) {
-            SQL.update(insumo);
-        }
-    }
-
-    public static void deletarInsumo(Insumo insumo) {
-
+    /**
+     * Método para remover um insumo no BD.
+     * @param insumo
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarInsumo(Insumo insumo) {
         if (insumo.getIdInsumo() != null) {
-            SQL.delete((int) insumo.getIdInsumo().longValue(), Insumo.class);
+            return SQL.delete((int) insumo.getIdInsumo().longValue(),
+                    Insumo.class);
         } else {
-            System.out.println("NÃO FOI POSSIVEL DELETAR O INSUMO");
+            System.out.println("NÃO FOI POSSIVEL DELETAR O INSUMO,"
+                    + "ID INVÁLIDO");
+            return false;
         }
+
     }
-     public static void deletarInsumoTodos() {
+
+    /**
+     * Método para removoter todos os insumos do BD.
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarInsumoTodos() {
         ArrayList<Insumo> insumos = get("");
-        int i = 0;
-        do{
-            SQL.delete((int) (insumos.get(i).getIdInsumo().longValue()), Insumo.class);
-            i++;
-        }while(i != insumos.size());
+        if (insumos != null) {
+            int i = 0;
+            do {
+                SQL.delete((int) (insumos.get(i).getIdInsumo().longValue()),
+                        Insumo.class);
+                i++;
+            } while (i != insumos.size());
+            return true;
+        } else {
+            System.out.println("Banco de dados já está vazio");
+            return false;
+        }
+
     }
+
 }

@@ -48,6 +48,12 @@ public class ProdutoService {
         TABLE_NAME = SQL.getNomeTabela(Produto.class);
     }
 
+    /**
+     * Método que busca um produto no BD pelo NOME.
+     * @param nome
+     * @return Obejeto do tipo Produto com a primeira ocorrencia
+     * do NOME passado por parâmetro.
+     */
     public static Produto getProdutoPorNome(String nome) {
 
         ArrayList<Produto> produtos = get("WHERE `nomeProduto`='" + nome + "'");
@@ -61,6 +67,12 @@ public class ProdutoService {
 
     }
 
+    /**
+     * Método que busca um produto no BD pelo ID.
+     * @param id
+     * @return Obejeto do tipo Produto com a primeira ocorrencia
+     * da ID passada por parâmetro.
+     */
     public static Produto getProdutoPorId(String id) {
 
         ArrayList<Produto> produtos = get("WHERE `idProduto`='" + id + "'");
@@ -74,6 +86,12 @@ public class ProdutoService {
         return produtos.get(0);
     }
 
+    /**
+     * Método que busca vários produtos no BD pelo NOME.
+     * @param nome
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
+     * do NOME passado por parâmetro.
+     */
     public static ArrayList<Produto> getProdutosPorNome(String nome) {
 
         ArrayList<Produto> produtos = get("WHERE `nomeProduto`='" + nome + "'");
@@ -87,6 +105,12 @@ public class ProdutoService {
         return produtos;
     }
 
+    /**
+     * Método que busca vários produtos no BD pelo ID.
+     * @param id
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
+     * da ID passada por parâmetro.
+     */
     public static ArrayList<Produto> getProdutosPorId(Long id) {
 
         ArrayList<Produto> produtos = get("WHERE `idProduto`='" + id + "'");
@@ -100,15 +124,19 @@ public class ProdutoService {
         return produtos;
     }
 
-    public static ArrayList<Produto> get(String queryCondition) {
+    /**
+     * Método que busca vários produtos no BD pela CONDICAO.
+     * @param condicao
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
+     * da CONDICAO passado por parâmetro.
+     */
+    public static ArrayList<Produto> get(String condicao) {
 
         ArrayList<Produto> produtos = new ArrayList<>();
 
         try {
             result = SQL.query("SELECT * FROM `" + TABLE_NAME
-                    + "` " + queryCondition);
-            System.out.println("SELECT * FROM `" + TABLE_NAME
-                    + "` " + queryCondition);
+                    + "` " + condicao);
             if (result.next()) {
                 do {
                     Produto produto = new Produto();
@@ -133,7 +161,7 @@ public class ProdutoService {
                 } while (result.next());
             } else {
                 System.out.println("NENHUM PRODUTO COM CONDIÇÃO: "
-                        + queryCondition + " FOI ENCONTRADO NO BANCO DE DADOS");
+                        + condicao + " FOI ENCONTRADO NO BANCO DE DADOS");
                 return null;
             }
 
@@ -145,45 +173,60 @@ public class ProdutoService {
         return produtos;
     }
 
-    public static void AdicionarProduto(Produto produto) {
-        SQL.insert(produto);
-        System.out.println(produto.toString());
+    /**
+     * Método para adicionar um produto no BD.
+     * @param produto
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean AdicionarProduto(Produto produto) {
+        return SQL.insert(produto);
     }
 
-    public static void AdicionarProdutos(ArrayList<Produto> produtos) {
-
-        for (Produto produto : produtos) {
-            SQL.insert(produto);
-        }
+    /**
+     * Método para atualizar um produto no BD.
+     * @param produto
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean atualizarProduto(Produto produto) {
+        return SQL.update(produto);
     }
 
-    public static void atualizarProduto(Produto produto) {
-        SQL.update(produto);
-    }
-
-    public static void atulizarProdutos(ArrayList<Produto> produtos) {
-
-        for (Produto produto : produtos) {
-            SQL.update(produto);
-        }
-    }
-
-    public static void deletarProduto(Produto produto) {
-
+    /**
+     * Método para remover um produto no BD.
+     * @param produto
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarProduto(Produto produto) {
         if (produto.getIdProduto() != null) {
-            SQL.delete((int) produto.getIdProduto().longValue(), Produto.class);
+            return SQL.delete((int) produto.getIdProduto().longValue(),
+                    Produto.class);
         } else {
-            System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO");
+            System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO,"
+                    + "ID INVÁLIDO");
+            return false;
         }
+
     }
-    
-    public static void deletarProdutoTodos() {
+
+    /**
+     * Método para removoter todos os produtos do BD.
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarProdutoTodos() {
         ArrayList<Produto> produtos = get("");
-        int i = 0;
-        do{
-            SQL.delete((int) (produtos.get(i).getIdProduto().longValue()), Produto.class);
-            i++;
-        }while(i != produtos.size());
+        if (produtos != null) {
+            int i = 0;
+            do {
+                SQL.delete((int) (produtos.get(i).getIdProduto().longValue()),
+                        Produto.class);
+                i++;
+            } while (i != produtos.size());
+            return true;
+        } else {
+            System.out.println("Banco de dados já está vazio");
+            return false;
+        }
+
     }
 
 }

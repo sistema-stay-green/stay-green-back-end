@@ -7,6 +7,7 @@ package br.cefetmg.staygreen.servlet;
 
 import br.cefetmg.staygreen.service.ProdutoService;
 import br.cefetmg.staygreen.service.InsumoService;
+import br.cefetmg.staygreen.service.RelatoriosControleProducaoService;
 import br.cefetmg.staygreen.table.Insumo;
 import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.util.JSON;
@@ -32,14 +33,23 @@ import javax.servlet.http.HttpServletResponse;
  * convertida em objeto.
  *
  * id => (OPCIONAL) Parâmetro responsável por informar o ID do produto ou insumo
- * que deve ser atualizado ou removido. Parâmetro também responsável por
- * ajudar na função de relatório
+ * que deve ser atualizado ou removido. Parâmetro também responsável por ajudar
+ * na função de relatório
  *
  * @author Arthur
  */
 @WebServlet(name = "ControleProducaoServlet", urlPatterns = {"/ControleProducaoServlet"})
 public class ControleProducaoServlet extends HttpServlet {
 
+    /**
+     * Faz a comunição do front-end (HTML/JS/AJAX) com o back-end (Services e
+     * BD)
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -48,6 +58,23 @@ public class ControleProducaoServlet extends HttpServlet {
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
+
+        /**
+         * Switch que define qual operação será feita, são elas:
+         * Adicionar: Adicionar produtos ou insumos ao BD.
+         * Remover: Remover produto ou insumo do BD.
+         * RemoverTodos: Remover todos os produtos ou todos os insumos do BD.
+         * RemoverTodosPI: Remover todos os produtos e insumos do do BD.
+         * Atualizar: Atualizar produto ou insumo no BD.
+         * Buscar: Buscar produto ou insumo no BD.
+         * BuscarTodos: Buscar todos os produtos ou insumos no BD.
+         * BuscarTodosPI: Buscar todos os produtos e insumos no BD.
+         * Filtro: Buscar produto(s) ou insumo(s) específicos.
+         * Relatorio1: Relatório de histórico de mercadorias/período.
+         * Relatorio2: BUILDING...
+         *
+         * 
+         */
         switch (operacao) {
             case "adicionar":
                 if (tipo.equals("produto")) {
@@ -124,18 +151,18 @@ public class ControleProducaoServlet extends HttpServlet {
                 }
                 break;
             case "relatorio1":
-                String id = request.getParameter("id");
-                resposta = JSON.stringify();
-
+                resposta = RelatoriosControleProducaoService.relatorio1(request.getParameter("id"));
                 break;
             case "relatorio2":
-
+                resposta = RelatoriosControleProducaoService.relatorio2(request.getParameter("id"));
                 break;
             default:
         }
         try (PrintWriter out = response.getWriter()) {
+            if (resposta.equals("")) {
+                resposta = "2";
+            }
             out.println(resposta);
-
         }
     }
 

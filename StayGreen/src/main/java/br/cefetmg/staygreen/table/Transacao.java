@@ -13,12 +13,15 @@ import java.util.Calendar;
 /**
  * @author Gabriel Cruz
  * @version 15-10-18/07:16
+ * @coop Arthur
+ * @version 11/11/18/17:47
+ * Modifiquei o nome do id e seus métodos para que ficasse igual ao do BD.
  */
 @Tabela("transacao")
 public class Transacao {
     // Atributos
     @Id
-    private Long id;
+    private Long idTransacao;
     private Long idItemTransacao;
     private double valorTransacao;
     private int quantTransacao;
@@ -29,15 +32,15 @@ public class Transacao {
 
     /**
      *  Cria uma produto com todos os parametros
-     * @param id Id único da linha na tabela
+     * @param idTransacao Id único da linha na tabela
      * @param idItemTransacao Id do elemento localizado em outra tabela
      * @param valorTransacao Valor total da transação (valor individual * quantidade de elementos)
      * @param quantTransacao a quantidade de produtos vendida ou comprada
      * @param tipoTransacao Tipo do produto a ser transacionado
      * @param dataTransacao Data de transação do produto
      */
-    public Transacao(Long id, Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacao tipoTransacao) {
-        this.id = id;
+    public Transacao(Long idTransacao, Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacao tipoTransacao) {
+        this.idTransacao = idTransacao;
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
         this.quantTransacao = quantTransacao;
@@ -147,16 +150,16 @@ public class Transacao {
      *
      * @return
      */
-    public Long getId() {
-        return id;
+    public Long getIdTransacao() {
+        return idTransacao;
     }
 
     /**
      *
-     * @param id
+     * @param idTransacao
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdTransacao(Long idTransacao) {
+        this.idTransacao = idTransacao;
     }   
     
     /**
@@ -171,7 +174,7 @@ public class Transacao {
 
     @Override
     public String toString() {
-        return "Transacao{" + "id=" + id + ", idItemTransacao=" + idItemTransacao + ", valorTransacao=" + valorTransacao + ", quantTransacao=" + quantTransacao + ", dataTransacao=" + dataTransacao + ", tipoTransacao=" + tipoTransacao + '}';
+        return "Transacao{" + "idTransacao=" + idTransacao + ", idItemTransacao=" + idItemTransacao + ", valorTransacao=" + valorTransacao + ", quantTransacao=" + quantTransacao + ", dataTransacao=" + dataTransacao + ", tipoTransacao=" + tipoTransacao + '}';
     }
     
     
