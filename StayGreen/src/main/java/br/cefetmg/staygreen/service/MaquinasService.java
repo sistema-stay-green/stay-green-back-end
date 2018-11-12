@@ -26,28 +26,18 @@ public class MaquinasService {
      * tabela transação
      * @param maquina
      * @param quantidade
+     * @param dataCompra
      */
-    public static void Compra(Patrimonio maquina, int quantidade){
-        Calendar dataCompra= Calendar.getInstance();
-        maquina.setDataCompra(dataCompra);
-        if(quantidade==0){    
-            Transacao compra = new Transacao(maquina.getId().longValue(),
-                    maquina.getId().longValue(),TransacaoEAluguelService.
-                    calculaValorAtual(maquina. getDataCompra(),maquina.
-                    getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
-                    dataCompra,TipoTransacao.MAQUINA);
-            TransacaoAccessService.insert(compra);
-        }
-        else{
-            Transacao compra = new Transacao(maquina.getId().longValue(),
-                    maquina.getId().longValue(),TransacaoEAluguelService.
-                            calculaValorAtual(maquina.
-                    getDataCompra(),maquina.getIndiceDepreciacao(), maquina. 
-                    getValorCompra()), quantidade, dataCompra,TipoTransacao.
-                    MAQUINA);
-            TransacaoAccessService.insert(compra);
-        } 
+    public static void Cadastrar(Patrimonio maquina, int quantidade, Calendar dataCompra){
+        
+        Transacao compra = new Transacao(null,
+                maquina.getId().longValue(),TransacaoEAluguelService.
+                calculaValorAtual(dataCompra,maquina.
+                getIndiceDepreciacao(), maquina.getValorCompra()), quantidade, 
+                dataCompra,TipoTransacao.MAQUINA);
+        TransacaoAccessService.insert(compra);
         maquina.setStatus("EM_POSSE");
+        maquina.setDataCompra(dataCompra);
         PatrimonioAccessService.insert(maquina);
     }
     
@@ -56,30 +46,19 @@ public class MaquinasService {
      * Muda o Estado da maquina para VENDIDO e adiciona uma nova transação à 
      * tabela transação
      * @param maquina
-     * @param quantidade
+     * @param dataBaixa
      */
-    public static void Venda(Patrimonio maquina, int quantidade){
+    public static void Venda(Patrimonio maquina, Calendar dataBaixa){
         if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
             System.out.println("Maquina já vendida");
         }
         else {
-            Calendar dataBaixa = Calendar.getInstance();
-            if(quantidade==0){    
-                Transacao venda = new Transacao(maquina.getId().longValue(),
-                        maquina.getId().longValue(),TransacaoEAluguelService.
-                        calculaValorAtual(maquina.getDataCompra(),maquina.
-                        getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
-                        dataBaixa,TipoTransacao.MAQUINA);
-                TransacaoAccessService.insert(venda);
-            }
-            else{
-                Transacao venda = new Transacao(maquina.getId().longValue(),
-                        maquina.getId().longValue(),TransacaoEAluguelService.
-                        calculaValorAtual(maquina.getDataCompra(),maquina.
-                        getIndiceDepreciacao(), maquina.getValorCompra()), 
-                        quantidade, dataBaixa,TipoTransacao.MAQUINA);
-                TransacaoAccessService.insert(venda);
-            }    
+            Transacao venda = new Transacao(null,
+                    maquina.getId().longValue(),TransacaoEAluguelService.
+                    calculaValorAtual(maquina.getDataCompra(),maquina.
+                    getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
+                    dataBaixa,TipoTransacao.MAQUINA);
+            TransacaoAccessService.insert(venda);
             maquina.setDataBaixa(dataBaixa);
             maquina.setStatus("VENDIDO");
             PatrimonioAccessService.update(maquina);
@@ -92,19 +71,17 @@ public class MaquinasService {
      * tabela aluguel
      * @param maquina
      * @param request
+     * @param dataSaida
      */
-    public static void Aluguel(Patrimonio maquina, HttpServletRequest request){
+    public static void Aluguel(Patrimonio maquina, HttpServletRequest request, Calendar dataSaida){
         if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
             System.out.println("Maquina já foi alugada");
         }
         else {
-            Calendar dataSaida = Calendar.getInstance();
-            Aluguel aluguel = new Aluguel(maquina.getId().
-                    longValue(), maquina.getId().longValue(),
-                    Double.parseDouble(request.
-                    getParameter("valorAluguel")),
-                    Integer.parseInt(request.
-                    getParameter("periodoAluguel")),dataSaida);
+            Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
+                    Double.parseDouble(request.getParameter("valorAluguel")),
+                    Integer.parseInt(request.getParameter("periodoAluguel")),
+                    dataSaida);
             maquina.setDataSaida(dataSaida);
             maquina.setStatus("ALUGADO");
             AluguelAccessService.insert(aluguel);
@@ -130,13 +107,15 @@ public class MaquinasService {
      * Usado ao manutenir uma maquina. 
      * Muda o Estado da maquina para EM_MANUTENCAO
      * @param maquina
+     * @param dataRetorno
      */
-    public static void Manuntenir(Patrimonio maquina){
+    public static void Manuntenir(Patrimonio maquina, Calendar dataRetorno){
         if(maquina.getStatus() == PatrimonioStatusEnum.EM_MANUTENCAO){
             System.out.println("Maquina já está em manutenção");
         }
         else {
             maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
+            maquina.setDataRetorno(dataRetorno);
         }
     }
 }

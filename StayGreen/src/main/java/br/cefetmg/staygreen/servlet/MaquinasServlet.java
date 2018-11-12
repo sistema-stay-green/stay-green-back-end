@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import java.util.ArrayList;
 
 /**
  * @author Gabriel Cruz
@@ -40,27 +42,38 @@ public class MaquinasServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()){
             Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"),
                     Patrimonio.class);   
-            String dataCompra = request.getParameter("dataCompra"),
-                   dataSaida = request.getParameter("dataSaida"),
-                   dataRetorno = request.getParameter("dataRetorno"),
-                   dataBaixa = request.getParameter("dataBaixa");
+            String stringDataCompra = request.getParameter("dataCompra"),
+                   stringDataSaida = request.getParameter("dataSaida"),
+                   stringDataRetorno = request.getParameter("dataRetorno"),
+                   stringDataBaixa = request.getParameter("dataBaixa");
+            
             int quantidade = 1;
             if(maquina != null) {
                 switch(request.getParameter("acao")){
                     case "c":
-                        MaquinasService.Compra(maquina, quantidade);
+                        MaquinasService.Cadastrar(maquina, quantidade, 
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataCompra));
                         break;
                     case "v":
-                        MaquinasService.Venda(maquina, quantidade);
+                        MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataBaixa));
                         break;
                     case "a":
-                        MaquinasService.Aluguel(maquina, request);
+                        MaquinasService.Aluguel(maquina, request,
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataSaida));
                         break;
                     case "d":
                         MaquinasService.Descarte(maquina);
                         break;
                     case "m":
-                        MaquinasService.Manuntenir(maquina);
+                        MaquinasService.Manuntenir(maquina,
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataRetorno));
+                        break;
+                    case "r":
+                        ArrayList<Patrimonio> maquinas = PatrimonioAccessService.get(null);
                         break;
                 }
             } 

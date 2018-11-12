@@ -152,4 +152,20 @@ public class TransacaoEAluguelService {
         return valorAtual;
     }
     
+    /**
+     * Converte um valor String para Calendar.
+     * @param stringData
+     * @return 
+     */
+    public static Calendar converteStringToCalendar(String stringData){
+        String stringDatas[];
+        stringDatas = stringData.split("/");
+        int dia = Integer.parseInt(stringDatas[0]);
+        int mes = Integer.parseInt(stringDatas[1]);
+        int ano = Integer.parseInt(stringDatas[2]);
+        Calendar data= Calendar.getInstance();
+        data.set(ano, mes, dia);
+        return data;
+    }
+    
 }
