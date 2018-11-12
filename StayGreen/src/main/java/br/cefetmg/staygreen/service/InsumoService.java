@@ -142,7 +142,7 @@ public class InsumoService {
                             result.getString(NOME_INSUMO_COLUMN));
                     insumo.setFinalidadeInsumo(
                             result.getString(FINALIDADE_INSUMO_COLUMN));
-                    insumo.setValorUnitInsumo(Double.parseDouble(
+                    insumo.setvalorCompraInsumo(Double.parseDouble(
                             result.getString(VALOR_UNITARIO_INSUMO_COLUMN)));
                     insumo.setQuantEstoqueInsumo(Integer.parseInt(
                             result.getString(QUANTIDADE_ESTOQUE_INSUMO_COLUMN)));

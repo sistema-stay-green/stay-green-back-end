@@ -5,14 +5,18 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.EstoqueService;
 import br.cefetmg.staygreen.service.ProdutoService;
 import br.cefetmg.staygreen.service.InsumoService;
 import br.cefetmg.staygreen.service.RelatoriosControleProducaoService;
+import br.cefetmg.staygreen.table.Estoque;
 import br.cefetmg.staygreen.table.Insumo;
 import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -82,11 +86,21 @@ public class ControleProducaoServlet extends HttpServlet {
                             Produto.class);
                     produto.setFotoMercadoria("foto");
                     ProdutoService.AdicionarProduto(produto);
+                    Estoque estoque = new Estoque();
+                    ArrayList<Produto> produtos = ProdutoService.get("");
+                    int tamanho = produtos.size();
+                    Long id = produtos.get(tamanho - 1).getIdProduto();
+                    estoque.setIdEstoque(id);
+                    estoque.setQuantProduzidaEstoque(produtos.get(tamanho - 1).getQuantEstoqueProduto());
+                    estoque.setDataProducaoEstoque(Calendar.getInstance());
+                    EstoqueService.AdicionarEstoque(estoque);
+                    
                 } else {
                     Insumo insumo = JSON.parse(request.getParameter("JSON"),
                             Insumo.class);
                     insumo.toString();
                     InsumoService.AdicionarInsumo(insumo);
+                    
                 }
                 break;
             case "remover":
@@ -124,11 +138,11 @@ public class ControleProducaoServlet extends HttpServlet {
                 break;
             case "buscar":
                 if (tipo.equals("produto")) {
-                    resposta = JSON.stringify(ProdutoService.getProdutoPorId(
-                            request.getParameter("id")));
+                    //resposta = JSON.stringify(ProdutoService.getProdutoPorId(
+                           // request.getParameter("id")));
                 } else {
-                    resposta = JSON.stringify(InsumoService.getInsumoPorId(
-                            request.getParameter("id")));
+                    //resposta = JSON.stringify(InsumoService.getInsumoPorId(
+                            //request.getParameter("id")));
                 }
             case "buscarTodos":
                 if (tipo.equals("produto")) {

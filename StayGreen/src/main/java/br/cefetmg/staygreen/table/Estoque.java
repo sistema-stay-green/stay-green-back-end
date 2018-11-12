@@ -11,39 +11,50 @@ import java.util.Calendar;
 
 /**
  *
- * @author arthu
+ * @author Arthur
  */
 @Tabela("Estoque")
 public class Estoque {
     @Id
-    private Long id;
-    private Integer quantProduzitoEstoque;
+    private Long idEstoque;
+    private Long idProduto;
+    private Integer quantProduzidaEstoque;
     private Calendar dataProducaoEstoque;
 
     public Estoque() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
-    public Estoque(Long id, Integer quantProduzitoEstoque, Calendar dataProducaoEstoque) {
-        this.id = id;
-        this.quantProduzitoEstoque = quantProduzitoEstoque;
+    public Estoque(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque,
+            Calendar dataProducaoEstoque) {
+        this.idEstoque = idEstoque;
+        this.idProduto = idProduto;
+        this.quantProduzidaEstoque = quantProduzidaEstoque;
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdEstoque() {
+        return idEstoque;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdEstoque(Long idEstoque) {
+        this.idEstoque = idEstoque;
     }
 
-    public Integer getQuantProduzitoEstoque() {
-        return quantProduzitoEstoque;
+    public Long getIdProduto() {
+        return idProduto;
     }
 
-    public void setQuantProduzitoEstoque(Integer quantProduzitoEstoque) {
-        this.quantProduzitoEstoque = quantProduzitoEstoque;
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public Integer getQuantProduzidaEstoque() {
+        return quantProduzidaEstoque;
+    }
+
+    public void setQuantProduzidaEstoque(Integer quantProduzidaEstoque) {
+        this.quantProduzidaEstoque = quantProduzidaEstoque;
     }
 
     public Calendar getDataProducaoEstoque() {
@@ -53,7 +64,7 @@ public class Estoque {
     public void setDataProducaoEstoque(Calendar dataProducaoEstoque) {
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
-    
+
     
 }
 
