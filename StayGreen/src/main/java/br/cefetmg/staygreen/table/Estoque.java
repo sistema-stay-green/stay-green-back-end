@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 /**
  *
- * @author arthu
+ * @author Arthur
  */
 @Tabela("Estoque")
 public class Estoque {
@@ -45,6 +45,14 @@ public class Estoque {
 
     public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
+    }
+
+    public Integer getQuantProduzidaEstoque() {
+        return quantProduzidaEstoque;
+    }
+
+    public void setQuantProduzidaEstoque(Integer quantProduzidaEstoque) {
+        this.quantProduzidaEstoque = quantProduzidaEstoque;
     }
 
     public Integer getQuantProduzidaEstoque() {
