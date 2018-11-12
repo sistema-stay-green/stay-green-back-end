@@ -87,7 +87,7 @@ CREATE TABLE `Tarefa`
   `gastoTarefa` Double NOT NULL,
   `quantProduzTarefa` Int NOT NULL,
   `insumosTarefa` Varchar(200) NOT NULL,
-  `quantInsumosTarefa` Varchar(100) NOT NULL,
+  `quantInsumosTarefa` Int NOT NULL,
   PRIMARY KEY (`idTarefa`)
 )
 ;
