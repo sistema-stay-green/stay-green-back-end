@@ -31,7 +31,7 @@ public class Tarefa {
     private Double gastoTarefa;
     private Integer quantProduzTarefa;
     private String insumosTarefa;
-    private String quantInsumosTarefa;
+    private Integer quantInsumosTarefa;
     
     //Constructors
     
@@ -77,7 +77,7 @@ public class Tarefa {
             TarefaTipoEnum tipoTarefa, Calendar dataInicialTarefa, 
             Integer periodRepetTarefa, Double gastoTarefa, 
             Integer quantProduzTarefa, String insumosTarefa, 
-            String quantInsumosTarefa) {
+            Integer quantInsumosTarefa) {
         this.idTarefa = idTarefa;
         this.nomeTarefa = nomeTarefa;
         this.descrTarefa = descrTarefa;
@@ -104,7 +104,7 @@ public class Tarefa {
                 tarefa.getDouble("gastotarefa"), 
                 tarefa.getInt("quantProduzTarefa"), 
                 tarefa.getString("insumosTarefa"), 
-                tarefa.getString("quantInsumosTarefa"));
+                tarefa.getInt("quantInsumosTarefa"));
     }
     
     //Getter e Setter
@@ -191,11 +191,11 @@ public class Tarefa {
         this.insumosTarefa = insumosTarefa;
     }
 
-    public String getQuantInsumosTarefa() {
+    public Integer getQuantInsumosTarefa() {
         return quantInsumosTarefa;
     }
 
-    public void setQuantInsumosTarefa(String quantInsumosTarefa) {
+    public void setQuantInsumosTarefa(Integer quantInsumosTarefa) {
         this.quantInsumosTarefa = quantInsumosTarefa;
     }
 
