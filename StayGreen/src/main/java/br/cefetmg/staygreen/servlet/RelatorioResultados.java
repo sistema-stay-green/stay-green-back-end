@@ -37,13 +37,13 @@ public class RelatorioResultados extends HttpServlet {
             ArrayList vendasECompras = new ArrayList<>();
             double vendas = 0, compras = 0, aux;
             
-            result = SQL.query("SELECT * FROM `" + TABLE_NAME + "` WHERE 'valorTransacao!=" + 0);
+            result = SQL.query("SELECT * FROM `" + TABLE_NAME + "` WHERE `valorTransacao` != 0");
 
             try{
-                if(result.next()){
-                    do{
+                if(result.isBeforeFirst()){
+                    while(result.next()){
                         vendasECompras.add(result.getDouble("valorTransacao"));
-                    }while(result.next());
+                    }
                 }else
                     System.out.println("ERRO - Tabela vazia");
             }catch(SQLException e){
@@ -66,16 +66,16 @@ public class RelatorioResultados extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+            processRequest(request, response);
+
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -85,13 +85,21 @@ public class RelatorioResultados extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+            processRequest(request, response);
 
+    }
 
     /**
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
      */
-
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }
