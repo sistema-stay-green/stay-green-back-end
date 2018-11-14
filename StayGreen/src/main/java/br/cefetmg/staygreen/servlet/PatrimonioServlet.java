@@ -50,81 +50,24 @@ public class PatrimonioServlet extends HttpServlet {
                 //                             N -> Not found
                 
                 case "c": //Caso de compra
-
-                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
-                    
-                    if (patrimonio != null) {
-                        if (PatrimonioAccessService.insert(patrimonio)){
-                            patrimonio = PatrimonioAccessService.
-                                    getLastInsertedPatrimonio();
-                            resposta = JSON.stringify(patrimonio);
-                        }
-                        else
-                            resposta = "F";
-                    }
-                    else
-                        resposta = "F";
+                    resposta = PatrimonioProcessService.compraPatrimonio(JSON.parse(request.getParameter("patrimonio"), Patrimonio.class));
                     break;
 
                 case "s": //Caso de pesquisa
-
-                    switch(request.getParameter("s")){
-
-                        case "id":
-                            patrimonio = PatrimonioAccessService.
-                                    getPatrimonioById(request.getParameter("id"));
-                            
-                            if (patrimonio != null)
-                                resposta += JSON.stringify(patrimonio);
-                            else
-                                resposta = "N";
-                            break;
-
-                        case "nome":
-                            patrimonios = PatrimonioAccessService.
-                                    getPatrimoniosByNome(request.getParameter("name"));
-                            
-                            if (patrimonios != null)                  
-                                resposta += JSON.stringify(patrimonios);
-                            else
-                                resposta = "N";
-                            break;
-
-                        default:
-                            throw new IllegalArgumentException("Parametro 's' possui um valor inválido.");
-                    }
+                    resposta = PatrimonioProcessService.pesquisaPatrimonio(request.getParameter("s"), request.getParameter(request.getParameter("s")));
                     break;
 
                 case "r": //Caso de retorno de todos os patrimonios
-                    
-                    patrimonios = PatrimonioAccessService.getAll();
-                            
-                    if (patrimonios != null)
-                            resposta = JSON.stringify(patrimonios);
+
+                    resposta = PatrimonioProcessService.retornaTodosPatrimonio();
                     break;
                     
                 case "u": 
-                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
-                    
-                    if (patrimonio != null){
-                        if (PatrimonioAccessService.update(patrimonio))
-                            resposta = "S";
-                        else
-                            resposta = "N";
-                    }
-                    else
-                        resposta = "F";
+                    resposta = PatrimonioProcessService.atualizaPatrimonio(JSON.parse(request.getParameter("patrimonio"), Patrimonio.class));
                     break;
                     
                 case "d":
-                    patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
-                    if(patrimonio != null)
-                        if (PatrimonioAccessService.delete(patrimonio))
-                            resposta = "S";
-                        else
-                            resposta = "N";
-                    else
-                        resposta = "F";
+                    resposta = PatrimonioProcessService.deletaPatrimonio(request.getParameter("id"));
                     break;
 
                 default: //Caso base
