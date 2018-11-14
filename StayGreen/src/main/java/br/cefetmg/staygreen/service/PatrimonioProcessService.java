@@ -105,7 +105,7 @@ public class PatrimonioProcessService {
 
     public static String pesquisaPatrimonio(String tipoPesquisa, String formaPesquisa) {
         String resposta = new String();
-        ArrayList<Patrimonio> patrimonios = null;
+        ArrayList<Patrimonio> patrimonios = new ArrayList<>();
         switch (tipoPesquisa) {
             case "id":
                 patrimonios.add(PatrimonioAccessService.
