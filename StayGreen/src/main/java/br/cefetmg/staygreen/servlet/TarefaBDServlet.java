@@ -43,23 +43,21 @@ public class TarefaBDServlet extends HttpServlet {
                 case "r":
                     if(TarefaAccessService.remove(Integer
                             .valueOf(tarefa.getIdTarefa().toString())))
-                        resposta = "Tarefa de id " + tarefa.getIdTarefa() 
-                                + " removida com sucesso!";
+                        resposta = "1";
                     else
-                        resposta = "Nenhuma tarefa encontrada com o id " 
-                                + tarefa.getIdTarefa();
+                        resposta = "0";
                     break;
                 case "u":
                     if(TarefaAccessService.update(tarefa))
-                        resposta = "Tarefa atualizada com sucesso.";
+                        resposta = "1";
                     else 
-                        resposta = "Tarefa não encontrada.";
+                        resposta = "0";
                     break;
                 case "a":
                     if(TarefaAccessService.insert(tarefa))
-                        resposta = "Tarefa inserida com sucesso.";
+                        resposta = "1";
                     else
-                        resposta = "Não foi possível inserir a tarefa.";
+                        resposta = "0";
             }
         }
         try (PrintWriter out = response.getWriter()) {

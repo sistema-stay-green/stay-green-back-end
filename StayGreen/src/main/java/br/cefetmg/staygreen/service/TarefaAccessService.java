@@ -150,7 +150,7 @@ public class TarefaAccessService {
                             .getInt(QUANT_PRODUZ_COLUMN));
                     tarefa.setInsumosTarefa(result.getString(INSUMOS_COLUMN));
                     tarefa.setQuantInsumosTarefa(result
-                            .getString(QUANT_INSUMOS_COLUMN));
+                            .getInt(QUANT_INSUMOS_COLUMN));
                     
                     tarefas.add(tarefa);
                     
