@@ -5,6 +5,7 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.MaquinasService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -14,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.service.PatrimonioAccessService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import java.util.ArrayList;
+
 /**
- *
- * @author Aluno
+ * @author Gabriel Cruz
+ * @version 03-11-18/14:09
  */
 @WebServlet(name = "MaquinasServlet", urlPatterns = {"/MaquinasServlet"})
 public class MaquinasServlet extends HttpServlet {
@@ -30,26 +35,54 @@ public class MaquinasServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, 
+            HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
+            Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"),
+                    Patrimonio.class);   
+            String stringDataCompra = request.getParameter("dataCompra"),
+                   stringDataSaida = request.getParameter("dataSaida"),
+                   stringDataRetorno = request.getParameter("dataRetorno"),
+                   stringDataBaixa = request.getParameter("dataBaixa");
             
-            String maquinaJSON = request.getParameter("maquinaJSON");
-            String tipo = request.getParameter("tipo");
-            System.out.println(maquinaJSON);
+            int quantidade = 1;
+            if(maquina != null) {
+                switch(request.getParameter("acao")){
+                    case "c":
+                        MaquinasService.Cadastrar(maquina, quantidade, 
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataCompra));
+                        break;
+                    case "v":
+                        MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataBaixa));
+                        break;
+                    case "a":
+                        MaquinasService.Aluguel(maquina, request,
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataSaida));
+                        break;
+                    case "d":
+                        MaquinasService.Descarte(maquina);
+                        break;
+                    case "m":
+                        MaquinasService.Manuntenir(maquina,
+                                TransacaoEAluguelService.
+                                converteStringToCalendar(stringDataRetorno));
+                        break;
+                    case "r":
+                        ArrayList<Patrimonio> maquinas = PatrimonioAccessService.get(null);
+                        break;
+                }
+            } 
             
-            Patrimonio aux = new Patrimonio();
-            Class T = aux.getClass();
-            
-            JSON.parse(maquinaJSON, T);
-            
-            
-            
+            PatrimonioAccessService.insert(maquina);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods.Click  on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -59,9 +92,10 @@ public class MaquinasServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, 
+            HttpServletResponse response)
             throws ServletException, IOException {
-        fixHeader(response);
+        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -74,9 +108,10 @@ public class MaquinasServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, 
+            HttpServletResponse response)
             throws ServletException, IOException {
-        fixHeader(response);
+        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -90,11 +125,13 @@ public class MaquinasServlet extends HttpServlet {
         return "Short description";
     }
     
-    public void fixHeader(HttpServletResponse response){
+    public HttpServletResponse fixHeader(HttpServletResponse response){
         response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS, DELETE");
-        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPT"
+                + "IONS, DELETE");
+        response.addHeader("Access-Control-Allow-Headers", "*");
         response.addHeader("Access-Control-Max-Age", "86400");
+        return response;
     }
     // </editor-fold>
 

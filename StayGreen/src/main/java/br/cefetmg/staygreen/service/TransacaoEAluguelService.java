@@ -25,7 +25,8 @@ public class TransacaoEAluguelService {
      * @param tipo
      * @return 
      */
-    public static double calculaValorTotal(double valor, int quantTransacao, int tipo){
+    public static double calculaValorTotal(double valor, int quantTransacao, 
+            int tipo){
         double valorTotal=valor*quantTransacao;
         
         if(tipo<0){
@@ -57,6 +58,25 @@ public class TransacaoEAluguelService {
     }
     
     /**
+     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * @param dataInicial
+     */
+    private static int tempoEmAnos(Calendar dataInicial){
+        return dataAtual().get(Calendar.YEAR)-
+                dataInicial.get(Calendar.YEAR);
+    }
+    
+    /**
+     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * @param dataFinal
+     * @return int TempoEmAnosFuturos, diferençca de tempo entre agora e uma 
+     * data no futuro
+     */
+    public static int tempoEmAnosFuturos(Calendar dataFinal){
+        return dataFinal.get(Calendar.YEAR)-dataAtual().get(Calendar.YEAR);
+    }
+    
+    /**
      * Calcula a data Atual
      */
     private static Calendar dataAtual(){
@@ -69,7 +89,8 @@ public class TransacaoEAluguelService {
      * @param dataEmprestimo
      * @return 
      */
-    public static double calculaValorRecebido(double taxaMensal, Calendar dataEmprestimo){
+    public static double calculaValorRecebido(double taxaMensal, 
+            Calendar dataEmprestimo){
         return tempoEmMeses(dataEmprestimo)*taxaMensal;
     }
     
@@ -86,10 +107,12 @@ public class TransacaoEAluguelService {
         int diaInicial = dataEmprestimo.get(Calendar.DAY_OF_MONTH);
         int diaAtual = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         if (diaAtual>diaInicial) { 
-            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), (Calendar.getInstance().get(Calendar.MONTH)+1), diaInicial);
+            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), 
+                    (Calendar.getInstance().get(Calendar.MONTH)+1), diaInicial);
         }
         else
-            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), diaInicial);
+            dataProxPagamento.set(Calendar.getInstance().get(Calendar.YEAR), 
+                    Calendar.getInstance().get(Calendar.MONTH), diaInicial);
         return dataProxPagamento;
     }
     
@@ -99,7 +122,8 @@ public class TransacaoEAluguelService {
      * @param periodoAluguel
      * @return 
      */
-    public static Calendar calculaDataFinal(Calendar dataInicial, int periodoAluguel){
+    public static Calendar calculaDataFinal(Calendar dataInicial, 
+            int periodoAluguel){
         Calendar dataFimContrato;
         dataFimContrato = Calendar.getInstance();
         
@@ -108,6 +132,40 @@ public class TransacaoEAluguelService {
                 get(Calendar.DAY_OF_MONTH));
         
         return dataFimContrato;
+    }
+    
+    /**
+     * Calcula o valor atual.
+     * @param dataInicial
+     * @param indiceDepreciacao
+     * @param valorCompra
+     * @return 
+     */
+    public static double calculaValorAtual(Calendar dataInicial, 
+            double indiceDepreciacao, double valorCompra){
+        double valorAtual=valorCompra;
+        
+        for (int i = 0; i < tempoEmAnos(dataInicial); i++) {
+            valorAtual=valorAtual-(valorAtual*(indiceDepreciacao/100));
+        }
+        
+        return valorAtual;
+    }
+    
+    /**
+     * Converte um valor String para Calendar.
+     * @param stringData
+     * @return 
+     */
+    public static Calendar converteStringToCalendar(String stringData){
+        String stringDatas[];
+        stringDatas = stringData.split("/");
+        int dia = Integer.parseInt(stringDatas[0]);
+        int mes = Integer.parseInt(stringDatas[1]);
+        int ano = Integer.parseInt(stringDatas[2]);
+        Calendar data= Calendar.getInstance();
+        data.set(ano, mes, dia);
+        return data;
     }
     
 }

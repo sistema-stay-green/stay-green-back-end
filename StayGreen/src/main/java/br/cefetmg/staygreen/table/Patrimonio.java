@@ -34,7 +34,7 @@ public class Patrimonio {
     private Calendar dataBaixaPatrimonio;
     
     // Constructors
-
+     
     /**
      *  Cria um patrimônio com um Id e Nome 
      * @param idPatrimonio Id único da linha na tabela
