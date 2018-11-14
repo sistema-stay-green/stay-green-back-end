@@ -40,10 +40,10 @@ public class Transacao {
      * @param tipoTransacao Tipo do produto a ser transacionado
      * @param dataTransacao Data de transação do produto
      */
-    public Transacao(Long id, Long idItemTransacao, double valorTransacao, 
+    public Transacao(Long idTransacao, Long idItemTransacao, double valorTransacao, 
             int quantTransacao, Calendar dataTransacao, 
             TipoTransacao tipoTransacao) {
-        this.id = id;
+        this.idTransacao = idTransacao;
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
         this.quantTransacao = quantTransacao;
