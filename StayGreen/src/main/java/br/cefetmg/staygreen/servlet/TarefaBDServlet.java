@@ -8,6 +8,7 @@ package br.cefetmg.staygreen.servlet;
 import br.cefetmg.staygreen.service.TarefaAccessService;
 import br.cefetmg.staygreen.table.Tarefa;
 import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -55,7 +56,9 @@ public class TarefaBDServlet extends HttpServlet {
                     break;
                 case "a":
                     if(TarefaAccessService.insert(tarefa))
-                        resposta = "1";
+                        resposta = TarefaAccessService
+                                .get("SELECT * from tarefa WHERE idTarefa = (SELECT MAX(idTarefa) from tarefa)")
+                                .get(0).getIdTarefa().toString();
                     else
                         resposta = "0";
             }
