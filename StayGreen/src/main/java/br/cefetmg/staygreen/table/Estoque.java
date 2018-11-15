@@ -22,6 +22,7 @@ public class Estoque {
     private Calendar dataProducaoEstoque;
 
     public Estoque() {
+        this(null, null, null, null);
     }
 
     public Estoque(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque, Calendar dataProducaoEstoque) {
