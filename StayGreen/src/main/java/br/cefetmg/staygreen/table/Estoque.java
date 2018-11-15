@@ -18,16 +18,16 @@ public class Estoque {
     @Id
     private Long idEstoque;
     private Long idProduto;
-    private Integer quantProduzitoEstoque;
+    private Integer quantProduzidaEstoque;
     private Calendar dataProducaoEstoque;
 
     public Estoque() {
     }
 
-    public Estoque(Long idEstoque, Long idProduto, Integer quantProduzitoEstoque, Calendar dataProducaoEstoque) {
+    public Estoque(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque, Calendar dataProducaoEstoque) {
         this.idEstoque = idEstoque;
         this.idProduto = idProduto;
-        this.quantProduzitoEstoque = quantProduzitoEstoque;
+        this.quantProduzidaEstoque = quantProduzidaEstoque;
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
 
@@ -47,12 +47,12 @@ public class Estoque {
         this.idProduto = idProduto;
     }
 
-    public Integer getQuantProduzitoEstoque() {
-        return quantProduzitoEstoque;
+    public Integer getQuantProduzidaEstoque() {
+        return quantProduzidaEstoque;
     }
 
-    public void setQuantProduzitoEstoque(Integer quantProduzitoEstoque) {
-        this.quantProduzitoEstoque = quantProduzitoEstoque;
+    public void setQuantProduzidaEstoque(Integer quantProduzidaEstoque) {
+        this.quantProduzidaEstoque = quantProduzidaEstoque;
     }
 
     public Calendar getDataProducaoEstoque() {
@@ -63,6 +63,7 @@ public class Estoque {
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
 
+   
    
 }
 
