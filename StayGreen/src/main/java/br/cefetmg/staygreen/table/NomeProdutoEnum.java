@@ -7,19 +7,22 @@ package br.cefetmg.staygreen.table;
 
 /**
  *
- * @author Paulo Vitor
  * @author Arthur
  */
-public enum UnidadesMedidaProduto {
-    KG, L;
+public enum NomeProdutoEnum {
+    INTEGRAL,
+    CAFE_BOURBON,
+    CAFE_ROBUSTA,
+    CAFE_ARABICA;
     
-    public static UnidadesMedidaProduto converter(Object id) {
-        for (UnidadesMedidaProduto tipo : values()) {
+        
+    public static NomeProdutoEnum converter(Object id) {
+        for (NomeProdutoEnum tipo : values()) {
             if (tipo.toString().equals(id)) {
                 return tipo;
             }
         }
         return null;
     }
+            
 }
-

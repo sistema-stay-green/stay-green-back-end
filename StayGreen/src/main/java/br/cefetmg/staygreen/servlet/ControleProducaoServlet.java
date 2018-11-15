@@ -85,7 +85,6 @@ public class ControleProducaoServlet extends HttpServlet {
                 } else {
                     Insumo insumo = JSON.parse(request.getParameter("JSON"),
                             Insumo.class);
-                    insumo.toString();
                     InsumoService.AdicionarInsumo(insumo);
                 }
                 break;

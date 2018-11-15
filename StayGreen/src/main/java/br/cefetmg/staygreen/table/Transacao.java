@@ -26,7 +26,7 @@ public class Transacao {
     private double valorTransacao;
     private int quantTransacao;
     private Calendar dataTransacao;
-    private TipoTransacao tipoTransacao;
+    private TipoTransacaoEnum tipoTransacao;
     
     // Construtores
 
@@ -42,7 +42,7 @@ public class Transacao {
      */
     public Transacao(Long idTransacao, Long idItemTransacao, double valorTransacao, 
             int quantTransacao, Calendar dataTransacao, 
-            TipoTransacao tipoTransacao) {
+            TipoTransacaoEnum tipoTransacao) {
         this.idTransacao = idTransacao;
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
@@ -51,7 +51,7 @@ public class Transacao {
         this.tipoTransacao = tipoTransacao;
     }
     
-    public Transacao(Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacao tipoTransacao) {
+    public Transacao(Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacaoEnum tipoTransacao) {
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
         this.quantTransacao = quantTransacao;
@@ -120,7 +120,7 @@ public class Transacao {
      *
      * @return o tipoTransacao, tipo do produto a ser transacionado
      */
-    public TipoTransacao getTipoTransacao() {
+    public TipoTransacaoEnum getTipoTransacao() {
         return tipoTransacao;
     }
 
@@ -128,7 +128,7 @@ public class Transacao {
      *
      * @param tipoTransacao
      */
-    public void setTipoTransacao(TipoTransacao tipoTransacao) {
+    public void setTipoTransacao(TipoTransacaoEnum tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
     
@@ -139,16 +139,16 @@ public class Transacao {
     public void setTipoTransacao(String tipoTransacao) {
         switch(tipoTransacao){
             case "MAQUINA":
-                this.tipoTransacao = TipoTransacao.MAQUINA;
+                this.tipoTransacao = TipoTransacaoEnum.MAQUINA;
                 break;
             case "PATRIMONIO":
-                this.tipoTransacao = TipoTransacao.PATRIMONIO;
+                this.tipoTransacao = TipoTransacaoEnum.PATRIMONIO;
                 break;
             case "INSUMO":
-                this.tipoTransacao = TipoTransacao.INSUMO;
+                this.tipoTransacao = TipoTransacaoEnum.INSUMO;
                 break;
             case "PRODUTO":
-                this.tipoTransacao = TipoTransacao.PRODUTO;
+                this.tipoTransacao = TipoTransacaoEnum.PRODUTO;
                 break;
         }
     }

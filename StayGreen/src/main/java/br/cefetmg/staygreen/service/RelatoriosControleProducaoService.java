@@ -47,7 +47,7 @@ public class RelatoriosControleProducaoService {
             default:
                 return null;
         }
-        SimpleDateFormat formatoData = new SimpleDateFormat("yyy-MM-dd");
+        SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
         String busca = "WHERE `dataTransacao` BETWEEN '"
                 + formatoData.format(dataLimite.getTime())
                 + "' AND '"

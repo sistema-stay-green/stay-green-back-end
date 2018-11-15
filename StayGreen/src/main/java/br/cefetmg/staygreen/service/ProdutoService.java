@@ -5,8 +5,9 @@
  */
 package br.cefetmg.staygreen.service;
 
+import br.cefetmg.staygreen.table.NomeProdutoEnum;
 import br.cefetmg.staygreen.table.Produto;
-import br.cefetmg.staygreen.table.UnidadesMedidaProduto;
+import br.cefetmg.staygreen.table.UnidadesMedidaProdutoEnum;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -142,11 +143,11 @@ public class ProdutoService {
                     Produto produto = new Produto();
                     produto.setIdProduto(Long.parseLong(
                             result.getString(ID_COLUMN)));
-                    produto.setNomeProduto(
-                            result.getString(NOME_PRODUTO_COLUMN));
+                    produto.setNomeProduto(NomeProdutoEnum.converter(
+                            result.getString(NOME_PRODUTO_COLUMN))); 
                     produto.setDescrProduto(
                             result.getString(DESCRICAO_PRODUTO_COLUMN));
-                    produto.setUnidMedProduto(UnidadesMedidaProduto.converter(
+                    produto.setUnidMedProduto(UnidadesMedidaProdutoEnum.converter(
                             result.getString(UNIDADE_MEDIDA_PRODUTO_COLUMN)));
                     produto.setValorUnitProduto(Double.parseDouble(
                             result.getString(VALOR_PRODUTO_COLUMN)));

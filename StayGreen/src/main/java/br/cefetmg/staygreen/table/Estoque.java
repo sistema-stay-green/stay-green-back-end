@@ -16,26 +16,35 @@ import java.util.Calendar;
 @Tabela("Estoque")
 public class Estoque {
     @Id
-    private Long id;
+    private Long idEstoque;
+    private Long idProduto;
     private Integer quantProduzitoEstoque;
     private Calendar dataProducaoEstoque;
 
     public Estoque() {
-        this(null, null, null);
     }
 
-    public Estoque(Long id, Integer quantProduzitoEstoque, Calendar dataProducaoEstoque) {
-        this.id = id;
+    public Estoque(Long idEstoque, Long idProduto, Integer quantProduzitoEstoque, Calendar dataProducaoEstoque) {
+        this.idEstoque = idEstoque;
+        this.idProduto = idProduto;
         this.quantProduzitoEstoque = quantProduzitoEstoque;
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdEstoque() {
+        return idEstoque;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdEstoque(Long idEstoque) {
+        this.idEstoque = idEstoque;
+    }
+
+    public Long getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(Long idProduto) {
+        this.idProduto = idProduto;
     }
 
     public Integer getQuantProduzitoEstoque() {
@@ -53,7 +62,7 @@ public class Estoque {
     public void setDataProducaoEstoque(Calendar dataProducaoEstoque) {
         this.dataProducaoEstoque = dataProducaoEstoque;
     }
-    
-    
+
+   
 }
 
