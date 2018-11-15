@@ -10,7 +10,7 @@ package br.cefetmg.staygreen.table;
  * @author Arthur
  */
 public enum NomeProdutoEnum {
-    INTEGRAL,
+    LEITE,
     CAFE_BOURBON,
     CAFE_ROBUSTA,
     CAFE_ARABICA;

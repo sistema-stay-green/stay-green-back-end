@@ -104,6 +104,11 @@ public class Produto {
         this.fotoMercadoria = fotoMercadoria;
     }
 
+    @Override
+    public String toString() {
+        return "Produto{" + "idProduto=" + idProduto + ", nomeProduto=" + nomeProduto + ", descrProduto=" + descrProduto + ", unidMedProduto=" + unidMedProduto + ", valorUnitProduto=" + valorUnitProduto + ", quantEstoqueProduto=" + quantEstoqueProduto + ", pontoAvisoProduto=" + pontoAvisoProduto + ", fotoMercadoria=" + fotoMercadoria + '}';
+    }
+
     
     
 }

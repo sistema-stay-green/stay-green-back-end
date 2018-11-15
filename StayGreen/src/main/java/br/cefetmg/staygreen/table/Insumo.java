@@ -101,7 +101,7 @@ public class Insumo {
      * 
      * @return o valor de cada unidade de um objeto insumo
      */
-    public Double getvalorCompraInsumo() {
+    public Double getValorCompraInsumo() {
         return valorCompraInsumo;
     }
 
@@ -109,7 +109,7 @@ public class Insumo {
      * Define o valor de cada unidade de um objeto insumo
      * @param valorCompraInsumo
      */
-    public void setvalorCompraInsumo(Double valorCompraInsumo) {
+    public void setValorCompraInsumo(Double valorCompraInsumo) {
         this.valorCompraInsumo = valorCompraInsumo;
     }
 

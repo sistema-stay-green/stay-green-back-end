@@ -170,7 +170,6 @@ public class ProdutoService {
             System.out.println(ex + " at getRowFromId");
             return null;
         }
-
         return produtos;
     }
 

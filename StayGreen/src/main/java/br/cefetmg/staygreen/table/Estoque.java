@@ -22,6 +22,7 @@ public class Estoque {
     private Calendar dataProducaoEstoque;
 
     public Estoque() {
+        this(null, null, null, null);
     }
 
     public Estoque(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque, Calendar dataProducaoEstoque) {
@@ -45,14 +46,6 @@ public class Estoque {
 
     public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
-    }
-
-    public Integer getQuantProduzidaEstoque() {
-        return quantProduzidaEstoque;
-    }
-
-    public void setQuantProduzidaEstoque(Integer quantProduzidaEstoque) {
-        this.quantProduzidaEstoque = quantProduzidaEstoque;
     }
 
     public Integer getQuantProduzidaEstoque() {

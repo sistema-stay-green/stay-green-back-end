@@ -25,7 +25,7 @@ public class InsumoService {
     private static final String ID_COLUMN;
     private static final String NOME_INSUMO_COLUMN;
     private static final String FINALIDADE_INSUMO_COLUMN;
-    private static final String VALOR_UNITARIO_INSUMO_COLUMN;
+    private static final String VALOR_COMPRA_INSUMO_COLUMN;
     private static final String QUANTIDADE_ESTOQUE_INSUMO_COLUMN;
     private static final String PONTO_AVISO_INSUMO_COLUMN;
 
@@ -36,10 +36,9 @@ public class InsumoService {
         ID_COLUMN = "idInsumo";
         NOME_INSUMO_COLUMN = "nomeInsumo";
         FINALIDADE_INSUMO_COLUMN = "finalidadeInsumo";
-        VALOR_UNITARIO_INSUMO_COLUMN = "valorUnitInsumo";
+        VALOR_COMPRA_INSUMO_COLUMN = "valorCompraInsumo";
         QUANTIDADE_ESTOQUE_INSUMO_COLUMN = "quantEstoqueInsumo";
         PONTO_AVISO_INSUMO_COLUMN = "pontoAvisoInsumo";
-
         TABLE_NAME = SQL.getNomeTabela(Insumo.class);
     }
     /**
@@ -142,8 +141,8 @@ public class InsumoService {
                             result.getString(NOME_INSUMO_COLUMN));
                     insumo.setFinalidadeInsumo(
                             result.getString(FINALIDADE_INSUMO_COLUMN));
-                    insumo.setvalorCompraInsumo(Double.parseDouble(
-                            result.getString(VALOR_UNITARIO_INSUMO_COLUMN)));
+                    insumo.setValorCompraInsumo(Double.parseDouble(
+                            result.getString(VALOR_COMPRA_INSUMO_COLUMN)));
                     insumo.setQuantEstoqueInsumo(Integer.parseInt(
                             result.getString(QUANTIDADE_ESTOQUE_INSUMO_COLUMN)));
                     insumo.setPontoAvisoInsumo(Integer.parseInt(

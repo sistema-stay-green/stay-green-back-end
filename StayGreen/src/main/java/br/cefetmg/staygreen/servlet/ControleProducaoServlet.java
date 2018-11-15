@@ -62,7 +62,8 @@ public class ControleProducaoServlet extends HttpServlet {
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
-
+        System.out.println(operacao);
+        System.out.println(tipo);
         /**
          * Switch que define qual operação será feita, são elas:
          * Adicionar: Adicionar produtos ou insumos ao BD.
@@ -85,15 +86,16 @@ public class ControleProducaoServlet extends HttpServlet {
                     Produto produto = JSON.parse(request.getParameter("JSON"),
                             Produto.class);
                     produto.setFotoMercadoria("foto");
+                    System.out.println(produto.toString());
                     ProdutoService.AdicionarProduto(produto);
-                    Estoque estoque = new Estoque();
-                    ArrayList<Produto> produtos = ProdutoService.get("");
-                    int tamanho = produtos.size();
-                    Long id = produtos.get(tamanho - 1).getIdProduto();
-                    estoque.setIdEstoque(id);
-                    estoque.setQuantProduzidaEstoque(produtos.get(tamanho - 1).getQuantEstoqueProduto());
-                    estoque.setDataProducaoEstoque(Calendar.getInstance());
-                    EstoqueService.AdicionarEstoque(estoque);
+//                    Estoque estoque = new Estoque();
+//                    ArrayList<Produto> produtos = ProdutoService.get("");
+//                    int tamanho = produtos.size();
+//                    Long id = produtos.get(tamanho - 1).getIdProduto();
+//                    estoque.setIdEstoque(id);
+//                    estoque.setQuantProduzidaEstoque(produtos.get(tamanho - 1).getQuantEstoqueProduto());
+//                    estoque.setDataProducaoEstoque(Calendar.getInstance());
+//                    EstoqueService.AdicionarEstoque(estoque);
                     
                 } else {
                     Insumo insumo = JSON.parse(request.getParameter("JSON"),
