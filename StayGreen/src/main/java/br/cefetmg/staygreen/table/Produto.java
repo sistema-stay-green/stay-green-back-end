@@ -11,50 +11,33 @@ import br.cefetmg.staygreen.annotation.Tabela;
 /**
  * Representa uma linha da tabela "produto"
  * @author Paulo Vitor
+ * @author Arthur
  * @version 1.1
  */
 @Tabela("produto")
 public class Produto {
     @Id
     private Long idProduto;
-    private String nomeProduto;
+    private NomeProdutoEnum nomeProduto;
     private String descrProduto;
-    private UnidadesMedidaProduto unidMedProduto;
+    private UnidadesMedidaProdutoEnum unidMedProduto;
     private Double valorUnitProduto;
     private Integer quantEstoqueProduto;
     private Integer pontoAvisoProduto;
     private String fotoMercadoria;
 
-    public Produto(Long idProduto, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
+    public Produto() {
+    }
+
+    public Produto(Long idProduto, NomeProdutoEnum nomeProduto, String descrProduto, UnidadesMedidaProdutoEnum unidMedProduto, Double valorUnitProduto, Integer quantEstoqueProduto, Integer pontoAvisoProduto, String fotoMercadoria) {
         this.idProduto = idProduto;
         this.nomeProduto = nomeProduto;
-        this.descrProduto = descProduto;
+        this.descrProduto = descrProduto;
         this.unidMedProduto = unidMedProduto;
-        this.valorUnitProduto = valorProduto;
+        this.valorUnitProduto = valorUnitProduto;
         this.quantEstoqueProduto = quantEstoqueProduto;
-        this.pontoAvisoProduto = pontoAvisoProdto;
+        this.pontoAvisoProduto = pontoAvisoProduto;
         this.fotoMercadoria = fotoMercadoria;
-    }
-
-    /**
-     * Cria um Produto sem id
-     * @param nomeProduto nome do produto
-     * @param descProduto descrição do produto
-     * @param unidMedProduto unidade de medida do produto
-     * @param valorProduto valor por unidade do produto
-     * @param quantEstoqueProduto quantidade no estoque
-     * @param pontoAvisoProdto ponto de aviso
-     * @param fotoMercadoria caminho para a foto da mercadoria
-     */
-    public Produto(String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
-        this(null, nomeProduto, descProduto, unidMedProduto, valorProduto, quantEstoqueProduto, pontoAvisoProdto, fotoMercadoria);
-    }
-
-    /**
-     * Cria um Produto todos os campos nulos
-     */
-    public Produto() {
-        this(null, null, null, null, null, null, null);
     }
 
     public Long getIdProduto() {
@@ -65,13 +48,11 @@ public class Produto {
         this.idProduto = idProduto;
     }
 
-
-
-    public String getNomeProduto() {
+    public NomeProdutoEnum getNomeProduto() {
         return nomeProduto;
     }
 
-    public void setNomeProduto(String nomeProduto) {
+    public void setNomeProduto(NomeProdutoEnum nomeProduto) {
         this.nomeProduto = nomeProduto;
     }
 
@@ -83,11 +64,11 @@ public class Produto {
         this.descrProduto = descrProduto;
     }
 
-    public UnidadesMedidaProduto getUnidMedProduto() {
+    public UnidadesMedidaProdutoEnum getUnidMedProduto() {
         return unidMedProduto;
     }
 
-    public void setUnidMedProduto(UnidadesMedidaProduto unidMedProduto) {
+    public void setUnidMedProduto(UnidadesMedidaProdutoEnum unidMedProduto) {
         this.unidMedProduto = unidMedProduto;
     }
 
@@ -121,20 +102,6 @@ public class Produto {
 
     public void setFotoMercadoria(String fotoMercadoria) {
         this.fotoMercadoria = fotoMercadoria;
-    }
-
-    @Override
-    public String toString() {
-        return "{"
-                + "Id: " + this.idProduto
-                + ", Nome: " + this.nomeProduto
-                + ", Descrição: " + this.descrProduto
-                + ", Valor: " + this.valorUnitProduto
-                + ", Quantidade: " + this.quantEstoqueProduto
-                + ", Ponto de Aviso" + this.pontoAvisoProduto
-                + ", Foto: " + this.fotoMercadoria
-                + ", Unidade de Medida: " + this.unidMedProduto
-                + "}";
     }
 
     

@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.table.Comprador;
-import br.cefetmg.staygreen.table.ModosPagamento;
+import br.cefetmg.staygreen.table.ModosPagamentoEnum;
 import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.table.VendaUsuario;
-import br.cefetmg.staygreen.table.TipoTransacao;
+import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
 import java.util.Date;
@@ -40,7 +40,7 @@ public class DadosVendasServlet extends HttpServlet {
         Integer dia = Integer.parseInt(request.getParameter("dia"));
         Integer mes = Integer.parseInt(request.getParameter("mes"));
         Integer ano = Integer.parseInt(request.getParameter("ano"));
-        TipoTransacao tipoTransacao = TipoTransacao.PRODUTO;
+        TipoTransacaoEnum tipoTransacao = TipoTransacaoEnum.PRODUTO;
         
         Calendar dataTransacao = Calendar.getInstance();
         dataTransacao.set(ano, mes, dia);
@@ -53,7 +53,7 @@ public class DadosVendasServlet extends HttpServlet {
         String cepComprador = request.getParameter("cepComprador");
         String modoPagamentoString = request.getParameter("modoPagamento");
         
-        ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
+        ModosPagamentoEnum modoPagamento = ModosPagamentoEnum.valueOf(modoPagamentoString);
         
         Transacao transacao = new Transacao(idItemTransacao, valorTransacao, quantTransacao, dataTransacao, tipoTransacao);
         Comprador comprador = new Comprador(nomeComprador, enderecoComprador, cepComprador, modoPagamento);

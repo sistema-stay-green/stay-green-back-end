@@ -5,7 +5,7 @@
  */
 package br.cefetmg.staygreen.service;
 
-import br.cefetmg.staygreen.table.TipoTransacao;
+import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.Data;
 import br.cefetmg.staygreen.util.SQL;
@@ -77,8 +77,7 @@ public class TransacaoService {
                     transacao.setQuantTransacao(
                             Integer.parseInt(
                                     result.getString(QUANT_TRANSACAO_COLUMN)));
-                    transacao.setTipoTransacao(
-                            TipoTransacao.converter(
+                    transacao.setTipoTransacao(TipoTransacaoEnum.converter(
                                     result.getString(TIPO_TRANSACAO_COLUMN)));
                     transacao.setValorTransacao(
                             Double.parseDouble(

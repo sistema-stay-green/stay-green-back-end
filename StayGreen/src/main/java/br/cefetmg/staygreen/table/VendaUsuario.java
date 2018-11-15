@@ -13,11 +13,13 @@ import br.cefetmg.staygreen.annotation.Tabela;
  * 
  * @author Paulo Vitor
  * @version 1.0
+ * @coop Arthur
+ * Atualizei algumas coisas da tabela pra ficar igual ao bd.
  */
 @Tabela("vendausuario")
 public class VendaUsuario {
     @Id
-    private Long id;
+    private Long idVenda;
     private Long idTransacao;
     private Long idComprador;
     private Double freteVenda;
@@ -26,15 +28,15 @@ public class VendaUsuario {
 
     /**
      * Cria uma Venda
-     * @param id id da venda
-     * @param idTransacao id da venda na tabela transação
-     * @param idComprador id do comprador
+     * @param idVenda idVenda da venda
+     * @param idTransacao idTransacao da venda na tabela transação
+     * @param idComprador idComprador do comprador
      * @param freteVenda preço do frete da venda
      * @param tempoEntregaVenda tempo de entrega da venda
      * @param numeroVenda numero da venda
      */
-    public VendaUsuario(Long id, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
-        this.id = id;
+    public VendaUsuario(Long idVenda, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
+        this.idVenda = idVenda;
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
         this.freteVenda = freteVenda;
@@ -43,9 +45,9 @@ public class VendaUsuario {
     }
 
     /**
-     * Cria uma venda sem o id
-     * @param idTransacao id da venda na tabela transação
-     * @param idComprador id do comprador
+     * Cria uma venda sem o idVenda
+     * @param idTransacao idVenda da venda na tabela transação
+     * @param idComprador idVenda do comprador
      * @param freteVenda preço do frete da venda
      * @param tempoEntregaVenda tempo de entrega da venda
      * @param numeroVenda numero da venda
@@ -65,12 +67,12 @@ public class VendaUsuario {
         this(null, null, null, null, null);
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdVenda() {
+        return idVenda;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdVenda(Long idVenda) {
+        this.idVenda = idVenda;
     }
 
     public Long getIdTransacao() {
@@ -115,15 +117,10 @@ public class VendaUsuario {
 
     @Override
     public String toString() {
-        return "{"
-                + "Id: " + this.id 
-                + ", Id da Transação: " + this.idTransacao
-                + ", Id do Comprador: " + this.idComprador
-                + ", Frete da Compra: " + this.freteVenda
-                + ", Tempo de entrega: " + this.tempoEntregaVenda
-                + ", Numero da Venda: " + this.numeroVenda
-                + "}";
+        return "VendaUsuario{" + "idVenda=" + idVenda + ", idTransacao=" + idTransacao + ", idComprador=" + idComprador + ", freteVenda=" + freteVenda + ", tempoEntregaVenda=" + tempoEntregaVenda + ", numeroVenda=" + numeroVenda + '}';
     }
+
+   
     
     
 }

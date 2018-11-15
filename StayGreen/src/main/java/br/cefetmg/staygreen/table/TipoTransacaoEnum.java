@@ -9,7 +9,7 @@ package br.cefetmg.staygreen.table;
  * @author Gabriel Cruz
  * @version 24-10-18/11:07
  */
-public enum TipoTransacao {
+public enum TipoTransacaoEnum {
     
     MAQUINA,
     PATRIMONIO,
@@ -17,7 +17,7 @@ public enum TipoTransacao {
     PRODUTO;
     
     /**
-     * @return o TipoTransacao
+     * @return o TipoTransacaoEnum
      */
     public int getTipoTransacao(){
         
@@ -36,13 +36,13 @@ public enum TipoTransacao {
     }
 
     /**
-     * Converte algum objeto generico (geralmente String) no ENUM TipoTransacao.
+     * Converte algum objeto generico (geralmente String) no ENUM TipoTransacaoEnum.
      * @param id
-     * @return ENUM TipoTransacao
+     * @return ENUM TipoTransacaoEnum
      * @author Arthur
      */
-    public static TipoTransacao converter(Object id) {
-        for (TipoTransacao tipo : values()) {
+    public static TipoTransacaoEnum converter(Object id) {
+        for (TipoTransacaoEnum tipo : values()) {
             if (tipo.toString().equals(id)) {
                 return tipo;
             }
