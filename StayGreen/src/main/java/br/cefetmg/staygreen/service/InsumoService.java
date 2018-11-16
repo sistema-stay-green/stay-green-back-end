@@ -179,6 +179,7 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarInsumo(Insumo insumo) {
+        System.out.println(insumo.toString());
         return SQL.update(insumo);
     }
 

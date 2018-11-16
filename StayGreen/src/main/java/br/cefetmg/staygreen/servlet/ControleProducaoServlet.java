@@ -62,8 +62,7 @@ public class ControleProducaoServlet extends HttpServlet {
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
-        System.out.println(operacao);
-        System.out.println(tipo);
+        Boolean res = false;
         /**
          * Switch que define qual operação será feita, são elas:
          * Adicionar: Adicionar produtos ou insumos ao BD.
@@ -86,7 +85,6 @@ public class ControleProducaoServlet extends HttpServlet {
                     Produto produto = JSON.parse(request.getParameter("JSON"),
                             Produto.class);
                     produto.setFotoMercadoria("foto");
-                    System.out.println(produto.toString());
                     ProdutoService.AdicionarProduto(produto);
 //                    Estoque estoque = new Estoque();
 //                    ArrayList<Produto> produtos = ProdutoService.get("");
@@ -106,9 +104,7 @@ public class ControleProducaoServlet extends HttpServlet {
                 break;
             case "remover":
                 if (tipo.equals("produto")) {
-                    ProdutoService.deletarProduto(
-                            ProdutoService.getProdutoPorId(
-                                    request.getParameter("id")));
+                    ProdutoService.deletarProduto(request.getParameter("id"));
                 } else {
                     InsumoService.deletarInsumo(
                             InsumoService.getInsumoPorId(
@@ -134,17 +130,19 @@ public class ControleProducaoServlet extends HttpServlet {
                 } else {
                     Insumo insumo = JSON.parse(request.getParameter("JSON"),
                             Insumo.class);
-                    InsumoService.atualizarInsumo(insumo);
+                    System.out.println(insumo.toString());
+                    res = InsumoService.atualizarInsumo(insumo);
                 }
                 break;
             case "buscar":
                 if (tipo.equals("produto")) {
-                    //resposta = JSON.stringify(ProdutoService.getProdutoPorId(
-                           // request.getParameter("id")));
+                    Produto produto = ProdutoService.getProdutoPorId(request.getParameter("id"));
+                    resposta = JSON.stringify(produto);
                 } else {
-                    //resposta = JSON.stringify(InsumoService.getInsumoPorId(
-                            //request.getParameter("id")));
+                    Insumo insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
+                    resposta = JSON.stringify(insumo);
                 }
+                break;
             case "buscarTodos":
                 if (tipo.equals("produto")) {
                     resposta = JSON.stringify(ProdutoService.get(""));
@@ -177,6 +175,7 @@ public class ControleProducaoServlet extends HttpServlet {
             if (resposta.equals("")) {
                 resposta = "2";
             }
+            System.out.println(res);
             out.println(resposta);
         }
     }

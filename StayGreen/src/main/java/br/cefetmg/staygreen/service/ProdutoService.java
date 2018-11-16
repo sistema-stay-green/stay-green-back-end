@@ -75,7 +75,7 @@ public class ProdutoService {
      * da ID passada por parâmetro.
      */
     public static Produto getProdutoPorId(String id) {
-
+        System.out.println(id);
         ArrayList<Produto> produtos = get("WHERE `idProduto`='" + id + "'");
 
         if (produtos == null) {
@@ -83,7 +83,6 @@ public class ProdutoService {
                     + " FOI ENCONTRADO NO BANCO DE DADOS");
             return null;
         }
-
         return produtos.get(0);
     }
 
@@ -134,42 +133,48 @@ public class ProdutoService {
     public static ArrayList<Produto> get(String condicao) {
 
         ArrayList<Produto> produtos = new ArrayList<>();
-
+        
         try {
             result = SQL.query("SELECT * FROM `" + TABLE_NAME
-                    + "` " + condicao);
+                    + "` " + condicao + ";");
             if (result.next()) {
+                result.first();
                 do {
                     Produto produto = new Produto();
-                    produto.setIdProduto(Long.parseLong(
-                            result.getString(ID_COLUMN)));
+                    produto.setIdProduto(
+                            result.getLong(ID_COLUMN));
                     produto.setNomeProduto(NomeProdutoEnum.converter(
                             result.getString(NOME_PRODUTO_COLUMN))); 
                     produto.setDescrProduto(
                             result.getString(DESCRICAO_PRODUTO_COLUMN));
                     produto.setUnidMedProduto(UnidadesMedidaProdutoEnum.converter(
-                            result.getString(UNIDADE_MEDIDA_PRODUTO_COLUMN)));
-                    produto.setValorUnitProduto(Double.parseDouble(
-                            result.getString(VALOR_PRODUTO_COLUMN)));
-                    produto.setQuantEstoqueProduto(Integer.parseInt(
-                            result.getString(QUANTIDADE_ESTOQUE_PRODUTO_COLUMN)));
-                    produto.setPontoAvisoProduto(Integer.parseInt(
-                            result.getString(PONTO_AVISO_PRODUTO_COLUMN)));
+                            result.getObject(UNIDADE_MEDIDA_PRODUTO_COLUMN)));
+                    produto.setValorUnitProduto(
+                            result.getDouble(VALOR_PRODUTO_COLUMN));
+                    produto.setQuantEstoqueProduto(
+                            result.getInt(QUANTIDADE_ESTOQUE_PRODUTO_COLUMN));
+                    produto.setPontoAvisoProduto(
+                            result.getInt(PONTO_AVISO_PRODUTO_COLUMN));
                     produto.setFotoMercadoria(
                             result.getString(FOTO_MERCADORIA_COLUMN));
                     produtos.add(produto);
-
-                } while (result.next());
+                } while(result.next());
             } else {
                 System.out.println("NENHUM PRODUTO COM CONDIÇÃO: "
                         + condicao + " FOI ENCONTRADO NO BANCO DE DADOS");
                 return null;
             }
-
         } catch (SQLException ex) {
             System.out.println(ex + " at getRowFromId");
+            try {
+                result.close();
+            } catch (SQLException ex1) {
+                System.out.println(ex1 + " at getRowFromId");
+            }
             return null;
         }
+
+        
         return produtos;
     }
 
@@ -190,6 +195,7 @@ public class ProdutoService {
     public static boolean atualizarProduto(Produto produto) {
         return SQL.update(produto);
     }
+    
 
     /**
      * Método para remover um produto no BD.
@@ -207,6 +213,30 @@ public class ProdutoService {
         }
 
     }
+    
+    /**
+     * Método para remover um produto no BD.
+     * @param id
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarProduto(String id) {
+        Produto produto = getProdutoPorId(id);
+        produto.setDescrProduto("-");
+        produto.setFotoMercadoria("-");
+        produto.setPontoAvisoProduto(0);
+        produto.setQuantEstoqueProduto(0);
+        produto.setValorUnitProduto(0.0);
+        if (produto.getIdProduto() != null) {
+            return SQL.update(produto);
+        } else {
+            System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO,"
+                    + "ID INVÁLIDO");
+            return false;
+        }
+
+    }
+    
+    
 
     /**
      * Método para removoter todos os produtos do BD.

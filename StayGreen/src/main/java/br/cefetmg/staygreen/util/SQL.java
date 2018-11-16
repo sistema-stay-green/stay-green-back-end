@@ -127,10 +127,10 @@ public final class SQL {
         String[] camposUpdate = campos.keySet().stream()
                 .map(nome -> String.format("%s = %s", nome, campos.get(nome)))
                 .toArray(String[]::new);
-        String sql = "UPDATE " + getNomeTabela(objeto.getClass())
-                + " SET " + String.join(", ", camposUpdate)
+        String sql = "UPDATE `" + getNomeTabela(objeto.getClass())
+                + "` SET " + String.join(", ", camposUpdate)
                 + " WHERE " + nomeId + " = " + id;
-        
+        System.out.println(sql);
         return query(sql) == null;
         
     }

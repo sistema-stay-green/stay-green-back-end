@@ -27,6 +27,7 @@ public class Produto {
     private String fotoMercadoria;
 
     public Produto() {
+        this(null, null, null, null, null, null, null, null);
     }
 
     public Produto(Long idProduto, NomeProdutoEnum nomeProduto, String descrProduto, UnidadesMedidaProdutoEnum unidMedProduto, Double valorUnitProduto, Integer quantEstoqueProduto, Integer pontoAvisoProduto, String fotoMercadoria) {
