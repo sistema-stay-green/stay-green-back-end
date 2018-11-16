@@ -9,8 +9,8 @@ package br.cefetmg.staygreen.table;
  * Enum que representa os modos de pagamento possíveis
  * @author paulo Vitor
  */
-public enum ModosPagamento {
+public enum ModosPagamentoEnum {
     CARTAO_CREDITO,
     CARTAO_DEBITO,
-    BOLETO
+    BOLETO;
 }

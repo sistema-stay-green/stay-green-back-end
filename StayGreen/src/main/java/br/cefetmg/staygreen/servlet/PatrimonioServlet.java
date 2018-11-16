@@ -5,9 +5,13 @@
  */
 package br.cefetmg.staygreen.servlet;
 
+import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
+import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Mei
+ * @author Mei Fagundes
  */
 @WebServlet(name = "PatrimonioServlet", urlPatterns = {"/PatrimonioServlet"})
 public class PatrimonioServlet extends HttpServlet {
@@ -29,21 +33,107 @@ public class PatrimonioServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @author Samuel Simonetti, Mei Fagundes
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         response.setContentType("text/html;charset=UTF-8");
+        String resposta = "";
+        Patrimonio patrimonio;
+        ArrayList<Patrimonio> patrimonios;
+        
+            switch(request.getParameter("action")){
+                
+                //Valores iniciais do retorno: S -> Succeded
+                //                             F -> Failed
+                //                             N -> Not found
+                
+                case "c": //Caso de compra
+
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    
+                    if (patrimonio != null) {
+                        if (PatrimonioAccessService.insert(patrimonio)){
+                            patrimonio = PatrimonioAccessService.
+                                    getLastInsertedPatrimonio();
+                            resposta = JSON.stringify(patrimonio);
+                        }
+                        else
+                            resposta = "F";
+                    }
+                    else
+                        resposta = "F";
+                    break;
+
+                case "s": //Caso de pesquisa
+
+                    switch(request.getParameter("s")){
+
+                        case "id":
+                            patrimonio = PatrimonioAccessService.
+                                    getPatrimonioById(request.getParameter("id"));
+                            
+                            if (patrimonio != null)
+                                resposta += JSON.stringify(patrimonio);
+                            else
+                                resposta = "N";
+                            break;
+
+                        case "nome":
+                            patrimonios = PatrimonioAccessService.
+                                    getPatrimoniosByNome(request.getParameter("name"));
+                            
+                            if (patrimonios != null)                  
+                                resposta += JSON.stringify(patrimonios);
+                            else
+                                resposta = "N";
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException("Parametro 's' possui um valor inválido.");
+                    }
+                    break;
+
+                case "r": //Caso de retorno de todos os patrimonios
+                    
+                    patrimonios = PatrimonioAccessService.getAll();
+                            
+                    if (patrimonios != null)
+                            resposta = JSON.stringify(patrimonios);
+                    break;
+                    
+                case "u": 
+                    patrimonio = JSON.parse(request.getParameter("patrimonio"), Patrimonio.class);
+                    
+                    if (patrimonio != null){
+                        if (PatrimonioAccessService.update(patrimonio))
+                            resposta = "S";
+                        else
+                            resposta = "N";
+                    }
+                    else
+                        resposta = "F";
+                    break;
+                    
+                case "d":
+                    patrimonio = PatrimonioAccessService.getPatrimonioById(request.getParameter("id"));
+                    if(patrimonio != null)
+                        if (PatrimonioAccessService.delete(patrimonio))
+                            resposta = "S";
+                        else
+                            resposta = "N";
+                    else
+                        resposta = "F";
+                    break;
+
+                default: //Caso base
+                    throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
+            }
+        
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet PatrimonioServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet PatrimonioServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
+            out.println(resposta);
         }
     }
 
@@ -60,19 +150,6 @@ public class PatrimonioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        // To-do
-        String action = request.getParameter("action");
-                switch(action){
-                    case "venda":
-                        String idPatrimonio = request.getParameter("id");
-                        PatrimonioProcessService.vendaPatrimonio(idPatrimonio);
-                        break;
-                    case "compra":
-                        break;
-                        
-                        
-                }
     }
 
     /**

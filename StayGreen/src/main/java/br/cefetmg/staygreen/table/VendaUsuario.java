@@ -13,19 +13,30 @@ import br.cefetmg.staygreen.annotation.Tabela;
  * 
  * @author Paulo Vitor
  * @version 1.0
+ * @coop Arthur
+ * Atualizei algumas coisas da tabela pra ficar igual ao bd.
  */
 @Tabela("vendausuario")
 public class VendaUsuario {
     @Id
-    private Long id;
+    private Long idVenda;
     private Long idTransacao;
     private Long idComprador;
     private Double freteVenda;
     private Integer tempoEntregaVenda;
     private Integer numeroVenda;
 
-    public VendaUsuario(Long id, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
-        this.id = id;
+    /**
+     * Cria uma Venda
+     * @param idVenda idVenda da venda
+     * @param idTransacao idTransacao da venda na tabela transação
+     * @param idComprador idComprador do comprador
+     * @param freteVenda preço do frete da venda
+     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param numeroVenda numero da venda
+     */
+    public VendaUsuario(Long idVenda, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
+        this.idVenda = idVenda;
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
         this.freteVenda = freteVenda;
@@ -33,6 +44,14 @@ public class VendaUsuario {
         this.numeroVenda = numeroVenda;
     }
 
+    /**
+     * Cria uma venda sem o idVenda
+     * @param idTransacao idVenda da venda na tabela transação
+     * @param idComprador idVenda do comprador
+     * @param freteVenda preço do frete da venda
+     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param numeroVenda numero da venda
+     */
     public VendaUsuario(Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
@@ -41,12 +60,19 @@ public class VendaUsuario {
         this.numeroVenda = numeroVenda;
     }
 
-    public Long getId() {
-        return id;
+    /**
+     * Cria uma venda com todos os campos nulos
+     */
+    public VendaUsuario() {
+        this(null, null, null, null, null);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getIdVenda() {
+        return idVenda;
+    }
+
+    public void setIdVenda(Long idVenda) {
+        this.idVenda = idVenda;
     }
 
     public Long getIdTransacao() {
@@ -88,5 +114,13 @@ public class VendaUsuario {
     public void setNumeroVenda(Integer numeroVenda) {
         this.numeroVenda = numeroVenda;
     }
+
+    @Override
+    public String toString() {
+        return "VendaUsuario{" + "idVenda=" + idVenda + ", idTransacao=" + idTransacao + ", idComprador=" + idComprador + ", freteVenda=" + freteVenda + ", tempoEntregaVenda=" + tempoEntregaVenda + ", numeroVenda=" + numeroVenda + '}';
+    }
+
+   
+    
     
 }

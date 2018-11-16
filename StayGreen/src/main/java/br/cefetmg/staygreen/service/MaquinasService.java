@@ -7,7 +7,7 @@ package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Aluguel;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.table.TipoTransacao;
+import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ public class MaquinasService {
                 maquina.getId().longValue(),TransacaoEAluguelService.
                 calculaValorAtual(dataCompra,maquina.
                 getIndiceDepreciacao(), maquina.getValorCompra()), quantidade, 
-                dataCompra,TipoTransacao.MAQUINA);
+                dataCompra,TipoTransacaoEnum.MAQUINA);
         TransacaoAccessService.insert(compra);
         maquina.setStatus("EM_POSSE");
         maquina.setDataCompra(dataCompra);
@@ -57,7 +57,7 @@ public class MaquinasService {
                     maquina.getId().longValue(),TransacaoEAluguelService.
                     calculaValorAtual(maquina.getDataCompra(),maquina.
                     getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
-                    dataBaixa,TipoTransacao.MAQUINA);
+                    dataBaixa,TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(venda);
             maquina.setDataBaixa(dataBaixa);
             maquina.setStatus("VENDIDO");

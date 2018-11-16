@@ -11,43 +11,64 @@ import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
 
 /**
- *
+ * Representa um comprador na tabela "comprador"
  * @author Paulo Vitor
  * @versio 1.0
+ * @coop Arthur
+ * Atualizei algumas coisas da tabela pra ficar igual ao bd
  */
 @Tabela("Comprador")
 public class Comprador {
     @Id
-    private Long id;
+    private Long idComprador;
     private String nomeComprador;
     private String enderecoComprador;
     private String cepComprador;
-    private ModosPagamento modoPagamento;
+    private ModosPagamentoEnum modoPagamento;
 
-    public Comprador(Long id, String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamento modoPagamento) {
-        this.id = id;
-        this.nomeComprador = nomeComprador;
-        this.enderecoComprador = enderecoComprador;
-        this.cepComprador = cepComprador;
-        this.modoPagamento = modoPagamento;
-    }
-
-    public Comprador(String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamento modoPagamento) {
+    /**
+     * Cria um Comprador com todos os atribútos inicializados
+     * @param idComprador idComprador do comprador
+     * @param nomeComprador nome do comprador
+     * @param enderecoComprador endereço do comprador
+     * @param cepComprador cep do comprador
+     * @param modoPagamento modo de pagamento
+     */
+    public Comprador(Long idComprador, String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamentoEnum modoPagamento) {
+        this.idComprador = idComprador;
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
         this.cepComprador = cepComprador;
         this.modoPagamento = modoPagamento;
     }
     
+    /**
+     * Cria um comprador sem idComprador
+     * @param nomeComprador nome do comprador
+     * @param enderecoComprador endereço do comprador
+     * @param cepComprador cep do comprador
+     * @param modoPagamento modo de pagamento
+     */
+    public Comprador(String nomeComprador, String enderecoComprador, String cepComprador, ModosPagamentoEnum modoPagamento) {
+        this.nomeComprador = nomeComprador;
+        this.enderecoComprador = enderecoComprador;
+        this.cepComprador = cepComprador;
+        this.modoPagamento = modoPagamento;
+    }
+    
+    /**
+     * Cria um comprador com todos os campos nulos
+     */
     public Comprador() {
+        this(null, null, null, null);
     }
 
-    public Long getId() {
-        return id;
+    public Long getIdComprador() {
+        return idComprador;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdComprador(Long idComprador) {
+        this.idComprador = idComprador;
     }
 
     public String getNomeComprador() {
@@ -74,14 +95,20 @@ public class Comprador {
         this.cepComprador = cepComprador;
     }
 
-    public ModosPagamento getModoPagamento() {
+    public ModosPagamentoEnum getModoPagamento() {
         return modoPagamento;
     }
 
-    public void setModoPagamento(ModosPagamento modoPagamento) {
+    public void setModoPagamento(ModosPagamentoEnum modoPagamento) {
         this.modoPagamento = modoPagamento;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Comprador{" + "idComprador=" + idComprador + ", nomeComprador=" + nomeComprador + ", enderecoComprador=" + enderecoComprador + ", cepComprador=" + cepComprador + ", modoPagamento=" + modoPagamento + '}';
+    }
+
+   
     
     
     

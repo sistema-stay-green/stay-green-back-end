@@ -9,54 +9,51 @@ package br.cefetmg.staygreen.table;
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
 /**
- *
+ * Representa uma linha da tabela "produto"
  * @author Paulo Vitor
+ * @author Arthur
  * @version 1.1
  */
 @Tabela("produto")
 public class Produto {
     @Id
-    private Integer idProduto;
-    private String nomeProduto;
+    private Long idProduto;
+    private NomeProdutoEnum nomeProduto;
     private String descrProduto;
-    private UnidadesMedidaProduto unidMedProduto;
+    private UnidadesMedidaProdutoEnum unidMedProduto;
     private Double valorUnitProduto;
     private Integer quantEstoqueProduto;
     private Integer pontoAvisoProduto;
     private String fotoMercadoria;
 
-    public Produto(Integer id, String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
-        this.idProduto = id;
+    public Produto() {
+        this(null, null, null, null, null, null, null, null);
+    }
+
+    public Produto(Long idProduto, NomeProdutoEnum nomeProduto, String descrProduto, UnidadesMedidaProdutoEnum unidMedProduto, Double valorUnitProduto, Integer quantEstoqueProduto, Integer pontoAvisoProduto, String fotoMercadoria) {
+        this.idProduto = idProduto;
         this.nomeProduto = nomeProduto;
-        this.descrProduto = descProduto;
+        this.descrProduto = descrProduto;
         this.unidMedProduto = unidMedProduto;
-        this.valorUnitProduto = valorProduto;
+        this.valorUnitProduto = valorUnitProduto;
         this.quantEstoqueProduto = quantEstoqueProduto;
-        this.pontoAvisoProduto = pontoAvisoProdto;
+        this.pontoAvisoProduto = pontoAvisoProduto;
         this.fotoMercadoria = fotoMercadoria;
     }
 
-    public Produto(String nomeProduto, String descProduto, UnidadesMedidaProduto unidMedProduto, Double valorProduto, Integer quantEstoqueProduto, Integer pontoAvisoProdto, String fotoMercadoria) {
-        this(null, nomeProduto, descProduto, unidMedProduto, valorProduto, quantEstoqueProduto, pontoAvisoProdto, fotoMercadoria);
-    }
-
-    public Produto() {
-        this(null, null, null, null, null, null, null);
-    }
-
-    public Integer getIdProduto() {
+    public Long getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(Integer idProduto) {
+    public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
     }
 
-    public String getNomeProduto() {
+    public NomeProdutoEnum getNomeProduto() {
         return nomeProduto;
     }
 
-    public void setNomeProduto(String nomeProduto) {
+    public void setNomeProduto(NomeProdutoEnum nomeProduto) {
         this.nomeProduto = nomeProduto;
     }
 
@@ -68,11 +65,11 @@ public class Produto {
         this.descrProduto = descrProduto;
     }
 
-    public UnidadesMedidaProduto getUnidMedProduto() {
+    public UnidadesMedidaProdutoEnum getUnidMedProduto() {
         return unidMedProduto;
     }
 
-    public void setUnidMedProduto(UnidadesMedidaProduto unidMedProduto) {
+    public void setUnidMedProduto(UnidadesMedidaProdutoEnum unidMedProduto) {
         this.unidMedProduto = unidMedProduto;
     }
 
@@ -110,16 +107,9 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "{Id: "
-                + "Nome: " + this.nomeProduto
-                + ", Descrição: " + this.descrProduto
-                + ", Valor: " + this.valorUnitProduto
-                + ", Quantidade: " + this.quantEstoqueProduto
-                + ", Ponto de Aviso" + this.pontoAvisoProduto
-                + ", Foto: " + this.fotoMercadoria
-                + ", Unidade de Medida: " + this.unidMedProduto
-                + "}";
+        return "Produto{" + "idProduto=" + idProduto + ", nomeProduto=" + nomeProduto + ", descrProduto=" + descrProduto + ", unidMedProduto=" + unidMedProduto + ", valorUnitProduto=" + valorUnitProduto + ", quantEstoqueProduto=" + quantEstoqueProduto + ", pontoAvisoProduto=" + pontoAvisoProduto + ", fotoMercadoria=" + fotoMercadoria + '}';
     }
+
     
     
 }

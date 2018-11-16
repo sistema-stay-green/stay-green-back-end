@@ -13,23 +13,26 @@ import java.util.Calendar;
 /**
  * @author Gabriel Cruz
  * @version 15-10-18/07:16
+ * @coop Arthur
+ * @version 11/11/18/17:47
+ * Modifiquei o nome do id e seus métodos para que ficasse igual ao do BD.
  */
 @Tabela("transacao")
 public class Transacao {
     // Atributos
     @Id
-    private Long id;
+    private Long idTransacao;
     private Long idItemTransacao;
     private double valorTransacao;
     private int quantTransacao;
     private Calendar dataTransacao;
-    private TipoTransacao tipoTransacao;
+    private TipoTransacaoEnum tipoTransacao;
     
     // Construtores
 
     /**
      *  Cria uma produto com todos os parametros
-     * @param id Id único da linha na tabela
+     * @param idTransacao Id único da linha na tabela
      * @param idItemTransacao Id do elemento localizado em outra tabela
      * @param valorTransacao Valor total da transação (valor individual vezes
      * quantidade de elementos)
@@ -37,10 +40,18 @@ public class Transacao {
      * @param tipoTransacao Tipo do produto a ser transacionado
      * @param dataTransacao Data de transação do produto
      */
-    public Transacao(Long id, Long idItemTransacao, double valorTransacao, 
+    public Transacao(Long idTransacao, Long idItemTransacao, double valorTransacao, 
             int quantTransacao, Calendar dataTransacao, 
-            TipoTransacao tipoTransacao) {
-        this.id = id;
+            TipoTransacaoEnum tipoTransacao) {
+        this.idTransacao = idTransacao;
+        this.idItemTransacao = idItemTransacao;
+        this.valorTransacao = valorTransacao;
+        this.quantTransacao = quantTransacao;
+        this.dataTransacao = dataTransacao;
+        this.tipoTransacao = tipoTransacao;
+    }
+    
+    public Transacao(Long idItemTransacao, double valorTransacao, int quantTransacao, Calendar dataTransacao, TipoTransacaoEnum tipoTransacao) {
         this.idItemTransacao = idItemTransacao;
         this.valorTransacao = valorTransacao;
         this.quantTransacao = quantTransacao;
@@ -109,7 +120,7 @@ public class Transacao {
      *
      * @return o tipoTransacao, tipo do produto a ser transacionado
      */
-    public TipoTransacao getTipoTransacao() {
+    public TipoTransacaoEnum getTipoTransacao() {
         return tipoTransacao;
     }
 
@@ -117,7 +128,7 @@ public class Transacao {
      *
      * @param tipoTransacao
      */
-    public void setTipoTransacao(TipoTransacao tipoTransacao) {
+    public void setTipoTransacao(TipoTransacaoEnum tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
     
@@ -128,16 +139,16 @@ public class Transacao {
     public void setTipoTransacao(String tipoTransacao) {
         switch(tipoTransacao){
             case "MAQUINA":
-                this.tipoTransacao = TipoTransacao.MAQUINA;
+                this.tipoTransacao = TipoTransacaoEnum.MAQUINA;
                 break;
             case "PATRIMONIO":
-                this.tipoTransacao = TipoTransacao.PATRIMONIO;
+                this.tipoTransacao = TipoTransacaoEnum.PATRIMONIO;
                 break;
             case "INSUMO":
-                this.tipoTransacao = TipoTransacao.INSUMO;
+                this.tipoTransacao = TipoTransacaoEnum.INSUMO;
                 break;
             case "PRODUTO":
-                this.tipoTransacao = TipoTransacao.PRODUTO;
+                this.tipoTransacao = TipoTransacaoEnum.PRODUTO;
                 break;
         }
     }
@@ -162,16 +173,16 @@ public class Transacao {
      *
      * @return o Id único da linha na tabela
      */
-    public Long getId() {
-        return id;
+    public Long getIdTransacao() {
+        return idTransacao;
     }
 
     /**
      *
-     * @param id
+     * @param idTransacao
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdTransacao(Long idTransacao) {
+        this.idTransacao = idTransacao;
     }   
     
     /**
@@ -183,6 +194,11 @@ public class Transacao {
     public double getValorTotal(double valorIndividual, int tipo){
         return TransacaoEAluguelService.calculaValorTotal(valorIndividual, 
                 quantTransacao, tipo);
+    }
+
+    @Override
+    public String toString() {
+        return "Transacao{" + "idTransacao=" + idTransacao + ", idItemTransacao=" + idItemTransacao + ", valorTransacao=" + valorTransacao + ", quantTransacao=" + quantTransacao + ", dataTransacao=" + dataTransacao + ", tipoTransacao=" + tipoTransacao + '}';
     }
     
     

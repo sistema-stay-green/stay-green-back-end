@@ -75,9 +75,28 @@ public final class SQL {
         String sql = "INSERT INTO " + getNomeTabela(objeto.getClass())
                 +" (" + String.join(", ", nomesCampos) + ")"
                 +  "  VALUES (" + String.join(", ", valoresCampos) + ")";
-        
         return query(sql) == null;
         
+    }
+    
+    /**
+     * Retorna o Id da ultima linha inserida com sucesso no DB.
+     * @return Id do ultimo objeto inserido no DB.
+     * @author Mei 
+     */
+    public static Integer getLastInsertId(){
+        
+        ResultSet resultSet = query("SELECT LAST_INSERT_ID()");
+        
+        try {
+            if (resultSet.next())
+                return resultSet.getInt("LAST_INSERT_ID()");
+            
+        } catch (SQLException sqlex) {
+            System.out.println(sqlex);
+        }
+        
+        return null;
     }
     
     /**
@@ -108,10 +127,10 @@ public final class SQL {
         String[] camposUpdate = campos.keySet().stream()
                 .map(nome -> String.format("%s = %s", nome, campos.get(nome)))
                 .toArray(String[]::new);
-        String sql = "UPDATE " + getNomeTabela(objeto.getClass())
-                + " SET " + String.join(", ", camposUpdate)
+        String sql = "UPDATE `" + getNomeTabela(objeto.getClass())
+                + "` SET " + String.join(", ", camposUpdate)
                 + " WHERE " + nomeId + " = " + id;
-        
+        System.out.println(sql);
         return query(sql) == null;
         
     }

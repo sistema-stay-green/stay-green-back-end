@@ -3,8 +3,13 @@ package patrimonio_debug_temp;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.table.PatrimonioData;
+import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
+import br.cefetmg.staygreen.util.Data;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 
 /*
  * Sistema de Agronegocio :: Stay Green
@@ -14,7 +19,7 @@ import java.util.Calendar;
 
 /**
  *
- * @author Mei
+ * @author Mei Fagundes
  * @version 10-10-18/21:45
  */
 public class PatrimonioTestClass {
@@ -25,6 +30,33 @@ public class PatrimonioTestClass {
         //testGetFromId(1);
         //testInsert("Nome");
         //testDelete(2);
+        //testCompraPatrimonio("Machine", PatrimonioTipoEnum.MAQUINA, "Maquinar coisas", b, a, dataCompra);
+        //testGetCalendarFromDateTimeString();
+        //testEmbedPatrimonioData();
+    }
+    
+    public static void testEmbedPatrimonioData(){
+        
+        Patrimonio p = new Patrimonio();
+        PatrimonioData pD = new PatrimonioData();
+        
+        pD.setDataBaixa("1999-08-03-09-25");
+        p.embedPatrimonioData(pD);
+        
+        System.out.println(p.getDataBaixa());
+    }
+    
+    public static void testGetCalendarFromDateTimeString(){
+        
+        try {
+
+            Calendar a = Data.getCalendarFromDateTimeString("1999-08-03-09-25");
+            System.out.println(a);
+
+            a = Data.getCalendarFromDateString("1999-08-03");
+            System.out.println(a);
+        } catch (ParseException e) {
+        }
     }
     
     public static void testDelete(Integer id){
@@ -55,7 +87,7 @@ public class PatrimonioTestClass {
     public static void testInsert(String nome){
         
         Patrimonio patrimonio = new Patrimonio(nome);
-        patrimonio.setTipo("Tipo");
+        patrimonio.setTipo("OUTROS");
         patrimonio.setFinalidade("Descrição");
         
         // Opção 1:
@@ -104,5 +136,9 @@ public class PatrimonioTestClass {
         System.out.println("Data da Compra: " + p.getDataSaida().getTime());
         System.out.println("Data da Saída: " + p.getDataSaida().getTime());
         System.out.println("Data da Baixa: " + p.getDataBaixa().getTime());
+    }
+    
+    public static void testCompraPatrimonio(String nome, PatrimonioTipoEnum tipo, String finalidade, Double indiceDeprec, Double valor, Calendar dataCompra){
+        PatrimonioProcessService.compraPatrimonio(nome, tipo, finalidade, indiceDeprec, valor, dataCompra);
     }
 }
