@@ -5,7 +5,7 @@
  */
 package br.cefetmg.staygreen.service;
 
-import br.cefetmg.staygreen.table.Estoque;
+import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.util.Data;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
@@ -40,18 +40,18 @@ public class EstoqueService {
         QUANTIDADE_PRODUZIDA_ESTOQUE_COLUMN = "quantProduzidaEstoque";
         DATA_PRODUCAO_ESTOQUE_COLUMN = "dataProducaoEstoque";
 
-        TABLE_NAME = SQL.getNomeTabela(Estoque.class);
+        TABLE_NAME = SQL.getNomeTabela(EstoqueProdutos.class);
     }
 
     /**
      * Método que busca um estoque no BD pelo ID.
      * @param id
-     * @return Obejeto do tipo Estoque com a primeira ocorrencia
-     * da ID passada por parâmetro.
+     * @return Obejeto do tipo EstoqueProdutos com a primeira ocorrencia
+ da ID passada por parâmetro.
      */
-    public static Estoque getEstoquePorId(String id) {
+    public static EstoqueProdutos getEstoquePorId(String id) {
 
-        ArrayList<Estoque> estoques = get("WHERE `idEstoque`='" + id + "'");
+        ArrayList<EstoqueProdutos> estoques = get("WHERE `idEstoque`='" + id + "'");
 
         if (estoques == null) {
             System.out.println("NENHUM ESTOQUE COM ID " + id
@@ -65,12 +65,12 @@ public class EstoqueService {
     /**
      * Método que busca vários estoques no BD pelo ID.
      * @param id
-     * @return ArrayList de objetos do tipo Estoque com todas as ocorrencias
-     * da ID passada por parâmetro.
+     * @return ArrayList de objetos do tipo EstoqueProdutos com todas as ocorrencias
+ da ID passada por parâmetro.
      */
-    public static ArrayList<Estoque> getEstoquesPorId(Long id) {
+    public static ArrayList<EstoqueProdutos> getEstoquesPorId(Long id) {
 
-        ArrayList<Estoque> estoques = get("WHERE `idEstoque`='" + id + "'");
+        ArrayList<EstoqueProdutos> estoques = get("WHERE `idEstoque`='" + id + "'");
 
         if (estoques == null) {
             System.out.println("NENHUM ESTOQUE COM ID " + id
@@ -84,19 +84,19 @@ public class EstoqueService {
     /**
      * Método que busca vários estoques no BD pela CONDICAO.
      * @param condicao
-     * @return ArrayList de objetos do tipo Estoque com todas as ocorrencias
-     * da CONDICAO passado por parâmetro.
+     * @return ArrayList de objetos do tipo EstoqueProdutos com todas as ocorrencias
+ da CONDICAO passado por parâmetro.
      */
-    public static ArrayList<Estoque> get(String condicao) {
+    public static ArrayList<EstoqueProdutos> get(String condicao) {
 
-        ArrayList<Estoque> estoques = new ArrayList<>();
+        ArrayList<EstoqueProdutos> estoques = new ArrayList<>();
 
         try {
             result = SQL.query("SELECT * FROM `" + TABLE_NAME
                     + "` " + condicao);
             if (result.next()) {
                 do {
-                    Estoque estoque = new Estoque();
+                    EstoqueProdutos estoque = new EstoqueProdutos();
                     estoque.setIdEstoque(Long.parseLong(
                             result.getString(ID_ESTOQUE_COLUMN)));
                     estoque.setIdProduto(Long.parseLong(
@@ -129,7 +129,7 @@ public class EstoqueService {
      * @param estoque
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
-    public static boolean AdicionarEstoque(Estoque estoque) {
+    public static boolean AdicionarEstoque(EstoqueProdutos estoque) {
         return SQL.insert(estoque);
     }
 
@@ -138,7 +138,7 @@ public class EstoqueService {
      * @param estoque
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
-    public static boolean atualizarEstoque(Estoque estoque) {
+    public static boolean atualizarEstoque(EstoqueProdutos estoque) {
         return SQL.update(estoque);
     }
 
@@ -147,10 +147,10 @@ public class EstoqueService {
      * @param estoque
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
-    public static boolean deletarEstoque(Estoque estoque) {
+    public static boolean deletarEstoque(EstoqueProdutos estoque) {
         if (estoque.getIdEstoque() != null) {
             return SQL.delete((int) estoque.getIdEstoque().longValue(),
-                    Estoque.class);
+                    EstoqueProdutos.class);
         } else {
             System.out.println("NÃO FOI POSSIVEL DELETAR O ESTOQUE,"
                     + "ID INVÁLIDO");
@@ -164,12 +164,12 @@ public class EstoqueService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean deletarEstoqueTodos() {
-        ArrayList<Estoque> estoques = get("");
+        ArrayList<EstoqueProdutos> estoques = get("");
         if (estoques != null) {
             int i = 0;
             do {
                 SQL.delete((int) (estoques.get(i).getIdEstoque().longValue()),
-                        Estoque.class);
+                        EstoqueProdutos.class);
                 i++;
             } while (i != estoques.size());
             return true;

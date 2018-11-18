@@ -101,5 +101,64 @@ public class TransacaoService {
 
         return transacaos;
     }
+    
+    /**
+     * Método para adicionar um transacao no BD.
+     * @param transacao
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean AdicionarTransacao(Transacao transacao) {
+        
+        return SQL.insert(transacao);
+    }
+
+    /**
+     * Método para atualizar um transacao no BD.
+     * @param transacao
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean atualizarTransacao(Transacao transacao) {
+        System.out.println(transacao.toString());
+        return SQL.update(transacao);
+    }
+
+    /**
+     * Método para remover um transacao no BD.
+     * @param transacao
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarTransacao(Transacao transacao) {
+        if (transacao.getIdTransacao() != null) {
+            return SQL.delete((int) transacao.getIdTransacao().longValue(),
+                    Transacao.class);
+        } else {
+            System.out.println("NÃO FOI POSSIVEL DELETAR O INSUMO,"
+                    + "ID INVÁLIDO");
+            return false;
+        }
+
+    }
+
+    /**
+     * Método para removoter todos os transacaos do BD.
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarTransacaoTodos() {
+        ArrayList<Transacao> transacaos = get("");
+        if (transacaos != null) {
+            int i = 0;
+            do {
+                SQL.delete((int) (transacaos.get(i).getIdTransacao().longValue()),
+                        Transacao.class);
+                i++;
+            } while (i != transacaos.size());
+            return true;
+        } else {
+            System.out.println("Banco de dados já está vazio");
+            return false;
+        }
+
+    }
+
 
 }

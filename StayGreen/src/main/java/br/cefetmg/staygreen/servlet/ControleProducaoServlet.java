@@ -9,10 +9,13 @@ import br.cefetmg.staygreen.service.EstoqueService;
 import br.cefetmg.staygreen.service.ProdutoService;
 import br.cefetmg.staygreen.service.InsumoService;
 import br.cefetmg.staygreen.service.RelatoriosControleProducaoService;
-import br.cefetmg.staygreen.table.Estoque;
+import br.cefetmg.staygreen.service.TransacaoService;
+import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.table.Insumo;
 import br.cefetmg.staygreen.table.Produto;
+import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -65,14 +68,12 @@ public class ControleProducaoServlet extends HttpServlet {
         Boolean res = false;
         /**
          * Switch que define qual operação será feita, são elas:
-         * Adicionar: Adicionar produtos ou insumos ao BD.
+         * Adicionar: Adicionar insumos ao BD.
          * Remover: Remover produto ou insumo do BD.
          * RemoverTodos: Remover todos os produtos ou todos os insumos do BD.
-         * RemoverTodosPI: Remover todos os produtos e insumos do do BD.
          * Atualizar: Atualizar produto ou insumo no BD.
          * Buscar: Buscar produto ou insumo no BD.
          * BuscarTodos: Buscar todos os produtos ou insumos no BD.
-         * BuscarTodosPI: Buscar todos os produtos e insumos no BD.
          * Filtro: Buscar produto(s) ou insumo(s) específicos.
          * Relatorio1: Relatório de histórico de mercadorias/período.
          * Relatorio2: BUILDING...
@@ -81,56 +82,34 @@ public class ControleProducaoServlet extends HttpServlet {
          */
         switch (operacao) {
             case "adicionar":
-                if (tipo.equals("produto")) {
-                    Produto produto = JSON.parse(request.getParameter("JSON"),
-                            Produto.class);
-                    produto.setFotoMercadoria("foto");
-                    ProdutoService.AdicionarProduto(produto);
-//                    Estoque estoque = new Estoque();
-//                    ArrayList<Produto> produtos = ProdutoService.get("");
-//                    int tamanho = produtos.size();
-//                    Long id = produtos.get(tamanho - 1).getIdProduto();
-//                    estoque.setIdEstoque(id);
-//                    estoque.setQuantProduzidaEstoque(produtos.get(tamanho - 1).getQuantEstoqueProduto());
-//                    estoque.setDataProducaoEstoque(Calendar.getInstance());
-//                    EstoqueService.AdicionarEstoque(estoque);
-                    
-                } else {
                     Insumo insumo = JSON.parse(request.getParameter("JSON"),
                             Insumo.class);
-                    InsumoService.AdicionarInsumo(insumo);
-                    
-                }
+                    res = InsumoService.AdicionarInsumo(insumo);
                 break;
             case "remover":
                 if (tipo.equals("produto")) {
-                    ProdutoService.deletarProduto(request.getParameter("id"));
+                    res = ProdutoService.deletarProduto(request.getParameter("id"));
                 } else {
-                    InsumoService.deletarInsumo(
+                    res = InsumoService.deletarInsumo(
                             InsumoService.getInsumoPorId(
                                     request.getParameter("id")));
                 }
                 break;
             case "removerTodos":
-                if (tipo.equals("produto")) {
-                    ProdutoService.deletarProdutoTodos();
+                if (tipo.equals("produto")) { 
+                    res = ProdutoService.deletarProdutoTodos();
                 } else {
-                    InsumoService.deletarInsumoTodos();
+                    res = InsumoService.deletarInsumoTodos();
                 }
-                break;
-            case "removerTodosPI":
-                ProdutoService.deletarProdutoTodos();
-                InsumoService.deletarInsumoTodos();
                 break;
             case "atualizar":
                 if (tipo.equals("produto")) {
                     Produto produto = JSON.parse(request.getParameter("JSON"),
                             Produto.class);
-                    ProdutoService.atualizarProduto(produto);
+                    res = ProdutoService.atualizarProduto(produto);
                 } else {
-                    Insumo insumo = JSON.parse(request.getParameter("JSON"),
+                    insumo = JSON.parse(request.getParameter("JSON"),
                             Insumo.class);
-                    System.out.println(insumo.toString());
                     res = InsumoService.atualizarInsumo(insumo);
                 }
                 break;
@@ -139,7 +118,7 @@ public class ControleProducaoServlet extends HttpServlet {
                     Produto produto = ProdutoService.getProdutoPorId(request.getParameter("id"));
                     resposta = JSON.stringify(produto);
                 } else {
-                    Insumo insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
+                    insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
                     resposta = JSON.stringify(insumo);
                 }
                 break;
@@ -150,17 +129,39 @@ public class ControleProducaoServlet extends HttpServlet {
                     resposta = JSON.stringify(InsumoService.get(""));
                 }
                 break;
-            case "buscarTodosPI":
-                resposta = JSON.stringify(ProdutoService.get(""))
-                        + JSON.stringify(InsumoService.get(""));
-                break;
             case "filtro":
                 if (tipo.equals("produto")) {
-                    resposta = JSON.stringify(ProdutoService.getProdutoPorNome(
-                            request.getParameter("nome")));
+                    switch(request.getParameter("id")){
+                        case "todosP":
+                            resposta = JSON.stringify(ProdutoService.get(""));
+                            break;
+                        case "estoqueBaixoP":
+                            resposta = JSON.stringify(ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC"));
+                            break;
+                        case "foraEstoqueP":
+                            resposta = JSON.stringify(ProdutoService.get("WHERE `quantEstoqueProduto` = 0"));
+                            break;
+                        case "maisVendidosP":
+                            ArrayList<Transacao> transacaos = TransacaoService.get("WHERE `tipoTransacao` = \"PRODUTO\" ORDER BY `transacao`.`quantTransacao` DESC");
+                            ArrayList<Produto> produtos = new ArrayList<Produto>();
+                            for(int i = 0; i < transacaos.size(); i++){ 
+                                produtos.add(ProdutoService.getProdutoPorId(String.valueOf(transacaos.get(i).getIdItemTransacao())));
+                            }
+                            resposta = JSON.stringify(produtos);
+                            break;
+                        default:
+                    }
                 } else {
-                    resposta = JSON.stringify(InsumoService.getInsumoPorNome(
-                            request.getParameter("nome")));
+                    switch(request.getParameter("id")){
+                        case "estoqueBaixoI":
+                            resposta = JSON.stringify(InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC"));
+                            break;
+                        case "foraEstoqueI":
+                            resposta = JSON.stringify(InsumoService.get("WHERE `quantEstoqueInsumo` = 0"));
+                            break;
+                        default:
+                    }
+
                 }
                 break;
             case "relatorio1":
@@ -172,10 +173,12 @@ public class ControleProducaoServlet extends HttpServlet {
             default:
         }
         try (PrintWriter out = response.getWriter()) {
-            if (resposta.equals("")) {
-                resposta = "2";
+            if (resposta.equals("") && res == false) {
+                resposta = " {\"resultado\":\"FALHA\"}";
             }
-            System.out.println(res);
+            if (resposta.equals("") && res == true){
+                resposta = " {\"resultado\":\"SUCESSO\"}";
+            }
             out.println(resposta);
         }
     }

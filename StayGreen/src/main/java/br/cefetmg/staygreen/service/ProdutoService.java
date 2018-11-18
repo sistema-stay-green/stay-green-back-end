@@ -5,6 +5,7 @@
  */
 package br.cefetmg.staygreen.service;
 
+import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.table.NomeProdutoEnum;
 import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.table.UnidadesMedidaProdutoEnum;
@@ -12,6 +13,7 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -75,7 +77,6 @@ public class ProdutoService {
      * da ID passada por parâmetro.
      */
     public static Produto getProdutoPorId(String id) {
-        System.out.println(id);
         ArrayList<Produto> produtos = get("WHERE `idProduto`='" + id + "'");
 
         if (produtos == null) {
@@ -177,41 +178,23 @@ public class ProdutoService {
         
         return produtos;
     }
-
-    /**
-     * Método para adicionar um produto no BD.
-     * @param produto
-     * @return True ou False, dependendo do sucesso com a conexão com BD.
-     */
-    public static boolean AdicionarProduto(Produto produto) {
-        return SQL.insert(produto);
-    }
-
+    
     /**
      * Método para atualizar um produto no BD.
      * @param produto
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarProduto(Produto produto) {
-        return SQL.update(produto);
-    }
-    
-
-    /**
-     * Método para remover um produto no BD.
-     * @param produto
-     * @return True ou False, dependendo do sucesso com a conexão com BD.
-     */
-    public static boolean deletarProduto(Produto produto) {
-        if (produto.getIdProduto() != null) {
-            return SQL.delete((int) produto.getIdProduto().longValue(),
-                    Produto.class);
-        } else {
-            System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO,"
-                    + "ID INVÁLIDO");
+        EstoqueProdutos estoque = new EstoqueProdutos();
+        estoque.setDataProducaoEstoque(Calendar.getInstance());
+        estoque.setIdProduto(produto.getIdProduto());
+        estoque.setQuantProduzidaEstoque(produto.getQuantEstoqueProduto());
+        if(EstoqueService.AdicionarEstoque(estoque)){
+            return SQL.update(produto);
+        }else{
             return false;
         }
-
+        
     }
     
     /**
@@ -245,12 +228,9 @@ public class ProdutoService {
     public static boolean deletarProdutoTodos() {
         ArrayList<Produto> produtos = get("");
         if (produtos != null) {
-            int i = 0;
-            do {
-                SQL.delete((int) (produtos.get(i).getIdProduto().longValue()),
-                        Produto.class);
-                i++;
-            } while (i != produtos.size());
+            for(int i = 0; i < produtos.size() ; i++){
+                deletarProduto(produtos.get(i).getIdProduto().toString());
+            }
             return true;
         } else {
             System.out.println("Banco de dados já está vazio");
