@@ -13,19 +13,19 @@ import java.util.Calendar;
  *
  * @author Arthur
  */
-@Tabela("Estoque")
-public class Estoque {
+@Tabela("EstoqueProdutos")
+public class EstoqueProdutos {
     @Id
     private Long idEstoque;
     private Long idProduto;
     private Integer quantProduzidaEstoque;
     private Calendar dataProducaoEstoque;
 
-    public Estoque() {
+    public EstoqueProdutos() {
         this(null, null, null, null);
     }
 
-    public Estoque(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque, Calendar dataProducaoEstoque) {
+    public EstoqueProdutos(Long idEstoque, Long idProduto, Integer quantProduzidaEstoque, Calendar dataProducaoEstoque) {
         this.idEstoque = idEstoque;
         this.idProduto = idProduto;
         this.quantProduzidaEstoque = quantProduzidaEstoque;
