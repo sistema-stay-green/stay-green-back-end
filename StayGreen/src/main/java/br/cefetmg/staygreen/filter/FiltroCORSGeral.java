@@ -25,7 +25,6 @@ public class FiltroCORSGeral implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) res;
-        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", 
                 "POST, GET, PUT, OPTIONS, DELETE");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type");

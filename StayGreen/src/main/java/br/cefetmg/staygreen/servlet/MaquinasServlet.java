@@ -40,14 +40,16 @@ public class MaquinasServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
-            Patrimonio maquina = JSON.parse(request.getParameter("maquinaJSON"),
-                    Patrimonio.class);   
+            Patrimonio maquina = JSON.parse(request.getParameter("maquinasJSON"),
+                    Patrimonio.class);
             String stringDataCompra = request.getParameter("dataCompra"),
                    stringDataSaida = request.getParameter("dataSaida"),
                    stringDataRetorno = request.getParameter("dataRetorno"),
-                   stringDataBaixa = request.getParameter("dataBaixa");
+                   stringDataBaixa = request.getParameter("dataBaixa"),
+                   stringQuantidade = request.getParameter("quantidade");
+            int quantidade = Integer.parseInt(stringQuantidade);
             
-            int quantidade = 1;
+
             if(maquina != null) {
                 switch(request.getParameter("acao")){
                     case "c":
