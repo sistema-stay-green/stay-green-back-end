@@ -222,16 +222,16 @@ public class ProdutoService {
             produto.setDescrProduto("-");
             produto.setFotoMercadoria("-");
             produto.setPontoAvisoProduto(0);
-            produto.setValorUnitProduto(0.0);
             estoque.setDataProducaoEstoque(Calendar.getInstance());
             estoque.setIdProduto(produto.getIdProduto());
             estoque.setQuantProduzidaEstoque(produto.getQuantEstoqueProduto() * -1);
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setIdItemTransacao(produto.getIdProduto());
-            transacao.setQuantTransacao(produto.getQuantEstoqueProduto());
-            produto.setQuantEstoqueProduto(0);
+            transacao.setQuantTransacao(produto.getQuantEstoqueProduto() * -1);           
             transacao.setTipoTransacao("PRODUTO");
-            transacao.setValorTransacao(0);
+            transacao.setValorTransacao(produto.getQuantEstoqueProduto() * produto.getValorUnitProduto() * -1);
+            produto.setValorUnitProduto(0.0);
+            produto.setQuantEstoqueProduto(0);
             if (TransacaoService.AdicionarTransacao(transacao)) {
                 if (EstoqueService.AdicionarEstoque(estoque)) {
                     return SQL.update(produto);
