@@ -10,6 +10,7 @@ import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
 import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
+import br.cefetmg.staygreen.util.JSON;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
@@ -27,18 +28,26 @@ public class MaquinasService {
      * @param maquina
      * @param quantidade
      * @param dataCompra
+     * @return 
      */
-    public static void Cadastrar(Patrimonio maquina, int quantidade, Calendar dataCompra){
+    public static String Cadastrar(Patrimonio maquina, int quantidade, 
+            Calendar dataCompra){
         
-        Transacao compra = new Transacao(null,
-                maquina.getId().longValue(),TransacaoEAluguelService.
-                calculaValorAtual(dataCompra,maquina.
-                getIndiceDepreciacao(), maquina.getValorCompra()), quantidade, 
-                dataCompra,TipoTransacaoEnum.MAQUINA);
-        TransacaoAccessService.insert(compra);
-        maquina.setStatus("EM_POSSE");
-        maquina.setDataCompra(dataCompra);
-        PatrimonioAccessService.insert(maquina);
+        try{
+            Transacao compra = new Transacao(null,
+                    maquina.getId().longValue(),TransacaoEAluguelService.
+                    calculaValorAtual(dataCompra,maquina.
+                    getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
+                    dataCompra,TipoTransacaoEnum.MAQUINA);
+            TransacaoAccessService.insert(compra);
+            maquina.setStatus("EM_POSSE");
+            maquina.setDataCompra(dataCompra);
+            PatrimonioAccessService.insert(maquina);
+            return JSON.stringify(maquina);
+        }
+        catch(Exception ex){
+            return "ERRO: "+ex;
+        }
     }
     
     /**
@@ -47,21 +56,28 @@ public class MaquinasService {
      * tabela transação
      * @param maquina
      * @param dataBaixa
+     * @return 
      */
-    public static void Venda(Patrimonio maquina, Calendar dataBaixa){
+    public static String Venda(Patrimonio maquina, Calendar dataBaixa){
         if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
-            System.out.println("Maquina já vendida");
+            return "Maquina já vendida";
         }
         else {
-            Transacao venda = new Transacao(null,
-                    maquina.getId().longValue(),TransacaoEAluguelService.
-                    calculaValorAtual(maquina.getDataCompra(),maquina.
-                    getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
-                    dataBaixa,TipoTransacaoEnum.MAQUINA);
-            TransacaoAccessService.insert(venda);
-            maquina.setDataBaixa(dataBaixa);
-            maquina.setStatus("VENDIDO");
-            PatrimonioAccessService.update(maquina);
+            try{
+                Transacao venda = new Transacao(null,
+                        maquina.getId().longValue(),TransacaoEAluguelService.
+                        calculaValorAtual(maquina.getDataCompra(),maquina.
+                        getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
+                        dataBaixa,TipoTransacaoEnum.MAQUINA);
+                TransacaoAccessService.insert(venda);
+                maquina.setDataBaixa(dataBaixa);
+                maquina.setStatus("VENDIDO");
+                PatrimonioAccessService.update(maquina);
+                return JSON.stringify(maquina);
+            }
+            catch(Exception ex){
+                return "ERRO: "+ex;
+            }
         }
     }
     
@@ -72,20 +88,29 @@ public class MaquinasService {
      * @param maquina
      * @param request
      * @param dataSaida
+     * @return 
      */
-    public static void Aluguel(Patrimonio maquina, HttpServletRequest request, Calendar dataSaida){
+    public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
+            Calendar dataSaida){
         if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
-            System.out.println("Maquina já foi alugada");
+            return "Maquina já foi alugada";
         }
         else {
-            Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
-                    Double.parseDouble(request.getParameter("valorAluguel")),
-                    Integer.parseInt(request.getParameter("periodoAluguel")),
-                    dataSaida);
-            maquina.setDataSaida(dataSaida);
-            maquina.setStatus("ALUGADO");
-            AluguelAccessService.insert(aluguel);
-            PatrimonioAccessService.update(maquina);
+            try{
+                Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
+                        Double.parseDouble(request.
+                        getParameter("valorAluguel")), Integer.parseInt(request.
+                        getParameter("periodoAluguel")), dataSaida);
+                maquina.setDataSaida(dataSaida);
+                maquina.setStatus("ALUGADO");
+                AluguelAccessService.insert(aluguel);
+                PatrimonioAccessService.update(maquina);
+                return JSON.stringify(maquina);
+            }
+            catch(Exception ex){
+                return "ERRO: "+ex;
+            }
+            
         }
     }
 
@@ -93,13 +118,20 @@ public class MaquinasService {
      * Usado ao descartar uma maquina. 
      * Muda o Estado da maquina para DESCARTADO
      * @param maquina
+     * @return 
      */
-    public static void Descarte(Patrimonio maquina){
+    public static String Descarte(Patrimonio maquina){
         if(maquina.getStatus() == PatrimonioStatusEnum.DESCARTADO){
-            System.out.println("Maquina já foi descartada");
+            return "Maquina já foi descartada";
         }
         else {
-            PatrimonioAccessService.delete(maquina);
+            try{
+                PatrimonioAccessService.delete(maquina);
+                return JSON.stringify(maquina);
+            }
+            catch(Exception ex){
+                return "ERRO: "+ex;
+            }
         }
     }
     
@@ -108,14 +140,21 @@ public class MaquinasService {
      * Muda o Estado da maquina para EM_MANUTENCAO
      * @param maquina
      * @param dataRetorno
+     * @return 
      */
-    public static void Manuntenir(Patrimonio maquina, Calendar dataRetorno){
+    public static String Manuntenir(Patrimonio maquina, Calendar dataRetorno){
         if(maquina.getStatus() == PatrimonioStatusEnum.EM_MANUTENCAO){
-            System.out.println("Maquina já está em manutenção");
+            return "Maquina já está em manutenção";
         }
         else {
-            maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
-            maquina.setDataRetorno(dataRetorno);
+            try{
+                maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
+                maquina.setDataRetorno(dataRetorno);
+                return JSON.stringify(maquina);
+            }
+            catch(Exception ex){
+                return "ERRO: "+ex;
+            }
         }
     }
 }
