@@ -49,7 +49,7 @@ public class MaquinasServlet extends HttpServlet {
                    stringQuantidade = request.getParameter("quantidade");
             int quantidade = Integer.parseInt(stringQuantidade);
             
-
+            
             if(maquina != null) {
                 switch(request.getParameter("acao")){
                     case "c":
@@ -79,8 +79,6 @@ public class MaquinasServlet extends HttpServlet {
                         break;
                 }
             } 
-            
-            PatrimonioAccessService.insert(maquina);
         }
     }
 
