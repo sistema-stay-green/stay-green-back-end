@@ -95,7 +95,6 @@ public class MaquinasServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, 
             HttpServletResponse response)
             throws ServletException, IOException {
-        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -111,7 +110,6 @@ public class MaquinasServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, 
             HttpServletResponse response)
             throws ServletException, IOException {
-        response = fixHeader(response);
         processRequest(request, response);
     }
 
@@ -123,15 +121,6 @@ public class MaquinasServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-    
-    public HttpServletResponse fixHeader(HttpServletResponse response){
-        response.addHeader("Access-Control-Allow-Origin", "*");
-        response.addHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPT"
-                + "IONS, DELETE");
-        response.addHeader("Access-Control-Allow-Headers", "*");
-        response.addHeader("Access-Control-Max-Age", "86400");
-        return response;
     }
     // </editor-fold>
 
