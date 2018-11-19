@@ -5,13 +5,17 @@
  */
 package br.cefetmg.staygreen.service;
 
+import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.table.NomeProdutoEnum;
 import br.cefetmg.staygreen.table.Produto;
+import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.UnidadesMedidaProdutoEnum;
 import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
 
 /**
  *
@@ -51,9 +55,10 @@ public class ProdutoService {
 
     /**
      * Método que busca um produto no BD pelo NOME.
+     *
      * @param nome
-     * @return Obejeto do tipo Produto com a primeira ocorrencia
-     * do NOME passado por parâmetro.
+     * @return Obejeto do tipo Produto com a primeira ocorrencia do NOME passado
+     * por parâmetro.
      */
     public static Produto getProdutoPorNome(String nome) {
 
@@ -70,12 +75,12 @@ public class ProdutoService {
 
     /**
      * Método que busca um produto no BD pelo ID.
+     *
      * @param id
-     * @return Obejeto do tipo Produto com a primeira ocorrencia
-     * da ID passada por parâmetro.
+     * @return Obejeto do tipo Produto com a primeira ocorrencia da ID passada
+     * por parâmetro.
      */
     public static Produto getProdutoPorId(String id) {
-        System.out.println(id);
         ArrayList<Produto> produtos = get("WHERE `idProduto`='" + id + "'");
 
         if (produtos == null) {
@@ -88,9 +93,10 @@ public class ProdutoService {
 
     /**
      * Método que busca vários produtos no BD pelo NOME.
+     *
      * @param nome
-     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
-     * do NOME passado por parâmetro.
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias do
+     * NOME passado por parâmetro.
      */
     public static ArrayList<Produto> getProdutosPorNome(String nome) {
 
@@ -107,9 +113,10 @@ public class ProdutoService {
 
     /**
      * Método que busca vários produtos no BD pelo ID.
+     *
      * @param id
-     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
-     * da ID passada por parâmetro.
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias da
+     * ID passada por parâmetro.
      */
     public static ArrayList<Produto> getProdutosPorId(Long id) {
 
@@ -126,14 +133,15 @@ public class ProdutoService {
 
     /**
      * Método que busca vários produtos no BD pela CONDICAO.
+     *
      * @param condicao
-     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias
-     * da CONDICAO passado por parâmetro.
+     * @return ArrayList de objetos do tipo Produto com todas as ocorrencias da
+     * CONDICAO passado por parâmetro.
      */
     public static ArrayList<Produto> get(String condicao) {
 
         ArrayList<Produto> produtos = new ArrayList<>();
-        
+
         try {
             result = SQL.query("SELECT * FROM `" + TABLE_NAME
                     + "` " + condicao + ";");
@@ -144,7 +152,7 @@ public class ProdutoService {
                     produto.setIdProduto(
                             result.getLong(ID_COLUMN));
                     produto.setNomeProduto(NomeProdutoEnum.converter(
-                            result.getString(NOME_PRODUTO_COLUMN))); 
+                            result.getString(NOME_PRODUTO_COLUMN)));
                     produto.setDescrProduto(
                             result.getString(DESCRICAO_PRODUTO_COLUMN));
                     produto.setUnidMedProduto(UnidadesMedidaProdutoEnum.converter(
@@ -158,7 +166,7 @@ public class ProdutoService {
                     produto.setFotoMercadoria(
                             result.getString(FOTO_MERCADORIA_COLUMN));
                     produtos.add(produto);
-                } while(result.next());
+                } while (result.next());
             } else {
                 System.out.println("NENHUM PRODUTO COM CONDIÇÃO: "
                         + condicao + " FOI ENCONTRADO NO BANCO DE DADOS");
@@ -174,60 +182,65 @@ public class ProdutoService {
             return null;
         }
 
-        
         return produtos;
     }
 
     /**
-     * Método para adicionar um produto no BD.
-     * @param produto
-     * @return True ou False, dependendo do sucesso com a conexão com BD.
-     */
-    public static boolean AdicionarProduto(Produto produto) {
-        return SQL.insert(produto);
-    }
-
-    /**
      * Método para atualizar um produto no BD.
+     *
      * @param produto
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarProduto(Produto produto) {
-        return SQL.update(produto);
-    }
-    
-
-    /**
-     * Método para remover um produto no BD.
-     * @param produto
-     * @return True ou False, dependendo do sucesso com a conexão com BD.
-     */
-    public static boolean deletarProduto(Produto produto) {
-        if (produto.getIdProduto() != null) {
-            return SQL.delete((int) produto.getIdProduto().longValue(),
-                    Produto.class);
+        Produto p = ProdutoService.getProdutoPorId(String.valueOf(produto.getIdProduto()));
+        if (!Objects.equals(p.getQuantEstoqueProduto(), produto.getQuantEstoqueProduto())) {
+            EstoqueProdutos estoque = new EstoqueProdutos();
+            estoque.setDataProducaoEstoque(Calendar.getInstance());
+            estoque.setIdProduto(produto.getIdProduto());
+            estoque.setQuantProduzidaEstoque(produto.getQuantEstoqueProduto());
+            if (EstoqueService.AdicionarEstoque(estoque)) {
+                return SQL.update(produto);
+            } else {
+                return false;
+            }
         } else {
-            System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO,"
-                    + "ID INVÁLIDO");
-            return false;
+            return SQL.update(produto);
         }
-
     }
-    
+
     /**
      * Método para remover um produto no BD.
+     *
      * @param id
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean deletarProduto(String id) {
         Produto produto = getProdutoPorId(id);
-        produto.setDescrProduto("-");
-        produto.setFotoMercadoria("-");
-        produto.setPontoAvisoProduto(0);
-        produto.setQuantEstoqueProduto(0);
-        produto.setValorUnitProduto(0.0);
         if (produto.getIdProduto() != null) {
-            return SQL.update(produto);
+            EstoqueProdutos estoque = new EstoqueProdutos();
+            Transacao transacao = new Transacao();
+            produto.setDescrProduto("-");
+            produto.setFotoMercadoria("-");
+            produto.setPontoAvisoProduto(0);
+            estoque.setDataProducaoEstoque(Calendar.getInstance());
+            estoque.setIdProduto(produto.getIdProduto());
+            estoque.setQuantProduzidaEstoque(produto.getQuantEstoqueProduto() * -1);
+            transacao.setDataTransacao(Calendar.getInstance());
+            transacao.setIdItemTransacao(produto.getIdProduto());
+            transacao.setQuantTransacao(produto.getQuantEstoqueProduto() * -1);           
+            transacao.setTipoTransacao("PRODUTO");
+            transacao.setValorTransacao(produto.getQuantEstoqueProduto() * produto.getValorUnitProduto() * -1);
+            produto.setValorUnitProduto(0.0);
+            produto.setQuantEstoqueProduto(0);
+            if (TransacaoService.AdicionarTransacao(transacao)) {
+                if (EstoqueService.AdicionarEstoque(estoque)) {
+                    return SQL.update(produto);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else {
             System.out.println("NÃO FOI POSSIVEL DELETAR O PRODUTO,"
                     + "ID INVÁLIDO");
@@ -235,22 +248,18 @@ public class ProdutoService {
         }
 
     }
-    
-    
 
     /**
      * Método para removoter todos os produtos do BD.
+     *
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean deletarProdutoTodos() {
         ArrayList<Produto> produtos = get("");
         if (produtos != null) {
-            int i = 0;
-            do {
-                SQL.delete((int) (produtos.get(i).getIdProduto().longValue()),
-                        Produto.class);
-                i++;
-            } while (i != produtos.size());
+            for (int i = 0; i < produtos.size(); i++) {
+                deletarProduto(String.valueOf(produtos.get(i).getIdProduto()));
+            }
             return true;
         } else {
             System.out.println("Banco de dados já está vazio");
