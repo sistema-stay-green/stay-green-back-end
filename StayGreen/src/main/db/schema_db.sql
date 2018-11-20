@@ -89,7 +89,7 @@ CHARSET = utf8;
 CREATE TABLE `Produto`
 (
   `idProduto` Int NOT NULL AUTO_INCREMENT,
-  `nomeProduto` Enum('LEITE', 'CAFE BOURBON', 'CAFE ROBUSTA', 'CAFE ARABICA') NOT NULL,
+  `nomeProduto` Enum('LEITE', 'CAFE_BOURBON', 'CAFE_ROBUSTA', 'CAFE_ARABICA') NOT NULL,
   `descrProduto` Varchar(120) NOT NULL,
   `valorUnitProduto` Double NOT NULL,
   `quantEstoqueProduto` Int NOT NULL,
@@ -115,6 +115,7 @@ CREATE TABLE `Tarefa`
   `quantProduzTarefa` Int NOT NULL,
   `insumosTarefa` Varchar(200) NOT NULL,
   `quantInsumosTarefa` Int NOT NULL,
+  `produtoProduzido` Enum('LEITE', 'CAFE_BOURBON', 'CAFE_ROBUSTA', 'CAFE_ARABICA') NOT NULL,
   PRIMARY KEY (`idTarefa`)
 )
 CHARSET = utf8;
