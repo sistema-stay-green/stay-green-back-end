@@ -102,6 +102,10 @@ public class ControleProducaoServlet extends HttpServlet {
                     res = InsumoService.deletarInsumoTodos();
                 }
                 break;
+            case "removerDefinitivo":
+                insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
+                res = InsumoService.deletarInsumoDefinitivo(insumo);
+                break;
             case "atualizar":
                 if (tipo.equals("produto")) {
                     Produto produto = JSON.parse(request.getParameter("JSON"),

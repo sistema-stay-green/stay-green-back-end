@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  *
@@ -179,21 +180,22 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean AdicionarInsumo(Insumo insumo) {
-
-        boolean resultado = SQL.insert(insumo);
-        Transacao transacao = new Transacao();
-        transacao.setDataTransacao(Calendar.getInstance());
-        transacao.setIdItemTransacao(SQL.getLastInsertId().longValue());
-        transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
-        transacao.setValorTransacao(insumo.getValorCompraInsumo());
-        transacao.setTipoTransacao("INSUMO");
-        boolean resultado2 = TransacaoService.AdicionarTransacao(transacao);
-        if (resultado2 && resultado) {
-            return resultado;
+        if (SQL.insert(insumo)) {
+            Transacao transacao = new Transacao();
+            if (SQL.getLastInsertId() != null) {
+                transacao.setIdItemTransacao(SQL.getLastInsertId().longValue());
+            } else {
+                return false;
+            }
+            System.out.println(SQL.getLastInsertId());
+            transacao.setDataTransacao(Calendar.getInstance());
+            transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
+            transacao.setValorTransacao(insumo.getValorCompraInsumo() * insumo.getQuantEstoqueInsumo() * -1);
+            transacao.setTipoTransacao("INSUMO");
+            return TransacaoService.AdicionarTransacao(transacao);
         } else {
             return false;
         }
-
     }
 
     /**
@@ -203,20 +205,29 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarInsumo(Insumo insumo) {
-        System.out.println(insumo.toString());
-        boolean resultado = SQL.update(insumo);
-        Transacao transacao = new Transacao();
-        transacao.setDataTransacao(Calendar.getInstance());
-        transacao.setIdItemTransacao(insumo.getIdInsumo());
-        transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
-        transacao.setValorTransacao(insumo.getValorCompraInsumo());
-        transacao.setTipoTransacao("INSUMO");
-        boolean resultado2 = TransacaoService.AdicionarTransacao(transacao);
-        if (resultado2 && resultado) {
-            return resultado;
+        Insumo in = InsumoService.getInsumoPorId(String.valueOf(insumo.getIdInsumo()));
+        if (!Objects.equals(in.getQuantEstoqueInsumo(), insumo.getQuantEstoqueInsumo())) {
+            Transacao transacao = new Transacao();
+            transacao.setDataTransacao(Calendar.getInstance());
+            transacao.setIdItemTransacao(insumo.getIdInsumo());
+            int aux = insumo.getQuantEstoqueInsumo() - in.getQuantEstoqueInsumo();                    
+            if(aux > 0){
+                transacao.setValorTransacao(aux * insumo.getValorCompraInsumo() * -1);
+                transacao.setQuantTransacao(aux);
+            }else{
+                transacao.setValorTransacao(0);
+                transacao.setQuantTransacao(aux);
+            }
+            transacao.setTipoTransacao("INSUMO");
+            if (TransacaoService.AdicionarTransacao(transacao)) {
+                return SQL.update(insumo);
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            return SQL.update(insumo);
         }
+
     }
 
     /**
@@ -228,17 +239,17 @@ public class InsumoService {
     public static boolean deletarInsumo(Insumo insumo) {
         boolean resultado;
         if (insumo.getIdInsumo() != null) {
-            resultado = SQL.delete((int) insumo.getIdInsumo().longValue(),
-                    Insumo.class);
             Transacao transacao = new Transacao();
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setIdItemTransacao(insumo.getIdInsumo());
-            transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
+            transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo() * -1);
             transacao.setValorTransacao(0);
             transacao.setTipoTransacao("INSUMO");
-            boolean resultado2 = TransacaoService.AdicionarTransacao(transacao);
-            if (resultado2 && resultado) {
-                return resultado;
+            insumo.setPontoAvisoInsumo(-1);
+            insumo.setQuantEstoqueInsumo(-1);
+            insumo.setValorCompraInsumo(-1.0);
+            if (SQL.update(insumo)) {
+                return TransacaoService.AdicionarTransacao(transacao);
             } else {
                 return false;
             }
@@ -251,7 +262,7 @@ public class InsumoService {
     }
 
     /**
-     * Método para removoter todos os insumos do BD.
+     * Método para remover todos os insumos do BD.
      *
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
@@ -259,12 +270,65 @@ public class InsumoService {
         ArrayList<Insumo> insumos = get("");
         int j = 0;
         if (insumos != null) {
-            for(int i = 0; i < insumos.size(); i++){
-                if(deletarInsumo(insumos.get(i))){
+            for (int i = 0; i < insumos.size(); i++) {
+                if (deletarInsumo(insumos.get(i))) {
                     j++;
                 }
             }
-            return j == insumos.size();            
+            return j == insumos.size();
+        } else {
+            System.out.println("Banco de dados já está vazio");
+            return false;
+        }
+
+    }
+
+    /**
+     * Método para remover um insumo no BD.
+     *
+     * @param insumo
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarInsumoDefinitivo(Insumo insumo) {
+        if (insumo.getIdInsumo() != null) {
+            ArrayList<Transacao> transacoes = TransacaoService.get(
+                    "WHERE `idItemTransacao`='" + insumo.getIdInsumo() + "'");
+            int j = 0;
+            for (int i = 0; i < transacoes.size(); i++) {
+                if (TransacaoService.deletarTransacao(transacoes.get(i))) {
+                    if (SQL.delete((int) insumo.getIdInsumo().longValue(),
+                            Insumo.class)) {
+                        j++;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return j == transacoes.size();
+        } else {
+            System.out.println("NÃO FOI POSSIVEL DELETAR O INSUMO,"
+                    + "ID INVÁLIDO");
+            return false;
+        }
+    }
+
+    /**
+     * Método para remover todos os insumos do BD.
+     *
+     * @return True ou False, dependendo do sucesso com a conexão com BD.
+     */
+    public static boolean deletarInsumoTodosDefinitivo() {
+        ArrayList<Insumo> insumos = get("");
+        int j = 0;
+        if (insumos != null) {
+            for (int i = 0; i < insumos.size(); i++) {
+                if (deletarInsumoDefinitivo(insumos.get(i))) {
+                    j++;
+                }
+            }
+            return j == insumos.size();
         } else {
             System.out.println("Banco de dados já está vazio");
             return false;
