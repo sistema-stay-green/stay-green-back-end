@@ -5,13 +5,11 @@
  */
 package br.cefetmg.staygreen.servlet;
 
-import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Mei Fagundes
+ * @author Mei Fagundes, Samuel Simonetti
+ * @version 20-11-18/14:37
  */
 @WebServlet(name = "PatrimonioServlet", urlPatterns = {"/PatrimonioServlet"})
 public class PatrimonioServlet extends HttpServlet {
@@ -38,44 +37,41 @@ public class PatrimonioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("text/html;charset=UTF-8");
-        String resposta = "";
-        Patrimonio patrimonio;
-        ArrayList<Patrimonio> patrimonios;
+        try(PrintWriter out = response.getWriter()) {
+            
+            response.setContentType("text/html;charset=UTF-8");
+            String resposta = "";
         
             switch(request.getParameter("action")){
                 
-                //Valores iniciais do retorno: S -> Succeded
-                //                             F -> Failed
-                //                             N -> Not found
+                // Valores iniciais do retorno: S -> Succeded
+                //                              F -> Failed
+                //                              N -> Not found
                 
-                case "c": //Caso de compra
+                case "c": // Caso de compra.
                     resposta = PatrimonioProcessService.compraPatrimonio(JSON.parse(request.getParameter("patrimonio"), Patrimonio.class));
                     break;
 
-                case "s": //Caso de pesquisa
+                case "s": // Caso de pesquisa.
                     resposta = PatrimonioProcessService.pesquisaPatrimonio(request.getParameter("s"), request.getParameter(request.getParameter("s")));
                     break;
 
-                case "r": //Caso de retorno de todos os patrimonios
+                case "r": // Caso de retorno de todos os patrimonios.
 
                     resposta = PatrimonioProcessService.retornaTodosPatrimonio();
                     break;
                     
-                case "u": 
+                case "u": // Caso de update de um patrimonio existente.
                     resposta = PatrimonioProcessService.atualizaPatrimonio(JSON.parse(request.getParameter("patrimonio"), Patrimonio.class));
                     break;
                     
-                case "d":
+                case "d": // Caso de remoção.
                     resposta = PatrimonioProcessService.deletaPatrimonio(request.getParameter("id"));
                     break;
 
-                default: //Caso base
-                    throw new IllegalArgumentException("Parametro 'action' possui um valor inválido.");
+                default: // Caso não existente.
+                    response.sendError(500);
             }
-        
-        try (PrintWriter out = response.getWriter()) {
-            
             out.println(resposta);
         }
     }

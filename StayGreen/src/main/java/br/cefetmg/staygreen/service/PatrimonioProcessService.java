@@ -6,127 +6,74 @@
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
 import br.cefetmg.staygreen.util.JSON;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Classe com a lógica principal de manipulação dos patrimônios da empresa.
  *
- * @author Mei
+ * @author Mei Fagundes, Samuel Simonetti
+ * @version 20-11-18/14:37
  */
 public class PatrimonioProcessService {
 
-    private static final String FIELD_SEPARATOR;
-    private static final String OBJECT_SEPARATOR;
-
-    static {
-        FIELD_SEPARATOR = "§";
-        OBJECT_SEPARATOR = "¢";
-    }
-
-    @Deprecated
-    public static String getPatrimonioByNome(String name) {
-
-        ArrayList<Patrimonio> patrimonios = new ArrayList<>();
-
-        patrimonios = PatrimonioAccessService.getPatrimoniosByNome(name);
-
-        return stringfy(patrimonios);
-
-    }
-
     /**
-     * Concatenates values from objects Patrimonio into a new String
-     *
-     * @param patrimonios
-     * @return String with all values from Patrimonio Objects.
-     */
-    @Deprecated
-    public static String stringfy(ArrayList<Patrimonio> patrimonios) {
-
-        String output = new String();
-
-        for (Patrimonio patrimonio : patrimonios) {
-
-            output += stringfy(patrimonio) + OBJECT_SEPARATOR;
-        }
-
-        return output;
-    }
-
-    /**
-     * Concatenates values from a object Patrimonio into a new String
-     *
+     * Registra o Patrimônio recebido e o retorna em caso de sucesso.
+     * 
      * @param patrimonio
-     * @return String with all values from a Patrimonio Object.
+     * @return response
+     * @author Samuel Simonetti
      */
-    @Deprecated
-    public static String stringfy(Patrimonio patrimonio) {
-
-        String output = new String();
-
-        output += patrimonio.getId().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getNome() + FIELD_SEPARATOR;
-        output += patrimonio.getTipo() + FIELD_SEPARATOR;
-        output += patrimonio.getFinalidade() + FIELD_SEPARATOR;
-        output += patrimonio.getStatus().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getIndiceDepreciacao().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getValorCompra().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataCompra().getTime().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataSaida().getTime().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataBaixa().getTime().toString();
-
-        return output;
-    }
-
     public static String compraPatrimonio(Patrimonio patrimonio) {
-        String resposta = new String();
+        
+        String resposta = "";
+        
         if (patrimonio != null) {
             if (PatrimonioAccessService.insert(patrimonio)) {
                 patrimonio = PatrimonioAccessService.
-                        getLastInsertedPatrimonio();
+                    getLastInsertedPatrimonio();
                 resposta = JSON.stringify(patrimonio);
-            } else {
+            } else
                 resposta = "F";
-            }
-        } else {
+        } else
             resposta = "F";
-        }
 
         return resposta;
     }
 
+    /**
+     * Pesquisa por Patrimônios usando os parâmetros recebidos.
+     * 
+     * @param tipoPesquisa
+     * @param formaPesquisa
+     * @return response
+     * @author Samuel Simonetti
+     */
     public static String pesquisaPatrimonio(String tipoPesquisa, String formaPesquisa) {
-        String resposta = new String();
+        
+        String resposta = "";
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
+        
         switch (tipoPesquisa) {
+            
             case "id":
                 patrimonios.add(PatrimonioAccessService.
                         getPatrimonioById(formaPesquisa));
 
-                if (patrimonios != null) {
+                if (patrimonios.isEmpty())
                     resposta += JSON.stringify(patrimonios);
-                } else {
+                else
                     resposta = "N";
-                }
                 break;
 
             case "nome":
                 patrimonios = PatrimonioAccessService.
                         getPatrimoniosByNome(formaPesquisa);
 
-                if (patrimonios != null) {
+                if (patrimonios.isEmpty())
                     resposta += JSON.stringify(patrimonios);
-                } else {
+                else
                     resposta = "N";
-                }
                 break;
 
             default:
@@ -135,43 +82,64 @@ public class PatrimonioProcessService {
         return resposta;
     }
 
+    /**
+     * Retorna todos os Patrimônios registrados no DB.
+     * 
+     * @return response
+     * @author Samuel Simonetti
+     */
     public static String retornaTodosPatrimonio() {
-        String resposta = new String();
+        
+        String resposta = "";
         ArrayList<Patrimonio> patrimonios;
+        
         patrimonios = PatrimonioAccessService.getAll();
-        if (patrimonios != null) {
+        if (patrimonios != null) 
             resposta = JSON.stringify(patrimonios);
-        }
+        
         return resposta;
     }
 
+    /**
+     * Atualiza um Patrimônio já existente no DB.
+     * 
+     * @param patrimonio
+     * @return response
+     * @author Samuel Simonetti
+     */
     public static String atualizaPatrimonio(Patrimonio patrimonio) {
-        String resposta = new String();
+        
+        String resposta = "";
+        
         if (patrimonio != null) {
-            if (PatrimonioAccessService.update(patrimonio)) {
+            if (PatrimonioAccessService.update(patrimonio))
                 resposta = "S";
-            } else {
+            else
                 resposta = "N";
-            }
-        } else {
+        } else
             resposta = "F";
-        }
         return resposta;
     }
 
+    /**
+     * Remove um Patrimônio do DB.
+     * 
+     * @param id
+     * @return response code
+     * @author Samuel Simonetti
+     */
     public static String deletaPatrimonio(String id) {
-        String resposta = new String();
+        
+        String resposta = "";
         Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
+        
         if (patrimonio != null) {
-            if (PatrimonioAccessService.delete(patrimonio)) {
+            if (PatrimonioAccessService.delete(patrimonio))
                 resposta = "S";
-            } else {
+            else
                 resposta = "N";
-            }
-        } else {
+        } else
             resposta = "F";
-        }
         return resposta;
     }
-
 }
