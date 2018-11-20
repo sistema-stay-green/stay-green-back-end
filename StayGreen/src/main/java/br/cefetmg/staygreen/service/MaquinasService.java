@@ -11,6 +11,8 @@ import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
+import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
@@ -105,6 +107,11 @@ public class MaquinasService {
                 maquina.setStatus("ALUGADO");
                 AluguelAccessService.insert(aluguel);
                 PatrimonioAccessService.update(maquina);
+                ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
+                
+                if(lastId.next()){
+                    maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
+                }
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -166,16 +173,36 @@ public class MaquinasService {
     public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
        
         try{
-            maquina.setDataBaixa(maquinaAtualizada.getDataBaixa());
-            maquina.setDataCompra(maquinaAtualizada.getDataCompra());
-            maquina.setDataSaida(maquinaAtualizada.getDataSaida());
-            maquina.setDataRetorno(maquinaAtualizada.getDataRetorno());
-            maquina.setFinalidade(maquinaAtualizada.getFinalidade());
-            maquina.setNome(maquinaAtualizada.getNome());
-            maquina.setIndiceDepreciacao(maquinaAtualizada.getIndiceDepreciacao());
-            maquina.setValorCompra(maquinaAtualizada.getValorCompra());
-            maquina.setTipo(maquinaAtualizada.getTipo());
-            maquina.setStatus((PatrimonioStatusEnum) maquinaAtualizada.getStatus());
+            if(maquinaAtualizada.getDataBaixa()!=null){
+                maquina.setDataBaixa(maquinaAtualizada.getDataBaixa());
+            }
+            if(maquinaAtualizada.getDataCompra()!=null){
+                maquina.setDataCompra(maquinaAtualizada.getDataCompra());
+            }
+            if(maquinaAtualizada.getDataSaida()!=null){
+                maquina.setDataSaida(maquinaAtualizada.getDataSaida());
+            }
+            if(maquinaAtualizada.getDataRetorno()!=null){
+                maquina.setDataRetorno(maquinaAtualizada.getDataRetorno());
+            }
+            if(maquinaAtualizada.getFinalidade()!=null){
+                maquina.setFinalidade(maquinaAtualizada.getFinalidade());
+            }
+            if(maquinaAtualizada.getNome()!=null){
+                maquina.setNome(maquinaAtualizada.getNome());
+            }
+            if(maquinaAtualizada.getIndiceDepreciacao()!=null){
+                maquina.setIndiceDepreciacao(maquinaAtualizada.getIndiceDepreciacao());
+            }
+            if(maquinaAtualizada.getValorCompra()!=null){
+                maquina.setValorCompra(maquinaAtualizada.getValorCompra());
+            }
+            if(maquinaAtualizada.getTipo()!=null){
+                maquina.setTipo(maquinaAtualizada.getTipo());
+            }
+            if(maquinaAtualizada.getStatus()!=null){
+                maquina.setStatus((PatrimonioStatusEnum) maquinaAtualizada.getStatus());
+            }
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }
