@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.table.Comprador;
 import br.cefetmg.staygreen.table.ModosPagamento;
+import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.VendaUsuario;
@@ -78,9 +79,6 @@ public class DadosVendasServlet extends HttpServlet {
             numeroVenda = numeroVendaAux + 1;
         }
         
-        //Long idItemTransacao = Long.parseLong(request.getParameter("idItemTransacao"));
-        //Double valorTransacao = Double.parseDouble(request.getParameter("valorTransacao"));
-        //Integer quantTransacao = Integer.parseInt(request.getParameter("quantTransacao"));
         //Pega as transacoes
         String transacaoJSON = request.getParameter("transacoes");
         Transacao[] transacoes = JSON.parse(transacaoJSON, Transacao[].class);
@@ -100,6 +98,17 @@ public class DadosVendasServlet extends HttpServlet {
             transacao.setDataTransacao(dataTransacao);
             transacao.setTipoTransacao(tipoTransacao);
             
+            Long idProduto = transacao.getIdItemTransacao();
+            
+            ResultSet estoqueProdutoRS = SQL.query("SELECT `quantEstoqueProduto` FROM " 
+                    + SQL.getNomeTabela(Produto.class) + " WHERE `idProduto`=" 
+                    + idProduto);
+            while(estoqueProdutoRS.next()){
+                Integer estoqueProduto = estoqueProdutoRS.getInt("quantEstoqueProduto");
+                SQL.update(new Produto(idProduto, null, null, null, null,
+                        numeroVenda, null, null));
+            }
+            
             //Insere transacao
             SQL.insert(transacao);
             
@@ -111,10 +120,6 @@ public class DadosVendasServlet extends HttpServlet {
                     freteVenda, tempoEntregaVenda, numeroVenda);
             SQL.insert(venda);
         }
-        
-        //Transacao transacao = new Transacao(idItemTransacao, valorTransacao,
-        //        quantTransacao, dataTransacao, tipoTransacao);
-        //SQL.insert(transacao);
         
     }
 

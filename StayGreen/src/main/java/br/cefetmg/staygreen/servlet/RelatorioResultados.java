@@ -26,13 +26,17 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "RelatorioResultados", urlPatterns = {"/RelatorioResultados"})
 public class RelatorioResultados extends HttpServlet {
     
-    private static ResultSet result;
-    private static final String TABLE_NAME = SQL.getNomeTabela(Transacao.class);
+            private static final String TABLE_NAME;
+            
+            static {
+                TABLE_NAME = SQL.getNomeTabela(Transacao.class);
+            }
             
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+            ResultSet result;
+            
             
             ArrayList vendasECompras = new ArrayList<>();
             double vendas = 0, compras = 0, aux;
@@ -62,6 +66,7 @@ public class RelatorioResultados extends HttpServlet {
             
             double total = vendas+compras;
             
+        try (PrintWriter out = response.getWriter()) {
             out.println(total);
         }
     }
