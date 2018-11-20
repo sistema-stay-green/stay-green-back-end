@@ -36,15 +36,16 @@ public class MaquinasService {
             Calendar dataCompra){
         
         try{
+            maquina.setStatus("EM_POSSE");
+            maquina.setDataCompra(dataCompra);
+            PatrimonioAccessService.insert(maquina);
+            maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
                     maquina.getId().longValue(),TransacaoEAluguelService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(compra);
-            maquina.setStatus("EM_POSSE");
-            maquina.setDataCompra(dataCompra);
-            PatrimonioAccessService.insert(maquina);
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
