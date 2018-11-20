@@ -108,7 +108,7 @@ CREATE TABLE `Tarefa`
   `idTarefa` Int NOT NULL AUTO_INCREMENT,
   `nomeTarefa` Varchar(40) NOT NULL,
   `descrTarefa` Varchar(200) NOT NULL,
-  `tipoTarefa` Enum('ADUBAÇÃO', 'IRRIGAÇÃO', 'ARAR', 'MAQUINÁRIO', 'COLHEITA', 'PECUÁRIA', 'OUTRAS') NOT NULL,
+  `tipoTarefa` Enum('ADUBACAO', 'IRRIGACAO', 'ARAR', 'MAQUINARIO', 'COLHEITA', 'PECUARIA', 'OUTRAS') NOT NULL,
   `dataInicialTarefa` Date NOT NULL,
   `periodRepetTarefa` Int NOT NULL,
   `gastoTarefa` Double NOT NULL,
