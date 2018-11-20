@@ -11,6 +11,8 @@ import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
+import br.cefetmg.staygreen.util.SQL;
+import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 
@@ -34,15 +36,17 @@ public class MaquinasService {
             Calendar dataCompra){
         
         try{
+            maquina.setStatus("EM_POSSE");
+            maquina.setDataCompra(dataCompra);
+            PatrimonioAccessService.insert(maquina);
+            maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
                     maquina.getId().longValue(),TransacaoEAluguelService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
+            System.out.println(compra.toString());
             TransacaoAccessService.insert(compra);
-            maquina.setStatus("EM_POSSE");
-            maquina.setDataCompra(dataCompra);
-            PatrimonioAccessService.insert(maquina);
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -105,6 +109,11 @@ public class MaquinasService {
                 maquina.setStatus("ALUGADO");
                 AluguelAccessService.insert(aluguel);
                 PatrimonioAccessService.update(maquina);
+                ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
+                
+                if(lastId.next()){
+                    maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
+                }
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -155,6 +164,21 @@ public class MaquinasService {
             catch(Exception ex){
                 return "ERRO: "+ex;
             }
+        }
+    }
+    /**
+     * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
+     * @param maquina
+     * @param maquinaAtualizada
+     * @return 
+     */
+    public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
+        try{
+            PatrimonioAccessService.update(maquina);
+            return JSON.stringify(maquina);
+        }
+        catch(Exception ex){
+            return "ERRO: "+ex;
         }
     }
 }
