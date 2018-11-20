@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.table.Comprador;
 import br.cefetmg.staygreen.table.ModosPagamento;
 import br.cefetmg.staygreen.util.SQL;
+import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.VendaUsuario;
 import br.cefetmg.staygreen.table.TipoTransacao;
 import br.cefetmg.staygreen.table.Transacao;
@@ -35,23 +36,8 @@ public class DadosVendasServlet extends HttpServlet {
             HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-        
-        Long idItemTransacao = Long.parseLong(request.getParameter("idItemTransacao"));
-        Double valorTransacao = Double.parseDouble(request.getParameter("valorTransacao"));
-        Integer quantTransacao = Integer.parseInt(request.getParameter("quantTransacao"));
-        Integer dia = Integer.parseInt(request.getParameter("dia"));
-        Integer mes = Integer.parseInt(request.getParameter("mes"));
-        Integer ano = Integer.parseInt(request.getParameter("ano"));
-        TipoTransacao tipoTransacao = TipoTransacao.PRODUTO;
-        
-        Calendar dataTransacao = Calendar.getInstance();
-        dataTransacao.set(ano, mes, dia);
-        
-        Transacao transacao = new Transacao(idItemTransacao, valorTransacao,
-                quantTransacao, dataTransacao, tipoTransacao);
-        SQL.insert(transacao);
-        Long idTransacao = new Long(SQL.getLastInsertId());
 
+        // Dados do comprador
         String nomeComprador = request.getParameter("nomeComprador");
         String enderecoComprador = request.getParameter("enderecoComprador");
         String cepComprador = request.getParameter("cepComprador");
@@ -59,20 +45,28 @@ public class DadosVendasServlet extends HttpServlet {
         
         ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
         
+        //insere comprador
         Comprador comprador = new Comprador(nomeComprador, enderecoComprador,
                 cepComprador, modoPagamento);
         SQL.insert(comprador);
+        
+        /**
+         * Id do comprador
+         */
         Long idComprador = new Long(SQL.getLastInsertId());
         
+        //Pega dados da venda
         Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
         Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
         
+        //Confere se a tabela vendas está vazia
         ResultSet resultSetAux = SQL.query("SELECT COUNT(*) AS total FROM VendaUsuario");
         Integer tabelaVazia = 0;
         while(resultSetAux.next()){
             tabelaVazia = resultSetAux.getInt("total");
         }
-              
+        
+        //Decide o numero da venda
         Integer numeroVenda;
         if(tabelaVazia == 0){
             numeroVenda = 1;
@@ -84,9 +78,44 @@ public class DadosVendasServlet extends HttpServlet {
             numeroVenda = numeroVendaAux + 1;
         }
         
-        VendaUsuario venda = new VendaUsuario(idTransacao, idComprador,
-                freteVenda, tempoEntregaVenda, numeroVenda);
-        SQL.insert(venda);
+        //Long idItemTransacao = Long.parseLong(request.getParameter("idItemTransacao"));
+        //Double valorTransacao = Double.parseDouble(request.getParameter("valorTransacao"));
+        //Integer quantTransacao = Integer.parseInt(request.getParameter("quantTransacao"));
+        //Pega as transacoes
+        String transacaoJSON = request.getParameter("transacoes");
+        Transacao[] transacoes = JSON.parse(transacaoJSON, Transacao[].class);
+        
+        //Data da transacao
+        Integer dia = Integer.parseInt(request.getParameter("dia"));
+        Integer mes = Integer.parseInt(request.getParameter("mes"));
+        Integer ano = Integer.parseInt(request.getParameter("ano"));
+        TipoTransacao tipoTransacao = TipoTransacao.PRODUTO;
+        
+        Calendar dataTransacao = Calendar.getInstance();
+        dataTransacao.set(ano, mes, dia);
+        
+        //Para cada transacao
+        for (Transacao transacao : transacoes) {
+            //Set data e tipo
+            transacao.setDataTransacao(dataTransacao);
+            transacao.setTipoTransacao(tipoTransacao);
+            
+            //Insere transacao
+            SQL.insert(transacao);
+            
+            //id da transacao
+            Long idTransacao = new Long(SQL.getLastInsertId());
+            
+            //Insere a venda
+            VendaUsuario venda = new VendaUsuario(idTransacao, idComprador,
+                    freteVenda, tempoEntregaVenda, numeroVenda);
+            SQL.insert(venda);
+        }
+        
+        //Transacao transacao = new Transacao(idItemTransacao, valorTransacao,
+        //        quantTransacao, dataTransacao, tipoTransacao);
+        //SQL.insert(transacao);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
