@@ -237,6 +237,7 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean deletarInsumo(Insumo insumo) {
+        boolean resultado;
         if (insumo.getIdInsumo() != null) {
             Transacao transacao = new Transacao();
             transacao.setDataTransacao(Calendar.getInstance());
