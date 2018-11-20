@@ -48,45 +48,52 @@ public class MaquinasServlet extends HttpServlet {
                    stringDataBaixa = request.getParameter("dataBaixa"),
                    stringQuantidade = request.getParameter("quantidade");
             int quantidade = Integer.parseInt(stringQuantidade);
-            
-            
-            if(maquina != null) {
-                switch(request.getParameter("acao")){
-                    case "c":
-                        MaquinasService.Cadastrar(maquina, quantidade, 
-                                TransacaoEAluguelService.
-                                converteStringToCalendar(stringDataCompra));
-                        break;
-                    case "v":
-                        MaquinasService.Venda(maquina,TransacaoEAluguelService.
-                                converteStringToCalendar(stringDataBaixa));
-                        break;
-                    case "a":
-                        MaquinasService.Aluguel(maquina, request,
-                                TransacaoEAluguelService.
-                                converteStringToCalendar(stringDataSaida));
-                        break;
-                    case "d":
-                        MaquinasService.Descarte(maquina);
-                        break;
-                    case "m":
-                        MaquinasService.Manuntenir(maquina,
-                                TransacaoEAluguelService.
-                                converteStringToCalendar(stringDataRetorno));
-                        break;
-                    case "r":
-                        ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
-                                get(null);
-                        break;
-                    case "e":
-                        MaquinasService.Editar(maquina, JSON.parse(request.
-                                getParameter("maquinasAtualizar"),
-                                Patrimonio.class));
-                        break;
-                    default: 
-                        throw new IllegalArgumentException("Opção Invalida");
-                }
-            } 
+                       
+            switch(request.getParameter("acao")){
+                case "c":
+                    MaquinasService.Cadastrar(maquina, quantidade, 
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataCompra));
+                    break;
+                case "v":
+                    MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataBaixa));
+                    break;
+                case "a":
+                    MaquinasService.Aluguel(maquina, request,
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataSaida));
+                    break;
+                case "d":
+                    MaquinasService.Descarte(maquina);
+                    break;
+                case "m":
+                    MaquinasService.Manuntenir(maquina,
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataRetorno));
+                    break;
+
+                case "r":
+                    
+                    ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
+                            get("");
+                    String JSONString = "";
+                    for (Patrimonio s : maquinas){
+                        System.out.println(JSON.stringify(s));
+                        JSONString += JSON.stringify(s) + "/";
+                    }
+                    System.out.println(JSONString);
+                    out.print(JSONString);
+
+                    break;
+                case "e":
+                    MaquinasService.Editar(maquina, JSON.parse(request.
+                            getParameter("maquinasAtualizar"),
+                            Patrimonio.class));
+                    break;
+                default: 
+                    throw new IllegalArgumentException("Opção Invalida");
+            }
         }
     }
 

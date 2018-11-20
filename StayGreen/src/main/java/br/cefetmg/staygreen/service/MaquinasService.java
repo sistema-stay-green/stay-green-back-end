@@ -36,15 +36,18 @@ public class MaquinasService {
             Calendar dataCompra){
         
         try{
+            maquina.setStatus("EM_POSSE");
+            maquina.setDataCompra(dataCompra);
+            PatrimonioAccessService.insert(maquina);
+            maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
                     maquina.getId().longValue(),TransacaoEAluguelService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
+            System.out.println(compra.toString());
             TransacaoAccessService.insert(compra);
-            maquina.setStatus("EM_POSSE");
-            maquina.setDataCompra(dataCompra);
-            PatrimonioAccessService.insert(maquina);
+            
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -171,38 +174,7 @@ public class MaquinasService {
      * @return 
      */
     public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
-       
         try{
-            if(maquinaAtualizada.getDataBaixa()!=null){
-                maquina.setDataBaixa(maquinaAtualizada.getDataBaixa());
-            }
-            if(maquinaAtualizada.getDataCompra()!=null){
-                maquina.setDataCompra(maquinaAtualizada.getDataCompra());
-            }
-            if(maquinaAtualizada.getDataSaida()!=null){
-                maquina.setDataSaida(maquinaAtualizada.getDataSaida());
-            }
-            if(maquinaAtualizada.getDataRetorno()!=null){
-                maquina.setDataRetorno(maquinaAtualizada.getDataRetorno());
-            }
-            if(maquinaAtualizada.getFinalidade()!=null){
-                maquina.setFinalidade(maquinaAtualizada.getFinalidade());
-            }
-            if(maquinaAtualizada.getNome()!=null){
-                maquina.setNome(maquinaAtualizada.getNome());
-            }
-            if(maquinaAtualizada.getIndiceDepreciacao()!=null){
-                maquina.setIndiceDepreciacao(maquinaAtualizada.getIndiceDepreciacao());
-            }
-            if(maquinaAtualizada.getValorCompra()!=null){
-                maquina.setValorCompra(maquinaAtualizada.getValorCompra());
-            }
-            if(maquinaAtualizada.getTipo()!=null){
-                maquina.setTipo(maquinaAtualizada.getTipo());
-            }
-            if(maquinaAtualizada.getStatus()!=null){
-                maquina.setStatus((PatrimonioStatusEnum) maquinaAtualizada.getStatus());
-            }
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }
