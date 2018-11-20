@@ -47,7 +47,6 @@ public class MaquinasService {
                     dataCompra,TipoTransacaoEnum.MAQUINA);
             System.out.println(compra.toString());
             TransacaoAccessService.insert(compra);
-            
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
