@@ -75,8 +75,16 @@ public class MaquinasServlet extends HttpServlet {
                                 converteStringToCalendar(stringDataRetorno));
                         break;
                     case "r":
-                        ArrayList<Patrimonio> maquinas = PatrimonioAccessService.get(null);
+                        ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
+                                get(null);
                         break;
+                    case "e":
+                        MaquinasService.Editar(maquina, JSON.parse(request.
+                                getParameter("maquinasAtualizar"),
+                                Patrimonio.class));
+                        break;
+                    default: 
+                        throw new IllegalArgumentException("Opção Invalida");
                 }
             } 
         }

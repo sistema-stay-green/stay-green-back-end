@@ -157,4 +157,30 @@ public class MaquinasService {
             }
         }
     }
+    /**
+     * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
+     * @param maquina
+     * @param maquinaAtualizada
+     * @return 
+     */
+    public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
+       
+        try{
+            maquina.setDataBaixa(maquinaAtualizada.getDataBaixa());
+            maquina.setDataCompra(maquinaAtualizada.getDataCompra());
+            maquina.setDataSaida(maquinaAtualizada.getDataSaida());
+            maquina.setDataRetorno(maquinaAtualizada.getDataRetorno());
+            maquina.setFinalidade(maquinaAtualizada.getFinalidade());
+            maquina.setNome(maquinaAtualizada.getNome());
+            maquina.setIndiceDepreciacao(maquinaAtualizada.getIndiceDepreciacao());
+            maquina.setValorCompra(maquinaAtualizada.getValorCompra());
+            maquina.setTipo(maquinaAtualizada.getTipo());
+            maquina.setStatus((PatrimonioStatusEnum) maquinaAtualizada.getStatus());
+            PatrimonioAccessService.update(maquina);
+            return JSON.stringify(maquina);
+        }
+        catch(Exception ex){
+            return "ERRO: "+ex;
+        }
+    }
 }
