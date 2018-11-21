@@ -18,6 +18,7 @@ import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Gabriel Cruz
@@ -77,19 +78,16 @@ public class MaquinasServlet extends HttpServlet {
                     
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
                             get("");
-                    String JSONString = "";
-                    for (Patrimonio s : maquinas){
-                        System.out.println(JSON.stringify(s));
-                        JSONString += JSON.stringify(s) + "/";
-                    }
-                    System.out.println(JSONString);
+                    String JSONString = JSON.stringify(maquinas);
+                    System.out.println(JSON.stringify(maquinas));
                     out.print(JSONString);
-
+                    
                     break;
                 case "e":
-                    MaquinasService.Editar(maquina, JSON.parse(request.
-                            getParameter("maquinasAtualizar"),
-                            Patrimonio.class));
+                    maquina.setDataCompra
+                            (TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataCompra)); 
+                    MaquinasService.Editar(maquina);
                     break;
                 default: 
                     throw new IllegalArgumentException("Opção Invalida");
