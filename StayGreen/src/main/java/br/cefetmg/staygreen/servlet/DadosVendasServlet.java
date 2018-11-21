@@ -106,7 +106,8 @@ public class DadosVendasServlet extends HttpServlet {
             while(estoqueProdutoRS.next()){
                 Integer estoqueProduto = estoqueProdutoRS.getInt("quantEstoqueProduto");
                 SQL.update(new Produto(idProduto, null, null, null, null,
-                        numeroVenda, null, null));
+                        estoqueProduto - transacao.getQuantTransacao(),
+                        null, null));
             }
             
             //Insere transacao
