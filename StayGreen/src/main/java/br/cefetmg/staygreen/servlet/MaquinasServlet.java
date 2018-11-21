@@ -87,9 +87,10 @@ public class MaquinasServlet extends HttpServlet {
 
                     break;
                 case "e":
-                    MaquinasService.Editar(maquina, JSON.parse(request.
-                            getParameter("maquinasAtualizar"),
-                            Patrimonio.class));
+                    maquina.setDataCompra
+                            (TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataCompra)); 
+                    MaquinasService.Editar(maquina);
                     break;
                 default: 
                     throw new IllegalArgumentException("Opção Invalida");

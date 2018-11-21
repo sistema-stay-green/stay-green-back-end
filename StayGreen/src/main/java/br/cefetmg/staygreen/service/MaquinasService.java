@@ -172,8 +172,9 @@ public class MaquinasService {
      * @param maquinaAtualizada
      * @return 
      */
-    public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
+    public static String Editar(Patrimonio maquina){
         try{
+            System.out.println(maquina.getValorCompra());
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }
