@@ -11,18 +11,12 @@ package br.cefetmg.staygreen.table;
  */
 public enum PatrimonioTipoEnum {
     MAQUINA,
+    ANIMAL,
+    IMOVEL,
+    MERCADORIA,
+    UTENSILIO,
+    VEICULO,
+    TERRENO,
     OUTROS;
-    
-    public int getTipoId(){
-        
-        switch (this) {
-            case MAQUINA:
-                return 0;
-            case OUTROS:
-                return 1;
-            default:
-                return -1;
-        }
-    }
 }
 

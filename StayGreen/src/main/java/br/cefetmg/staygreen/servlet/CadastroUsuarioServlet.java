@@ -6,6 +6,7 @@
 package br.cefetmg.staygreen.servlet;
 
 import br.cefetmg.staygreen.table.Usuario;
+import br.cefetmg.staygreen.util.IO;
 import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -32,7 +33,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
             null,
             req.getParameter("nome"),
             req.getParameter("email"),
-            req.getParameter("senha"),
+            IO.criptografar(req.getParameter("senha")),
             req.getParameter("cnpj"),
             Double.parseDouble(req.getParameter("saldo"))
         );

@@ -12,10 +12,10 @@ USE `staygreen`;
 -- Table Aluguel
 
 CREATE TABLE IF NOT EXISTS `Aluguel` (
-    `idAluguel` Int(20) NOT NULL AUTO_INCREMENT,
-    `idMaquina` Int(20) DEFAULT NULL,
+    `idAluguel` BigInt(20) NOT NULL AUTO_INCREMENT,
+    `idMaquina` BigInt(20) DEFAULT NULL,
     `valorAluguel` Double DEFAULT NULL,
-    `periodoAluguel` Int DEFAULT NULL,
+    `periodoAluguel` BigInt DEFAULT NULL,
     `dataInicialAluguel` Date DEFAULT NULL,
     PRIMARY KEY (`idAluguel`)
 )
@@ -26,7 +26,7 @@ CHARSET = utf8;
 
 CREATE TABLE `Comprador`
 (
-  `idComprador` Int NOT NULL AUTO_INCREMENT,
+  `idComprador` BigInt NOT NULL AUTO_INCREMENT,
   `nomeComprador` Varchar(40) NOT NULL,
   `enderecoComprador` Varchar(120) NOT NULL,
   `cepComprador` Varchar(8) NOT NULL,
@@ -40,9 +40,9 @@ CHARSET = utf8;
 
 CREATE TABLE `EstoqueProdutos`
 (
-  `idEstoque` Int NOT NULL AUTO_INCREMENT,
-  `idProduto` Int NOT NULL,
-  `quantProduzidaEstoque` Int NOT NULL,
+  `idEstoque` BigInt NOT NULL AUTO_INCREMENT,
+  `idProduto` BigInt NOT NULL,
+  `quantProduzidaEstoque` BigInt NOT NULL,
   `dataProducaoEstoque` Date NOT NULL,
   PRIMARY KEY (`idEstoque`)
 )
@@ -53,12 +53,12 @@ CHARSET = utf8;
 
 CREATE TABLE `Insumo`
 (
-  `idInsumo` Int NOT NULL AUTO_INCREMENT,
+  `idInsumo` BigInt NOT NULL AUTO_INCREMENT,
   `nomeInsumo` Varchar(40) NOT NULL,
   `finalidadeInsumo` Varchar(120) NOT NULL,
   `valorCompraInsumo` Double NOT NULL,
-  `quantEstoqueInsumo` Int NOT NULL,
-  `pontoAvisoInsumo` Int NOT NULL,
+  `quantEstoqueInsumo` BigInt NOT NULL,
+  `pontoAvisoInsumo` BigInt NOT NULL,
   PRIMARY KEY (`idInsumo`)
 )
 CHARSET = utf8;
@@ -88,12 +88,12 @@ CHARSET = utf8;
 
 CREATE TABLE `Produto`
 (
-  `idProduto` Int NOT NULL AUTO_INCREMENT,
-  `nomeProduto` Enum('LEITE', 'CAFE BOURBON', 'CAFE ROBUSTA', 'CAFE ARABICA') NOT NULL,
+  `idProduto` BigInt NOT NULL AUTO_INCREMENT,
+  `nomeProduto` Enum('LEITE', 'CAFE_BOURBON', 'CAFE_ROBUSTA', 'CAFE_ARABICA') NOT NULL,
   `descrProduto` Varchar(120) NOT NULL,
   `valorUnitProduto` Double NOT NULL,
-  `quantEstoqueProduto` Int NOT NULL,
-  `pontoAvisoProduto` Int NOT NULL,
+  `quantEstoqueProduto` BigInt NOT NULL,
+  `pontoAvisoProduto` BigInt NOT NULL,
   `fotoMercadoria` Varchar(200) NOT NULL,
   `unidMedProduto` Enum('KG', 'L') NOT NULL,
   PRIMARY KEY (`idProduto`)
@@ -105,16 +105,17 @@ CHARSET = utf8;
 
 CREATE TABLE `Tarefa`
 (
-  `idTarefa` Int NOT NULL AUTO_INCREMENT,
+  `idTarefa` BigInt NOT NULL AUTO_INCREMENT,
   `nomeTarefa` Varchar(40) NOT NULL,
   `descrTarefa` Varchar(200) NOT NULL,
-  `tipoTarefa` Enum('ADUBAÇÃO', 'IRRIGAÇÃO', 'ARAR', 'MAQUINÁRIO', 'COLHEITA', 'PECUÁRIA', 'OUTRAS') NOT NULL,
+  `tipoTarefa` Enum('ADUBACAO', 'IRRIGACAO', 'ARAR', 'MAQUINARIO', 'COLHEITA', 'PECUARIA', 'OUTRAS') NOT NULL,
   `dataInicialTarefa` Date NOT NULL,
-  `periodRepetTarefa` Int NOT NULL,
+  `periodRepetTarefa` BigInt NOT NULL,
   `gastoTarefa` Double NOT NULL,
-  `quantProduzTarefa` Int NOT NULL,
+  `quantProduzTarefa` BigInt NOT NULL,
   `insumosTarefa` Varchar(200) NOT NULL,
-  `quantInsumosTarefa` Int NOT NULL,
+  `quantInsumosTarefa` BigInt NOT NULL,
+  `produtoProduzido` Enum('LEITE', 'CAFE_BOURBON', 'CAFE_ROBUSTA', 'CAFE_ARABICA') NOT NULL,
   PRIMARY KEY (`idTarefa`)
 )
 CHARSET = utf8;
@@ -124,11 +125,11 @@ CHARSET = utf8;
 
 CREATE TABLE `Transacao`
 (
-  `idTransacao` Int NOT NULL AUTO_INCREMENT,
+  `idTransacao` BigInt NOT NULL AUTO_INCREMENT,
   `valorTransacao` Double NOT NULL,
-  `quantTransacao` Int NOT NULL DEFAULT 1,
+  `quantTransacao` BigInt NOT NULL DEFAULT 1,
   `dataTransacao` Date NOT NULL,
-  `idItemTransacao` Int NOT NULL,
+  `idItemTransacao` BigInt NOT NULL,
   `tipoTransacao` Enum('PATRIMONIO', 'INSUMO', 'PRODUTO', 'MAQUINA') NOT NULL,
   PRIMARY KEY (`idTransacao`)
 )
@@ -139,7 +140,7 @@ CHARSET = utf8;
 
 CREATE TABLE `Usuario`
 (
-  `idUsuario` Int NOT NULL AUTO_INCREMENT,
+  `idUsuario` BigInt NOT NULL AUTO_INCREMENT,
   `nomeUsuario` Varchar(40) NOT NULL,
   `emailUsuario` Varchar(40) NOT NULL,
   `senhaUsuario` Varchar(20) NOT NULL,
@@ -154,12 +155,24 @@ CHARSET = utf8;
 
 CREATE TABLE `VendaUsuario`
 (
-  `idVenda` Int NOT NULL AUTO_INCREMENT,
-  `idTransacao` Int NOT NULL,
+  `idVenda` BigInt NOT NULL AUTO_INCREMENT,
+  `idTransacao` BigInt NOT NULL,
   `freteVenda` Double NOT NULL,
-  `tempoEntregaVenda` Int NOT NULL,
-  `idComprador` Int NOT NULL,
-  `numeroVenda` Int NOT NULL,
+  `tempoEntregaVenda` BigInt NOT NULL,
+  `idComprador` BigInt NOT NULL,
+  `numeroVenda` BigInt NOT NULL,
   PRIMARY KEY (`idVenda`)
+)
+CHARSET = utf8;
+
+
+-- Table Frete
+
+CREATE TABLE `Frete`
+(
+  `idFrete` BigInt NOT NULL AUTO_INCREMENT,
+  `regiaoFrete` Enum ('SUL', 'SUDESTE', 'CENTRO_OESTE', 'NORDESTE', 'NORTE') NOT NULL,
+  `precoFrete` Double NOT NULL,
+  PRIMARY KEY (`idFrete`)
 )
 CHARSET = utf8;

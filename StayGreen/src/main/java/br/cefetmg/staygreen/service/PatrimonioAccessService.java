@@ -12,9 +12,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
- * @author Mei
- * @version 10-10-18/18:29
+ * Classe de acesso dos Patrimônios através do DB.
+ * 
+ * @author Mei Fagundes
+ * @version 20-11-18/14:37
  */
 public class PatrimonioAccessService {
     
@@ -117,6 +118,7 @@ public class PatrimonioAccessService {
      * Pesquisa na DB 'staygreen' usando a queryCondition recebida.
      * @param queryCondition
      * @return Retorna objetos Patrimonio resultantes da queryCondition de pesquisa recebida.
+     * @author Mei Fagundes
      */
     public static ArrayList<Patrimonio> get(String queryCondition){
         
@@ -172,6 +174,7 @@ public class PatrimonioAccessService {
     /**
      * Tenta Recupera o ultimo Patrimonio inserido na DB 'staygreen'.
      * @return Retorna o ultimo Patrimonio inserido na DB 'staygreen'.
+     * @author Mei Fagundes
      */
     public static Patrimonio getLastInsertedPatrimonio(){
         
@@ -193,6 +196,7 @@ public class PatrimonioAccessService {
      * Insere um objeto Patrimonio na DB 'staygreen'
      * @param patrimonio
      * @return Retorna o Patrimonio inserido com o Id atualizado.
+     * @author Mei Fagundes
      */
     public static Boolean insert(Patrimonio patrimonio){
         
@@ -203,6 +207,7 @@ public class PatrimonioAccessService {
      * Insere vários objetos Patrimonio na DB 'staygreen'
      * @param patrimonios
      * @return Retorna o êxito da operação.
+     * @author Mei Fagundes
      */
     public static Boolean insertAll(ArrayList<Patrimonio> patrimonios){
         
@@ -217,6 +222,7 @@ public class PatrimonioAccessService {
      * Atualiza o patrimonio na DB correspondente ao objeto Patrimonio recebido
      * @param patrimonio
      * @return Retorna o êxito da operação.
+     * @author Mei Fagundes
      */
     public static Boolean update(Patrimonio patrimonio){
         
@@ -227,6 +233,7 @@ public class PatrimonioAccessService {
      * Atualiza os patrimonios na DB correspondentes aos objetos Patrimonio recebidos
      * @param patrimonios
      * @return Retorna o êxito da operação.
+     * @author Mei Fagundes
      */
     public static Boolean updateAll(ArrayList<Patrimonio> patrimonios){
         
@@ -241,6 +248,7 @@ public class PatrimonioAccessService {
      * Deleta o Patrimonio do DB através de seu Id.
      * @param patrimonio
      * @return Retorna o êxito da operação.
+     * @author Mei Fagundes
      */
     public static Boolean delete(Patrimonio patrimonio){
         

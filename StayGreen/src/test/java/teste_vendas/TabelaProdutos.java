@@ -6,9 +6,13 @@
 package teste_vendas;
 
 import br.cefetmg.staygreen.table.Produto;
-import br.cefetmg.staygreen.util.Reflection;
+import br.cefetmg.staygreen.table.VendaUsuario;
+import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Date;
 /**
  *
  * @author pvito
@@ -20,7 +24,11 @@ public class TabelaProdutos {
      */
     public static void main(String[] args) {
         List<Produto> produtos = (List<Produto>) SQL.getRegistros(Produto.class);
-        System.out.println(produtos);
+        System.out.println(JSON.stringify(produtos));
+        Produto[] a = JSON.parse(JSON.stringify(produtos), Produto[].class);
+        System.out.println(Arrays.toString(a));
+        List<VendaUsuario> vendas = (List<VendaUsuario>) SQL.getRegistros(VendaUsuario.class);
+        System.out.println(vendas);
     }
     
 }

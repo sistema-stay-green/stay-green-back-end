@@ -138,7 +138,4 @@ public class PatrimonioTestClass {
         System.out.println("Data da Baixa: " + p.getDataBaixa().getTime());
     }
     
-    public static void testCompraPatrimonio(String nome, PatrimonioTipoEnum tipo, String finalidade, Double indiceDeprec, Double valor, Calendar dataCompra){
-        PatrimonioProcessService.compraPatrimonio(nome, tipo, finalidade, indiceDeprec, valor, dataCompra);
-    }
 }

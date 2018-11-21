@@ -100,14 +100,14 @@ public class MaquinasService {
         }
         else {
             try{
+                maquina.setDataSaida(dataSaida);
+                maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
+                PatrimonioAccessService.update(maquina);
                 Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
                         Double.parseDouble(request.
                         getParameter("valorAluguel")), Integer.parseInt(request.
                         getParameter("periodoAluguel")), dataSaida);
-                maquina.setDataSaida(dataSaida);
-                maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
                 AluguelAccessService.insert(aluguel);
-                PatrimonioAccessService.update(maquina);
                 ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
                 
                 if(lastId.next()){
