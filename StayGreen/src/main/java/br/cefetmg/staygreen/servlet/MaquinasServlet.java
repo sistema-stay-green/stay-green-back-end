@@ -79,7 +79,7 @@ public class MaquinasServlet extends HttpServlet {
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
                             get("");
                     String JSONString = JSON.stringify(maquinas);
-                    response.setContentType("application/json;charset=UTF-8");
+                    System.out.println(JSON.stringify(maquinas));
                     out.print(JSONString);
                     
                     break;
