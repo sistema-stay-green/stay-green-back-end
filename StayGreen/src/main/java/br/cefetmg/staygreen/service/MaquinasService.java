@@ -34,7 +34,6 @@ public class MaquinasService {
      */
     public static String Cadastrar(Patrimonio maquina, int quantidade, 
             Calendar dataCompra){
-        
         try{
             maquina.setStatus("EM_POSSE");
             maquina.setDataCompra(dataCompra);
@@ -75,7 +74,7 @@ public class MaquinasService {
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
                 TransacaoAccessService.insert(venda);
                 maquina.setDataBaixa(dataBaixa);
-                maquina.setStatus("VENDIDO");
+                maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
                 PatrimonioAccessService.update(maquina);
                 return JSON.stringify(maquina);
             }
@@ -106,7 +105,7 @@ public class MaquinasService {
                         getParameter("valorAluguel")), Integer.parseInt(request.
                         getParameter("periodoAluguel")), dataSaida);
                 maquina.setDataSaida(dataSaida);
-                maquina.setStatus("ALUGADO");
+                maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
                 AluguelAccessService.insert(aluguel);
                 PatrimonioAccessService.update(maquina);
                 ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");

@@ -119,7 +119,7 @@ public class TesteMaquinaServlet {
         maquinaAtualizada.setValorCompra(null);
         maquinaAtualizada.setTipo((PatrimonioTipoEnum)null);
         maquinaAtualizada.setStatus(PatrimonioStatusEnum.ALUGADO);
-        MaquinasService.Editar(maquina, maquinaAtualizada);
+        MaquinasService.Editar(maquina);
         
         System.out.println("\nMaquina 0:");
         imprimeMaquina(maquina);
