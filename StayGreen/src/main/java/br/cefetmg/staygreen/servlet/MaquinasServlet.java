@@ -18,6 +18,7 @@ import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Gabriel Cruz
@@ -77,14 +78,10 @@ public class MaquinasServlet extends HttpServlet {
                     
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
                             get("");
-                    String JSONString = "";
-                    for (Patrimonio s : maquinas){
-                        System.out.println(JSON.stringify(s));
-                        JSONString += JSON.stringify(s) + "/";
-                    }
-                    System.out.println(JSONString);
+                    String JSONString = JSON.stringify(maquinas);
+                    response.setContentType("application/json;charset=UTF-8");
                     out.print(JSONString);
-
+                    
                     break;
                 case "e":
                     maquina.setDataCompra
