@@ -39,7 +39,7 @@ public class Comprador {
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
         this.cepComprador = cepComprador;
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
     
     /**
@@ -53,7 +53,7 @@ public class Comprador {
         this.nomeComprador = nomeComprador;
         this.enderecoComprador = enderecoComprador;
         this.cepComprador = cepComprador;
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
     
     /**
@@ -96,11 +96,11 @@ public class Comprador {
     }
 
     public ModosPagamentoEnum getModoPagamento() {
-        return modoPagamento;
+        return modoPagamentoComprador;
     }
 
     public void setModoPagamento(ModosPagamentoEnum modoPagamento) {
-        this.modoPagamento = modoPagamento;
+        this.modoPagamentoComprador = modoPagamento;
     }
 
     @Override
