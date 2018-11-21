@@ -44,7 +44,7 @@ public class DadosVendasServlet extends HttpServlet {
         String cepComprador = request.getParameter("cepComprador");
         String modoPagamentoString = request.getParameter("modoPagamento");
         
-        ModosPagamento modoPagamento = ModosPagamento.valueOf(modoPagamentoString);
+        ModosPagamentoEnum modoPagamento = ModosPagamentoEnum.valueOf(modoPagamentoString);
         
         //insere comprador
         Comprador comprador = new Comprador(nomeComprador, enderecoComprador,

@@ -24,7 +24,7 @@ public class Comprador {
     private String nomeComprador;
     private String enderecoComprador;
     private String cepComprador;
-    private ModosPagamentoEnum modoPagamento;
+    private ModosPagamentoEnum modoPagamentoComprador;
 
     /**
      * Cria um Comprador com todos os atribútos inicializados
@@ -105,7 +105,7 @@ public class Comprador {
 
     @Override
     public String toString() {
-        return "Comprador{" + "idComprador=" + idComprador + ", nomeComprador=" + nomeComprador + ", enderecoComprador=" + enderecoComprador + ", cepComprador=" + cepComprador + ", modoPagamento=" + modoPagamento + '}';
+        return "Comprador{" + "idComprador=" + idComprador + ", nomeComprador=" + nomeComprador + ", enderecoComprador=" + enderecoComprador + ", cepComprador=" + cepComprador + ", modoPagamento=" + modoPagamentoComprador + '}';
     }
 
    
