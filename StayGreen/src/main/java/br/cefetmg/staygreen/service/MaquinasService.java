@@ -15,7 +15,6 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gabriel Cruz
@@ -25,11 +24,6 @@ import java.util.concurrent.TimeUnit;
 public class MaquinasService {
     
     
-    public static int diasEntre(Calendar dataInicio, Calendar dataFinal){
-        long end = dataFinal.getTimeInMillis();
-        long start = dataInicio.getTimeInMillis();
-        return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
-    }
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -51,7 +45,6 @@ public class MaquinasService {
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
-            System.out.println(compra.toString());
             TransacaoAccessService.insert(compra);
             return JSON.stringify(maquina);
         }
@@ -93,21 +86,20 @@ public class MaquinasService {
      * @param maquina
      * @param request
      * @param dataSaida
+     * @param dataRetorno
      * @return 
      */
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
         try{
-            System.out.println(dataSaida);
             maquina.setDataSaida(dataSaida);
-            System.out.println(maquina.getDataSaida());
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
             PatrimonioAccessService.update(maquina);
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
-                    Double.parseDouble(request.
-                    getParameter("valorAluguel")),
-                    diasEntre(dataSaida, dataRetorno), dataSaida);
+                    Double.parseDouble(request.getParameter("valorAluguel")),
+                    TransacaoEAluguelService.diasEntre(dataSaida,dataRetorno),
+                    dataSaida);
             AluguelAccessService.insert(aluguel);
             ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
 
@@ -169,7 +161,6 @@ public class MaquinasService {
      */
     public static String Editar(Patrimonio maquina){
         try{
-            System.out.println(maquina.getValorCompra());
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }
