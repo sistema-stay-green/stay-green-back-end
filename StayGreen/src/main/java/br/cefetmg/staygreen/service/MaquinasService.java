@@ -51,7 +51,6 @@ public class MaquinasService {
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
-            System.out.println(compra.toString());
             TransacaoAccessService.insert(compra);
             return JSON.stringify(maquina);
         }
@@ -93,14 +92,13 @@ public class MaquinasService {
      * @param maquina
      * @param request
      * @param dataSaida
+     * @param dataRetorno
      * @return 
      */
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
         try{
-            System.out.println(dataSaida);
             maquina.setDataSaida(dataSaida);
-            System.out.println(maquina.getDataSaida());
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
             PatrimonioAccessService.update(maquina);
@@ -169,7 +167,6 @@ public class MaquinasService {
      */
     public static String Editar(Patrimonio maquina){
         try{
-            System.out.println(maquina.getValorCompra());
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }

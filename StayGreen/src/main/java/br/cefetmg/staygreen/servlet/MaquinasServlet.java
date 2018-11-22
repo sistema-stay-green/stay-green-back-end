@@ -41,9 +41,11 @@ public class MaquinasServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
+            
             Patrimonio maquina = JSON.parse(request.getParameter("maquinasJSON"),
                     Patrimonio.class);
-            String stringDataCompra = request.getParameter("dataCompra"),
+            String resposta = "",
+                   stringDataCompra = request.getParameter("dataCompra"),
                    stringDataSaida = request.getParameter("dataSaida"),
                    stringDataRetorno = request.getParameter("dataRetorno"),
                    stringDataBaixa = request.getParameter("dataBaixa"),
@@ -52,27 +54,27 @@ public class MaquinasServlet extends HttpServlet {
                        
             switch(request.getParameter("acao")){
                 case "c":
-                    MaquinasService.Cadastrar(maquina, quantidade, 
+                    resposta = MaquinasService.Cadastrar(maquina, quantidade, 
                             TransacaoEAluguelService.
                             converteStringToCalendar(stringDataCompra));
                     break;
                 case "v":
-                    MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                    resposta = MaquinasService.Venda(maquina,TransacaoEAluguelService.
                             converteStringToCalendar(stringDataBaixa));
                     break;
                 case "a":
-                    MaquinasService.Aluguel(maquina, request,
+                    resposta = MaquinasService.Aluguel(maquina, request,
                             TransacaoEAluguelService.
                             converteStringToCalendar(stringDataSaida),
                             TransacaoEAluguelService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
                 case "d":
-                    MaquinasService.Descarte(maquina, TransacaoEAluguelService.
+                    resposta = MaquinasService.Descarte(maquina, TransacaoEAluguelService.
                             converteStringToCalendar(stringDataBaixa) );
                     break;
                 case "m":
-                    MaquinasService.Manuntenir(maquina,
+                    resposta = MaquinasService.Manuntenir(maquina,
                             TransacaoEAluguelService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
@@ -80,19 +82,18 @@ public class MaquinasServlet extends HttpServlet {
                 case "r":      
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
                             get("WHERE tipoPatrimonio = 'MAQUINA'");
-                    String JSONString = JSON.stringify(maquinas);
-                    out.println(JSON.stringify(maquinas));
-              
+                    resposta = JSON.stringify(maquinas);              
                     break;
                 case "e":
                     maquina.setDataCompra
                             (TransacaoEAluguelService.
                             converteStringToCalendar(stringDataCompra)); 
-                    MaquinasService.Editar(maquina);
+                    resposta = MaquinasService.Editar(maquina);
                     break;
                 default: 
                     throw new IllegalArgumentException("Opção Invalida");
             }
+            out.println(resposta);
         }
     }
 
