@@ -25,11 +25,13 @@ import java.util.concurrent.TimeUnit;
 public class MaquinasService {
     
     
-    public static int diasEntre(Calendar dataInicio, Calendar dataFinal){
+    private static int diasEntre(Calendar dataInicio, Calendar dataFinal){
         long end = dataFinal.getTimeInMillis();
         long start = dataInicio.getTimeInMillis();
         return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
+    
+
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -98,9 +100,16 @@ public class MaquinasService {
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
         try{
+            
+            // Exemplo de como pegar a maquina antiga e editar a dataCompra dela
+            Patrimonio maquinaAntiga = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
+            maquina.setDataCompra(maquinaAntiga.getDataCompra());
+            // Fim do exemplo
             maquina.setDataSaida(dataSaida);
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
+            
             PatrimonioAccessService.update(maquina);
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
                     Double.parseDouble(request.
@@ -162,7 +171,6 @@ public class MaquinasService {
     /**
      * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
      * @param maquina
-     * @param maquinaAtualizada
      * @return 
      */
     public static String Editar(Patrimonio maquina){
