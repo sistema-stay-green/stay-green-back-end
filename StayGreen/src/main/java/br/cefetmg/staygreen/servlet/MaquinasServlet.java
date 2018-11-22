@@ -63,10 +63,13 @@ public class MaquinasServlet extends HttpServlet {
                 case "a":
                     MaquinasService.Aluguel(maquina, request,
                             TransacaoEAluguelService.
-                            converteStringToCalendar(stringDataSaida));
+                            converteStringToCalendar(stringDataSaida),
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataRetorno));
                     break;
                 case "d":
-                    MaquinasService.Descarte(maquina);
+                    MaquinasService.Descarte(maquina, TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataBaixa) );
                     break;
                 case "m":
                     MaquinasService.Manuntenir(maquina,
@@ -74,14 +77,12 @@ public class MaquinasServlet extends HttpServlet {
                             converteStringToCalendar(stringDataRetorno));
                     break;
 
-                case "r":
-                    
+                case "r":      
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
-                            get("");
+                            get("WHERE tipoPatrimonio = 'MAQUINA'");
                     String JSONString = JSON.stringify(maquinas);
-                    System.out.println(JSON.stringify(maquinas));
-                    out.print(JSONString);
-                    
+                    out.println(JSON.stringify(maquinas));
+              
                     break;
                 case "e":
                     maquina.setDataCompra

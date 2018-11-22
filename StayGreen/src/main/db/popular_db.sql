@@ -10,12 +10,19 @@ USE `staygreen`;
 
 -- Tabela Patrimonio
 
-INSERT INTO `Patrimonio` (`id`, `nome`, `tipo`, `descricao`, `status`, `indiceDepreciacao`, `valorCompra`, `valorAtual`, `dataCompra`, `dataSaida`, `dataBaixa`)
-VALUES (NULL, 'Trator', 'Máquina', 'Uma máquina que ajuda na colheita do café.', 'VENDIDO', '15', '5000', '4800', '2018-10-01', '2018-10-03', '2018-10-02');
+INSERT INTO `Patrimonio` (`idPatrimonio`, `nomePatrimonio`, `finalidadePatrimonio`, `tipoPatrimonio`, `valorCompraPatrimonio`, `dataCompraPatrimonio`, `statusPatrimonio`, `dataSaidaPatrimonio`, `dataRetornoPatrimonio`, `dataBaixaPatrimonio`, `indDeprecPatrimonio`)
+-- VALUES (NULL, 'Trator', 'Máquina', 'Uma máquina que ajuda na colheita do café.', 'VENDIDO', '15', '5000', '4800', '2018-10-01', '2018-10-03', '2018-10-02');
+
+VALUES (NULL, 'Segadeira', 'Utilizada para cortar grama, cereais e capim – esse último transformado em feno para alimentação animal.', 'MAQUINA', '360000', '2014-10-01','EM_POSSE', NULL, NULL, NULL, 10),
+	   (NULL, 'Vaca', 'Pra dar leite', 'ANIMAL', '5000', '2014-10-01','EM_POSSE', NULL, NULL, NULL, 10),	
+	   (NULL, 'Ordenhadeira', 'Uma máquina que ajuda no processo de retirar leite.', 'MAQUINA', '3250', '2017-12-01','ALUGADO', '2018-04-02', '2019-04-02', NULL, 3),
+	   (NULL, 'Patrola rebocada', 'Utilizada em estradas de terra e no meio dos canaviais para nivelar o terreno por onde passam os veículos.', 'MAQUINA', '1250', '2017-12-01','EM_MANUTENCAO', '2018-06-02', '2019-01-02', NULL, 3),
+	   (NULL, 'Enfardadora', 'Produz fardos de feno cilindricos.', 'MAQUINA', '97000', '2014-02-01','VENDIDO', NULL, NULL, '2018-10-03', 4),
+	   (NULL, 'Enfardadora', 'Produz fardos de feno cilindricos.', 'MAQUINA', '150000', '2014-02-01','DESCARTADO', NULL, NULL, '2018-09-30', 2.5);
 
 -- Tabela Tarefa
 
-INSERT INTO `tarefa` (`id`, `nome`, `tipo`, `caminhoImg`, `dataMarcada`, `repeticao`, `producaoPrevista`, `valorGasto`)
-VALUES (NULL, 'Trabalho Final', 'Impossível', 'imgs/aaaa.png', '2018-11-26', '7', '12000', '12000');
+-- INSERT INTO `tarefa` (`id`, `nome`, `tipo`, `caminhoImg`, `dataMarcada`, `repeticao`, `producaoPrevista`, `valorGasto`)
+-- VALUES (NULL, 'Trabalho Final', 'Impossível', 'imgs/aaaa.png', '2018-11-26', '7', '12000', '12000');
 
 -- Tabela ...
