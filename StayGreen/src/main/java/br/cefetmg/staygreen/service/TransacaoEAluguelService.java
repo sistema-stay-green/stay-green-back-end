@@ -6,6 +6,7 @@
 package br.cefetmg.staygreen.service;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -17,13 +18,13 @@ import java.util.Calendar;
 public class TransacaoEAluguelService {
     
     /**
-     * Calcula o valor total com base no valor e a quantidade de produtos que
-     * foi transacionada.
+     * Calcula o valor total.
      * 
      * @param valor
      * @param quantTransacao
      * @param tipo
-     * @return 
+     * @return  double calculaValorTotal, o valor total com base no valor 
+     * e a quantidade de produtos que foi transacionada
      */
     public static double calculaValorTotal(double valor, int quantTransacao, 
             int tipo){
@@ -37,20 +38,23 @@ public class TransacaoEAluguelService {
     }
     
     /**
-     * Calcula o valor total com base no valor e a quantidade de produtos que
-     * foi transacionada.
+     * Calcula o valor total do aluguel.
      * 
      * @param valor
      * @param tempo
-     * @return 
+     * @return double calculaValorTotalAluguel, o valor total do aluguel com 
+     * base no valor e a no tempo de aluguel.
      */
     public static double calculaValorTotalAluguel(double valor, int tempo){
         return valor*tempo;
     }
     
     /**
-     * Calcula o tempo em meses entre a data Atual e a data inicial
+     * Calcula o tempo em meses.
+     * 
      * @param dataInicial
+     * @return int tempoEmMeses, a quantidade de meses entre a data atual e a 
+     * data inicial.
      */
     private static int tempoEmMeses(Calendar dataInicial){
         return dataAtual().get(Calendar.MONTH)-
@@ -58,8 +62,11 @@ public class TransacaoEAluguelService {
     }
     
     /**
-     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * Calcula o tempo em anos.
+     * 
      * @param dataInicial
+     * @return int tempoEmAnos, a quantidade de anos entre a data atual e a data
+     * inicial.
      */
     private static int tempoEmAnos(Calendar dataInicial){
         return dataAtual().get(Calendar.YEAR)-
@@ -67,27 +74,33 @@ public class TransacaoEAluguelService {
     }
     
     /**
-     * Calcula o tempo em anos entre a data Atual e a data inicial
+     * Calcula o tempo em anos entre a data Atual e a data inicial.
+     * 
      * @param dataFinal
      * @return int TempoEmAnosFuturos, diferençca de tempo entre agora e uma 
-     * data no futuro
+     * data no futuro.
      */
     public static int tempoEmAnosFuturos(Calendar dataFinal){
         return dataFinal.get(Calendar.YEAR)-dataAtual().get(Calendar.YEAR);
     }
     
     /**
-     * Calcula a data Atual
+     * Calcula a data Atual.
+     * 
+     * @return Calendar dataAtual, a data que atual no momento que a função for 
+     * ser chamada.
      */
     private static Calendar dataAtual(){
         return Calendar.getInstance();
     }
     
     /**
-     * Calcula o valor recebido com o aluguel da maquina ate o momento
+     * Calcula o valor recebido com o aluguel da maquina ate o momento.
+     * 
      * @param taxaMensal
      * @param dataEmprestimo
-     * @return 
+     * @return double calculaValorRecebido, o valor recebido com o aluguel da 
+     * maquina ate o momento.
      */
     public static double calculaValorRecebido(double taxaMensal, 
             Calendar dataEmprestimo){
@@ -95,11 +108,12 @@ public class TransacaoEAluguelService {
     }
     
     /**
-     * Calcula a data do roximo pagamento e relação da data que a maquina foi 
-     * alugada na primeira vez. Se o dia de pagar nesse mês já passou a data de
-     * pagar é no proximo mês.
+     * Calcula a data do proximo pagamento.
+     * 
      * @param dataEmprestimo
-     * @return 
+     * @return Calendar calculaProximoPagamento, a data do proximo pagamento e 
+     * relação da data que a maquina foi alugada na primeira vez. Se o dia de 
+     * pagar nesse mês já passou a data de pagar é no proximo mês.
      */
     public static Calendar calculaProximoPagamento(Calendar dataEmprestimo){
         Calendar dataProxPagamento;
@@ -118,9 +132,11 @@ public class TransacaoEAluguelService {
     
     /**
      * Calcula a data que o contrato do aluguel acaba.
+     * 
      * @param dataInicial
      * @param periodoAluguel
-     * @return 
+     * @return Calendar calculaDataFinal, a data que o contrato do aluguel acaba
+     * com base na data inicial e o periodo do aluguel.
      */
     public static Calendar calculaDataFinal(Calendar dataInicial, 
             int periodoAluguel){
@@ -136,10 +152,13 @@ public class TransacaoEAluguelService {
     
     /**
      * Calcula o valor atual.
+     * 
      * @param dataInicial
      * @param indiceDepreciacao
      * @param valorCompra
-     * @return 
+     * @return double calculaValorAtual, o valor atual com base no tempo entre o
+     * dia que a função for chamada e a data de Compra, no indice de depreciação
+     * e no valor de compra.
      */
     public static double calculaValorAtual(Calendar dataInicial, 
             double indiceDepreciacao, double valorCompra){
@@ -154,8 +173,9 @@ public class TransacaoEAluguelService {
     
     /**
      * Converte um valor String para Calendar.
+     * 
      * @param stringData
-     * @return 
+     * @return Calendar converteStringToCalendar, um valor calendar que foi convertido de uma String.
      */
     public static Calendar converteStringToCalendar(String stringData){
         String stringDatas[];
@@ -168,4 +188,18 @@ public class TransacaoEAluguelService {
         return data;
     }
     
+    /**
+     * Calcula a quantidade de dias entre duas datas.
+     * 
+     * @autor Guilherme Sena
+     * @param dataInicio
+     * @param dataFinal
+     * @return int diasEntre, a quantidade de dias entre duas datas.
+     */
+    public static int diasEntre(Calendar dataInicio, Calendar dataFinal){
+        long dataFinalEmMilisegundos = dataFinal.getTimeInMillis();
+        long dataInicialEmMilisegundos = dataInicio.getTimeInMillis();
+        return (int) TimeUnit.MILLISECONDS.toDays(Math.
+                abs(dataFinalEmMilisegundos - dataInicialEmMilisegundos));
+    }
 }

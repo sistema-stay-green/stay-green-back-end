@@ -15,7 +15,6 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gabriel Cruz
@@ -31,7 +30,6 @@ public class MaquinasService {
         return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
     
-
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -112,9 +110,9 @@ public class MaquinasService {
             
             PatrimonioAccessService.update(maquina);
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
-                    Double.parseDouble(request.
-                    getParameter("valorAluguel")),
-                    diasEntre(dataSaida, dataRetorno), dataSaida);
+                    Double.parseDouble(request.getParameter("valorAluguel")),
+                    TransacaoEAluguelService.diasEntre(dataSaida,dataRetorno),
+                    dataSaida);
             AluguelAccessService.insert(aluguel);
             ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
 
