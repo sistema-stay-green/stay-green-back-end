@@ -48,7 +48,7 @@ public class MaquinasService {
             PatrimonioAccessService.insert(maquina);
             maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
-                    maquina.getId().longValue(),TransacaoEAluguelService.
+                    maquina.getId().longValue(),ControleDeMaquinasUtilService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
@@ -74,7 +74,7 @@ public class MaquinasService {
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
                 PatrimonioAccessService.update(maquina);
                 Transacao venda = new Transacao(null,
-                        maquina.getId().longValue(),TransacaoEAluguelService.
+                        maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
                         getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
@@ -112,7 +112,7 @@ public class MaquinasService {
             PatrimonioAccessService.update(maquina);
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
                     Double.parseDouble(request.getParameter("valorAluguel")),
-                    TransacaoEAluguelService.diasEntre(dataSaida,dataRetorno),
+                    ControleDeMaquinasUtilService.diasEntre(dataSaida,dataRetorno),
                     dataSaida);
             AluguelAccessService.insert(aluguel);
             ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");

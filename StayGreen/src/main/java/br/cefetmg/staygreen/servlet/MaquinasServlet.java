@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,7 +60,7 @@ public class MaquinasServlet extends HttpServlet {
                 */
                 case "c": 
                     MaquinasService.Cadastrar(maquina, quantidade, 
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataCompra));
                     break;
                     
@@ -70,7 +70,7 @@ public class MaquinasServlet extends HttpServlet {
                 * vende-la
                 */
                 case "v":
-                    resposta = MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                    resposta = MaquinasService.Venda(maquina,ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa));
                     break;
                     
@@ -81,9 +81,9 @@ public class MaquinasServlet extends HttpServlet {
                 */
                 case "a":
                     resposta = MaquinasService.Aluguel(maquina, request,
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataSaida),
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
                     
@@ -93,7 +93,7 @@ public class MaquinasServlet extends HttpServlet {
                 * descarta-la
                 */
                 case "d":
-                    resposta = MaquinasService.Descarte(maquina, TransacaoEAluguelService.
+                    resposta = MaquinasService.Descarte(maquina, ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa) );
                     break;
                     
@@ -104,7 +104,7 @@ public class MaquinasServlet extends HttpServlet {
                 */
                 case "m":
                     resposta = MaquinasService.Manuntenir(maquina,
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
                     
@@ -126,7 +126,7 @@ public class MaquinasServlet extends HttpServlet {
                 */
                 case "e":
                     maquina.setDataCompra
-                            (TransacaoEAluguelService.
+                            (ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataCompra)); 
                     resposta = MaquinasService.Editar(maquina);
                     break;

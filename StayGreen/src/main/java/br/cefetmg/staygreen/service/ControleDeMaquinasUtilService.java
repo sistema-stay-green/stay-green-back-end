@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @version 22-10-18/07:12
  * 
  */
-public class TransacaoEAluguelService {
+public class ControleDeMaquinasUtilService {
     
     /**
      * Calcula o valor total.
