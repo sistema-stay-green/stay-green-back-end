@@ -7,7 +7,7 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.annotation.Id;
-import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
 
 /**
@@ -192,7 +192,7 @@ public class Transacao {
      * @return e calcula o double valorTotal
      */
     public double getValorTotal(double valorIndividual, int tipo){
-        return ControleDeMaquinasUtilService.calculaValorTotal(valorIndividual, 
+        return TransacaoEAluguelService.calculaValorTotal(valorIndividual, 
                 quantTransacao, tipo);
     }
 

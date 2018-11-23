@@ -7,7 +7,7 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Tabela;
 import br.cefetmg.staygreen.annotation.Id;
-import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.Calendar;
 
 /**
@@ -137,7 +137,7 @@ public class Aluguel {
      * @return o valor recebido até a data atual
      */
     public double getValorRecebido(){
-        return ControleDeMaquinasUtilService.
+        return TransacaoEAluguelService.
                 calculaValorRecebido(valorAluguel, dataInicialAluguel);
     }
     
@@ -146,7 +146,7 @@ public class Aluguel {
      * @return o valor a ser recebido até a data final
      */
     public double getValorTotal(){
-        return ControleDeMaquinasUtilService.
+        return TransacaoEAluguelService.
                 calculaValorTotalAluguel(valorAluguel, periodoAluguel);
     }
     
@@ -155,7 +155,7 @@ public class Aluguel {
      * @return a data que o proximo pagamento deve ser efetuado
      */
     public Calendar getProximoPagamento() {
-        return ControleDeMaquinasUtilService.
+        return TransacaoEAluguelService.
                 calculaProximoPagamento(dataInicialAluguel);
     }
     
@@ -164,7 +164,7 @@ public class Aluguel {
      * @return a data que o contrato do aluguel acaba
      */
     public Calendar getDataFinalAluguel() {
-        return ControleDeMaquinasUtilService.calculaDataFinal(dataInicialAluguel,
+        return TransacaoEAluguelService.calculaDataFinal(dataInicialAluguel,
                 periodoAluguel);
     }
 }

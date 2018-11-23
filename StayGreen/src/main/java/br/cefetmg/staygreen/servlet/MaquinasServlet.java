@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
+import br.cefetmg.staygreen.service.TransacaoEAluguelService;
 import java.util.ArrayList;
 import java.util.Arrays;
 

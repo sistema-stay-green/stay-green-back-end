@@ -15,6 +15,7 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gabriel Cruz
@@ -47,7 +48,7 @@ public class MaquinasService {
             PatrimonioAccessService.insert(maquina);
             maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
-                    maquina.getId().longValue(),ControleDeMaquinasUtilService.
+                    maquina.getId().longValue(),TransacaoEAluguelService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
@@ -73,7 +74,7 @@ public class MaquinasService {
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
                 PatrimonioAccessService.update(maquina);
                 Transacao venda = new Transacao(null,
-                        maquina.getId().longValue(),ControleDeMaquinasUtilService.
+                        maquina.getId().longValue(),TransacaoEAluguelService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
                         getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
