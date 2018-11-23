@@ -41,7 +41,7 @@ public class MaquinasService {
             PatrimonioAccessService.insert(maquina);
             maquina.setId(SQL.getLastInsertId());
             Transacao compra = new Transacao(null,
-                    maquina.getId().longValue(),TransacaoEAluguelService.
+                    maquina.getId().longValue(),ControleDeMaquinasUtilService.
                     calculaValorAtual(dataCompra,maquina.
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
@@ -68,7 +68,7 @@ public class MaquinasService {
         else {
             try{
                 Transacao venda = new Transacao(null,
-                        maquina.getId().longValue(),TransacaoEAluguelService.
+                        maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
                         getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
                         dataBaixa,TipoTransacaoEnum.MAQUINA);

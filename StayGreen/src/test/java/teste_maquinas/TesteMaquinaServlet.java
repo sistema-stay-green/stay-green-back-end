@@ -8,7 +8,7 @@ package teste_maquinas;
 import br.cefetmg.staygreen.service.MaquinasService;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.PatrimonioProcessService;
-import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.table.PatrimonioData;
 import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
@@ -86,12 +86,12 @@ public class TesteMaquinaServlet {
         
         System.out.println("\n\n\tTESTE CADASTRAR TODAS:");
         
-        MaquinasService.Cadastrar(maquina, 1, TransacaoEAluguelService.
+        MaquinasService.Cadastrar(maquina, 1, ControleDeMaquinasUtilService.
                 converteStringToCalendar("12/11/2012"));
         MaquinasService.Cadastrar(maquina1, 1, Calendar.getInstance());
-        MaquinasService.Cadastrar(maquina2, 1, TransacaoEAluguelService.
+        MaquinasService.Cadastrar(maquina2, 1, ControleDeMaquinasUtilService.
                 converteStringToCalendar("20/10/2017"));
-        MaquinasService.Cadastrar(maquina3, 1, TransacaoEAluguelService.
+        MaquinasService.Cadastrar(maquina3, 1, ControleDeMaquinasUtilService.
                 converteStringToCalendar("02/04/1996"));
         
         System.out.println("\nMaquina 0:");
@@ -112,8 +112,8 @@ public class TesteMaquinaServlet {
         Patrimonio maquinaAtualizada = new Patrimonio(null, null);
         maquinaAtualizada.setDataBaixa((Calendar)null);
         maquinaAtualizada.setDataCompra((Calendar)null);
-        maquinaAtualizada.setDataSaida(TransacaoEAluguelService.converteStringToCalendar("12/11/2017"));
-        maquinaAtualizada.setDataRetorno(TransacaoEAluguelService.converteStringToCalendar("12/11/2019"));
+        maquinaAtualizada.setDataSaida(ControleDeMaquinasUtilService.converteStringToCalendar("12/11/2017"));
+        maquinaAtualizada.setDataRetorno(ControleDeMaquinasUtilService.converteStringToCalendar("12/11/2019"));
         maquinaAtualizada.setFinalidade(null);
         maquinaAtualizada.setIndiceDepreciacao(null);
         maquinaAtualizada.setValorCompra(null);
@@ -137,7 +137,7 @@ public class TesteMaquinaServlet {
         
         System.out.println("\n\n\tTESTE VENDA 2:");
         
-        MaquinasService.Venda(maquina2, TransacaoEAluguelService.converteStringToCalendar("25/11/2018"));
+        MaquinasService.Venda(maquina2, ControleDeMaquinasUtilService.converteStringToCalendar("25/11/2018"));
         
         System.out.println("\nMaquina 0:");
         imprimeMaquina(maquina);
@@ -155,7 +155,7 @@ public class TesteMaquinaServlet {
         
         System.out.println("\n\n\tTESTE MANUTENIR 1:");
         
-        MaquinasService.Manuntenir(maquina1, TransacaoEAluguelService.converteStringToCalendar("01/08/2020"));
+        MaquinasService.Manuntenir(maquina1, ControleDeMaquinasUtilService.converteStringToCalendar("01/08/2020"));
         
         System.out.println("\nMaquina 0:");
         imprimeMaquina(maquina);

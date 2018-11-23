@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import java.util.ArrayList;
 
 /**
@@ -54,16 +54,16 @@ public class MaquinasServlet extends HttpServlet {
                 switch(request.getParameter("acao")){
                     case "c":
                         MaquinasService.Cadastrar(maquina, quantidade, 
-                                TransacaoEAluguelService.
+                                ControleDeMaquinasUtilService.
                                 converteStringToCalendar(stringDataCompra));
                         break;
                     case "v":
-                        MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                        MaquinasService.Venda(maquina,ControleDeMaquinasUtilService.
                                 converteStringToCalendar(stringDataBaixa));
                         break;
                     case "a":
                         MaquinasService.Aluguel(maquina, request,
-                                TransacaoEAluguelService.
+                                ControleDeMaquinasUtilService.
                                 converteStringToCalendar(stringDataSaida));
                         break;
                     case "d":
@@ -71,7 +71,7 @@ public class MaquinasServlet extends HttpServlet {
                         break;
                     case "m":
                         MaquinasService.Manuntenir(maquina,
-                                TransacaoEAluguelService.
+                                ControleDeMaquinasUtilService.
                                 converteStringToCalendar(stringDataRetorno));
                         break;
                     case "r":

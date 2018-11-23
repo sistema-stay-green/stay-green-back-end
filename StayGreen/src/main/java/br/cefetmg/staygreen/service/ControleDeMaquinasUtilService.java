@@ -14,7 +14,7 @@ import java.util.Calendar;
  * @version 22-10-18/07:12
  * 
  */
-public class TransacaoEAluguelService {
+public class ControleDeMaquinasUtilService {
     
     /**
      * Calcula o valor total com base no valor e a quantidade de produtos que
