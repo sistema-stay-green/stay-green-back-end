@@ -79,7 +79,7 @@ public class TransacaoAccessService {
     
     /**
      * Pesquisa no db 'staygreen' todas as transações.
-     * @return todos os objetos Transação em um ArrayList.
+     * @return ArrayList getAll, todos os objetos Transação em um ArrayList.
      */
     public static ArrayList<Transacao> getAll() {
         return get("SELECT * FROM " + SQL.getNomeTabela(Transacao.class));
@@ -88,7 +88,7 @@ public class TransacaoAccessService {
     /**
      * Remove uma transacao do bd 'staygreen' usando o id recebido.
      * @param id Id da transação a ser removida.
-     * @return true se a operação for bem sucedida e false se não for.
+     * @return boolean delete, true se a operação for bem sucedida e false se não for.
      */
     public static boolean delete(int id) {
         return SQL.delete(id, Transacao.class);
@@ -97,7 +97,8 @@ public class TransacaoAccessService {
     /**
      * Pesquisa no db 'staygreen' usando a query recebida.
      * @param query query a ser executada
-     * @return os objetos Transação encontrados utilizando a query recebida.
+     * @return ArrayList get, os objetos Transação encontrados utilizando a 
+     * query recebida.
      */
     public static ArrayList<Transacao> get(String query){
         
@@ -134,7 +135,7 @@ public class TransacaoAccessService {
     /**
      * Insere um objeto Transação no DB 'staygreen'
      * @param transacao objeto transacao
-     * @return true se não houver problemas na operação.
+     * @return boolean insert, true se não houver problemas na operação.
      */
     public static boolean insert(Transacao transacao){
             return SQL.insert(transacao);
@@ -153,7 +154,7 @@ public class TransacaoAccessService {
     /**
      * Atualiza a transação no DB correspondente ao objeto Transação recebido
      * @param transacao
-     * @return true se não houver problemas na operação.
+     * @return boolean update, true se não houver problemas na operação.
      */
     public static boolean update(Transacao transacao){
         return SQL.update(transacao);

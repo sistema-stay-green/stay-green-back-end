@@ -15,7 +15,6 @@ import br.cefetmg.staygreen.util.SQL;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gabriel Cruz
@@ -24,13 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MaquinasService {
     
-    
-    private static int diasEntre(Calendar dataInicio, Calendar dataFinal){
-        long end = dataFinal.getTimeInMillis();
-        long start = dataInicio.getTimeInMillis();
-        return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
-    }
-    
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -38,7 +30,7 @@ public class MaquinasService {
      * @param maquina
      * @param quantidade
      * @param dataCompra
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Cadastrar(Patrimonio maquina, int quantidade, 
             Calendar dataCompra){
@@ -47,11 +39,11 @@ public class MaquinasService {
             maquina.setDataCompra(dataCompra);
             PatrimonioAccessService.insert(maquina);
             maquina.setId(SQL.getLastInsertId());
-            Transacao compra = new Transacao(null,
-                    maquina.getId().longValue(),ControleDeMaquinasUtilService.
-                    calculaValorAtual(dataCompra,maquina.
-                    getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
-                    dataCompra,TipoTransacaoEnum.MAQUINA);
+            Transacao compra = new Transacao(null, maquina.getId().longValue(),
+                    ((-1)*ControleDeMaquinasUtilService.
+                    calculaValorAtual(dataCompra,maquina.getIndiceDepreciacao(),
+                    maquina.getValorCompra())),quantidade, dataCompra,
+                    TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(compra);
             System.out.println(maquina.getId());
             return JSON.stringify(maquina);
@@ -67,7 +59,7 @@ public class MaquinasService {
      * tabela transação
      * @param maquina
      * @param dataBaixa
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Venda(Patrimonio maquina, Calendar dataBaixa){
             try{
@@ -95,7 +87,7 @@ public class MaquinasService {
      * @param request
      * @param dataSaida
      * @param dataRetorno
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
@@ -133,7 +125,7 @@ public class MaquinasService {
      * Usado ao descartar uma maquina. 
      * Muda o Estado da maquina para DESCARTADO
      * @param maquina
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Descarte(Patrimonio maquina, Calendar dataBaixa){
             
@@ -155,7 +147,7 @@ public class MaquinasService {
      * Muda o Estado da maquina para EM_MANUTENCAO
      * @param maquina
      * @param dataRetorno
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Manuntenir(Patrimonio maquina, Calendar dataRetorno){
             try{
@@ -171,7 +163,7 @@ public class MaquinasService {
     /**
      * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
      * @param maquina
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Editar(Patrimonio maquina){
         try{
