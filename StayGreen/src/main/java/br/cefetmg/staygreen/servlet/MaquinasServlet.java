@@ -70,7 +70,8 @@ public class MaquinasServlet extends HttpServlet {
                 * vende-la
                 */
                 case "v":
-                    resposta = MaquinasService.Venda(maquina,ControleDeMaquinasUtilService.
+                    resposta = MaquinasService.Venda(maquina,
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa));
                     break;
                     
@@ -93,7 +94,8 @@ public class MaquinasServlet extends HttpServlet {
                 * descarta-la
                 */
                 case "d":
-                    resposta = MaquinasService.Descarte(maquina, ControleDeMaquinasUtilService.
+                    resposta = MaquinasService.Descarte(maquina, 
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa) );
                     break;
                     
@@ -125,8 +127,8 @@ public class MaquinasServlet extends HttpServlet {
                 * suas variáveis de classe
                 */
                 case "e":
-                    maquina.setDataCompra
-                            (ControleDeMaquinasUtilService.
+                    System.out.println(maquina.getId());
+                    maquina.setDataCompra(ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataCompra)); 
                     resposta = MaquinasService.Editar(maquina);
                     break;

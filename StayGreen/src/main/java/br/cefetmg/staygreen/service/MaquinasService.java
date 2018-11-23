@@ -53,6 +53,7 @@ public class MaquinasService {
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(compra);
+            System.out.println(maquina.getId());
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -100,16 +101,16 @@ public class MaquinasService {
         Calendar dataSaida, Calendar dataRetorno){
         try{
             
-            // Exemplo de como pegar a maquina antiga e editar a dataCompra dela
-            Patrimonio maquinaAntiga = PatrimonioAccessService.getPatrimonioById
-                (Integer.toString(maquina.getId()));
-            maquina.setDataCompra(maquinaAntiga.getDataCompra());
-            // Fim do exemplo
+ 
+            
+            maquina.getDataCompra();
             maquina.setDataSaida(dataSaida);
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
             
             PatrimonioAccessService.update(maquina);
+            maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
                     Double.parseDouble(request.getParameter("valorAluguel")),
                     ControleDeMaquinasUtilService.diasEntre(dataSaida,dataRetorno),
@@ -175,6 +176,8 @@ public class MaquinasService {
     public static String Editar(Patrimonio maquina){
         try{
             PatrimonioAccessService.update(maquina);
+            maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
