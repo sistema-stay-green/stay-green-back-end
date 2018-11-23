@@ -58,10 +58,13 @@ public class MaquinasServlet extends HttpServlet {
                 * desejada pelo usuário a ser feita, em uma maquina, seja a de 
                 * compra, candastrando-a
                 */
-                case "c": 
-                    MaquinasService.Cadastrar(maquina, quantidade, 
+                case "c":
+                    System.out.println(ControleDeMaquinasUtilService.
+                            converteStringToCalendar(stringDataCompra));
+                    resposta = MaquinasService.Cadastrar(maquina, quantidade, 
                             ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataCompra));
+                    System.out.println(resposta);
                     break;
                     
                 /**
@@ -127,10 +130,9 @@ public class MaquinasServlet extends HttpServlet {
                 * suas variáveis de classe
                 */
                 case "e":
-                    System.out.println(maquina.getId());
-                    maquina.setDataCompra(ControleDeMaquinasUtilService.
-                            converteStringToCalendar(stringDataCompra)); 
-                    resposta = MaquinasService.Editar(maquina);
+                    resposta = MaquinasService.Editar(maquina,
+                            ControleDeMaquinasUtilService.
+                            converteStringToCalendar(stringDataCompra));
                     break;
                     
                 /**

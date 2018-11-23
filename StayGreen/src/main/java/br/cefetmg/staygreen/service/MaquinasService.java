@@ -53,7 +53,6 @@ public class MaquinasService {
                     getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
                     dataCompra,TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(compra);
-            System.out.println(maquina.getId());
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -74,6 +73,8 @@ public class MaquinasService {
                 maquina.setDataBaixa(dataBaixa);
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 Transacao venda = new Transacao(null,
                         maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
@@ -101,8 +102,6 @@ public class MaquinasService {
         Calendar dataSaida, Calendar dataRetorno){
         try{
             
- 
-            
             maquina.getDataCompra();
             maquina.setDataSaida(dataSaida);
             maquina.setDataRetorno(dataRetorno);
@@ -116,11 +115,6 @@ public class MaquinasService {
                     ControleDeMaquinasUtilService.diasEntre(dataSaida,dataRetorno),
                     dataSaida);
             AluguelAccessService.insert(aluguel);
-            ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-
-            if(lastId.next()){
-                maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
-            }
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -143,6 +137,8 @@ public class MaquinasService {
                 maquina.setDataSaida((Calendar) null);
                 maquina.setDataRetorno((Calendar) null);
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -162,6 +158,8 @@ public class MaquinasService {
                 maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
                 maquina.setDataRetorno(dataRetorno);
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -173,8 +171,9 @@ public class MaquinasService {
      * @param maquina
      * @return 
      */
-    public static String Editar(Patrimonio maquina){
+    public static String Editar(Patrimonio maquina, Calendar dataCompra){
         try{
+            maquina.setDataCompra(dataCompra);
             PatrimonioAccessService.update(maquina);
             maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
