@@ -18,7 +18,6 @@ import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Gabriel Cruz
@@ -42,7 +41,7 @@ public class MaquinasServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
             
-            Patrimonio maquina = JSON.parse(request.getParameter("maquinasJSON"),
+            Patrimonio maquina =JSON.parse(request.getParameter("maquinasJSON"),
                     Patrimonio.class);
             String resposta = "",
                    stringDataCompra = request.getParameter("dataCompra"),
@@ -115,8 +114,8 @@ public class MaquinasServlet extends HttpServlet {
                     
                 /**
                 * O Parametro "acao" será igual ao carcacter 'r' caso, a ação 
-                * desejada pelo usuário a ser feita seja retornar os dados de todas
-                * as maquinas presentes no Data Base
+                * desejada pelo usuário a ser feita seja retornar os dados de 
+                * todas as maquinas presentes no Data Base
                 */
                 case "r":      
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
