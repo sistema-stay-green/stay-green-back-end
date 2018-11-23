@@ -7,6 +7,8 @@ package br.cefetmg.staygreen.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 /**
  * Contém métodos estáticos para manipulação de entrada e saída.
@@ -16,6 +18,17 @@ import java.util.Properties;
  */
 public final class IO {
     
+    private static MessageDigest digester;
+
+    static {
+        try {
+            digester = MessageDigest.getInstance("MD5");
+        }
+        catch (NoSuchAlgorithmException ex) {
+            System.out.println(ex);
+        }
+    }
+        
     private IO() {}
     
     /**
@@ -59,6 +72,22 @@ public final class IO {
             .replace('\\', File.separator.charAt(0));
         
         return caminhoVerificado;
+        
+    }
+    
+    public static String criptografar(String s) {
+        
+        digester.update(s.getBytes());
+        
+        byte[] hash = digester.digest();
+        StringBuilder hexString = new StringBuilder();
+        
+        for (int i = 0; i < hash.length; i++) {
+            String criptografado = Integer.toHexString(0xFF & hash[i]);
+            hexString.append(((0xff & hash[i]) < 0x10 ? "0" : "") + criptografado);
+        }
+        
+        return hexString.toString();
         
     }
     

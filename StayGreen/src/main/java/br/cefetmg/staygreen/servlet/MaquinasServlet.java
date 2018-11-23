@@ -18,6 +18,7 @@ import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
 import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Gabriel Cruz
@@ -40,53 +41,104 @@ public class MaquinasServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
+            
             Patrimonio maquina = JSON.parse(request.getParameter("maquinasJSON"),
                     Patrimonio.class);
-            String stringDataCompra = request.getParameter("dataCompra"),
+            String resposta = "",
+                   stringDataCompra = request.getParameter("dataCompra"),
                    stringDataSaida = request.getParameter("dataSaida"),
                    stringDataRetorno = request.getParameter("dataRetorno"),
                    stringDataBaixa = request.getParameter("dataBaixa"),
                    stringQuantidade = request.getParameter("quantidade");
             int quantidade = Integer.parseInt(stringQuantidade);
-            
-            
-            if(maquina != null) {
-                switch(request.getParameter("acao")){
-                    case "c":
-                        MaquinasService.Cadastrar(maquina, quantidade, 
-                                ControleDeMaquinasUtilService.
-                                converteStringToCalendar(stringDataCompra));
-                        break;
-                    case "v":
-                        MaquinasService.Venda(maquina,ControleDeMaquinasUtilService.
-                                converteStringToCalendar(stringDataBaixa));
-                        break;
-                    case "a":
-                        MaquinasService.Aluguel(maquina, request,
-                                ControleDeMaquinasUtilService.
-                                converteStringToCalendar(stringDataSaida));
-                        break;
-                    case "d":
-                        MaquinasService.Descarte(maquina);
-                        break;
-                    case "m":
-                        MaquinasService.Manuntenir(maquina,
-                                ControleDeMaquinasUtilService.
-                                converteStringToCalendar(stringDataRetorno));
-                        break;
-                    case "r":
-                        ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
-                                get(null);
-                        break;
-                    case "e":
-                        MaquinasService.Editar(maquina, JSON.parse(request.
-                                getParameter("maquinasAtualizar"),
-                                Patrimonio.class));
-                        break;
-                    default: 
-                        throw new IllegalArgumentException("Opção Invalida");
-                }
-            } 
+                       
+            switch(request.getParameter("acao")){
+                /**
+                * O Parametro "acao" será igual ao carcacter 'c' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * compra, candastrando-a
+                */
+                case "c": 
+                    MaquinasService.Cadastrar(maquina, quantidade, 
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataCompra));
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'v' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * vende-la
+                */
+                case "v":
+                    resposta = MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataBaixa));
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'a' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * aluga-la, por valor pré-determinado
+                */
+                case "a":
+                    resposta = MaquinasService.Aluguel(maquina, request,
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataSaida),
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataRetorno));
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'd' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * descarta-la
+                */
+                case "d":
+                    resposta = MaquinasService.Descarte(maquina, TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataBaixa) );
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'm' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * manuiteni-la
+                */
+                case "m":
+                    resposta = MaquinasService.Manuntenir(maquina,
+                            TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataRetorno));
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'r' caso, a ação 
+                * desejada pelo usuário a ser feita seja retornar os dados de todas
+                * as maquinas presentes no Data Base
+                */
+                case "r":      
+                    ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
+                            get("WHERE tipoPatrimonio = 'MAQUINA'");
+                    resposta = JSON.stringify(maquinas);              
+                    break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'e' caso, a ação 
+                * desejada pelo usuário a ser feita seja editar qualquer um das
+                * suas variáveis de classe
+                */
+                case "e":
+                    maquina.setDataCompra
+                            (TransacaoEAluguelService.
+                            converteStringToCalendar(stringDataCompra)); 
+                    resposta = MaquinasService.Editar(maquina);
+                    break;
+                    
+                /**
+                * Caso o Parametro "acao" for diferente à todos os carcacteres 
+                * anteriores, acusará que a opção selecionada está equivocada
+                */
+                default: 
+                    throw new IllegalArgumentException("Opção Invalida");
+            }
+            out.println(resposta);
         }
     }
 

@@ -3,217 +3,143 @@
  * CEFET-MG
  * INF-2A 2018
  */
-
 package br.cefetmg.staygreen.service;
 
 import br.cefetmg.staygreen.table.Patrimonio;
-import br.cefetmg.staygreen.table.PatrimonioStatusEnum;
-import br.cefetmg.staygreen.table.PatrimonioTipoEnum;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import br.cefetmg.staygreen.util.JSON;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Classe com a lógica principal de manipulação dos patrimônios da empresa.
  *
- * @author Mei
+ * @author Mei Fagundes, Samuel Simonetti
+ * @version 20-11-18/14:37
  */
 public class PatrimonioProcessService {
-    
-    private static final String FIELD_SEPARATOR;
-    private static final String OBJECT_SEPARATOR;
-    
-    static {
-        FIELD_SEPARATOR = "§";
-        OBJECT_SEPARATOR = "¢";
-    }
-    
-    @Deprecated
-    public static String getPatrimonioByNome(String name){
+
+    /**
+     * Registra o Patrimônio recebido e o retorna em caso de sucesso.
+     * 
+     * @param patrimonio
+     * @return response
+     * @author Samuel Simonetti
+     */
+    public static String compraPatrimonio(Patrimonio patrimonio) {
         
+        String resposta = "";
+        
+        if (patrimonio != null) {
+            if (PatrimonioAccessService.insert(patrimonio)) {
+                patrimonio = PatrimonioAccessService.
+                    getLastInsertedPatrimonio();
+                resposta = JSON.stringify(patrimonio);
+            } else
+                resposta = "F";
+        } else
+            resposta = "F";
+
+        return resposta;
+    }
+
+    /**
+     * Pesquisa por Patrimônios usando os parâmetros recebidos.
+     * 
+     * @param tipoPesquisa
+     * @param formaPesquisa
+     * @return response
+     * @author Samuel Simonetti
+     */
+    public static String pesquisaPatrimonio(String tipoPesquisa, String formaPesquisa) {
+        
+        String resposta = "";
         ArrayList<Patrimonio> patrimonios = new ArrayList<>();
         
-        patrimonios = PatrimonioAccessService.getPatrimoniosByNome(name);
-        
-        return stringfy(patrimonios);
-        
-    }
-    
-    /**
-     * Calcula e aplica a desvalorização de acordo com a Data
-     * @param id
-     * @return valor atual (dia do acesso)
-     * @author Simonetti
-     */
-    public static Double desvalorizaPatrimonio(String id){
-        
-        // Instancia do patrimÃ´nio, desvalorizaÃ§Ã£o e Valor de compra
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-
-        Double indiceDepreciacaoAnual = patrimonio.getIndiceDepreciacao()/100;
-
-        Double valorCompra = patrimonio.getValorCompra();
- 	
-	// Calculo da diferenÃ§a de data
-
-        Integer anoCompra = patrimonio.getDataCompra().get(Calendar.YEAR);
-
-        Integer anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-        
-	    Integer diferencaData = anoAtual-anoCompra;
-
-        Double valorAtual = valorCompra - ((diferencaData * indiceDepreciacaoAnual)
-                * valorCompra);
-        
-        if(valorAtual <= 0)
+        switch (tipoPesquisa) {
             
-            return 0.1*valorCompra;
-            
-            else
-                
-                return valorAtual;
-    }
-    
-    /*public static Double depreciacaoAcelerada(String id){
-        PatrimonioAccessService.getPatrimonioById(id);
-        
-    }*/
-    
-    /**
-     * Vende um patrimonio
-     * @param id
-     * @return true ou false dependendo se o patrimonio já estiver vendido
-     * @author Simonetti
-     */
-    public static boolean vendaPatrimonio(String id){
-        //InstÃ¢ncia do objeto patrimÃ´nio a partir da sua Id
-        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-        //VerificaÃ§Ã£o 
-        if(patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
-            return false;
-            else {
-                Calendar dataBaixa = Calendar.getInstance();
-                
-                patrimonio.setStatus("VENDIDO");
-                
-                patrimonio.setDataBaixa(dataBaixa);
-                
-                PatrimonioAccessService.update(patrimonio);
-                
-                return true;          
+            case "id":
+                patrimonios.add(PatrimonioAccessService.
+                        getPatrimonioById(formaPesquisa));
+
+                if (patrimonios.isEmpty())
+                    resposta += JSON.stringify(patrimonios);
+                else
+                    resposta = "N";
+                break;
+
+            case "nome":
+                patrimonios = PatrimonioAccessService.
+                        getPatrimoniosByNome(formaPesquisa);
+
+                if (patrimonios.isEmpty())
+                    resposta += JSON.stringify(patrimonios);
+                else
+                    resposta = "N";
+                break;
+
+            default:
+                throw new IllegalArgumentException("Parametro 's' possui um valor inválido.");
         }
-    }
-    
-    /**
-     * Compra um patrimonio
-     * @param nome
-     * @param tipo
-     * @param finalidade
-     * @param indiceDepreciacao
-     * @param valorCompra
-     * @param dataCompra
-     * @author Simonetti
-     */
-    public static void compraPatrimonio( String nome, PatrimonioTipoEnum tipo, 
-            String finalidade,Double indiceDepreciacao, Double valorCompra,
-            Calendar dataCompra){
-        
-        Patrimonio novoPatrimonio = new Patrimonio();
-        
-        novoPatrimonio.setNome(nome);
-        
-        novoPatrimonio.setTipo(tipo);
-        
-        novoPatrimonio.setFinalidade(finalidade);
-        
-        novoPatrimonio.setStatus("EM_POSSE");
-        
-        novoPatrimonio.setIndiceDepreciacao(indiceDepreciacao);
-        
-        novoPatrimonio.setValorCompra(valorCompra);
-        
-        novoPatrimonio.setDataCompra(dataCompra);
-                
-        PatrimonioAccessService.insert(novoPatrimonio);      
-
+        return resposta;
     }
 
-    
     /**
-     * Recebe um patrimonio que estava fora da fazenda
-     * @param id
-     * @return true ou false dependendo se for alugado corretamente
-     * @author Simonetti
+     * Retorna todos os Patrimônios registrados no DB.
+     * 
+     * @return response
+     * @author Samuel Simonetti
      */
-    public static boolean recebePatrimonio(String id){
-       Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
-       if(patrimonio.getStatus() == PatrimonioStatusEnum.EM_POSSE || 
-               patrimonio.getStatus() == PatrimonioStatusEnum.VENDIDO)
-            return false;
-            else{
-                patrimonio.setStatus("EM_POSSE");
-                patrimonio.setDataRetorno(Calendar.getInstance());
-                //patrimonio.setDataSaida(null);
-                PatrimonioAccessService.update(patrimonio);
-                return true;
-       }
-       
-    }
-    
-    public static Calendar dataParse(String data){
-        String[] dataSplited;
-        dataSplited = data.split("-");
-        Calendar dataParsed = Calendar.getInstance();
-        dataParsed.set(Calendar.YEAR, Integer.parseInt(dataSplited[0]));
-        dataParsed.set(Calendar.MONTH, Integer.parseInt(dataSplited[1])-1);
-        dataParsed.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dataSplited[2]));
+    public static String retornaTodosPatrimonio() {
         
-        return dataParsed;
+        String resposta = "";
+        ArrayList<Patrimonio> patrimonios;
+        
+        patrimonios = PatrimonioAccessService.getAll();
+        if (patrimonios != null) 
+            resposta = JSON.stringify(patrimonios);
+        
+        return resposta;
     }
-    
+
     /**
-     * Concatenates values from objects Patrimonio into a new String
-     * @param patrimonios
-     * @return String with all values from Patrimonio Objects.
-     */
-    @Deprecated
-    public static String stringfy(ArrayList<Patrimonio> patrimonios){
-        
-        String output = new String();
-        
-        for (Patrimonio patrimonio : patrimonios) {
-            
-            output += stringfy(patrimonio) + OBJECT_SEPARATOR;
-        }
-        
-        return output;
-    }
-    
-    /**
-     * Concatenates values from a object Patrimonio into a new String
+     * Atualiza um Patrimônio já existente no DB.
+     * 
      * @param patrimonio
-     * @return String with all values from a Patrimonio Object.
+     * @return response
+     * @author Samuel Simonetti
      */
-    @Deprecated
-    public static String stringfy(Patrimonio patrimonio){
+    public static String atualizaPatrimonio(Patrimonio patrimonio) {
         
-        String output = new String();
+        String resposta = "";
         
-        output += patrimonio.getId().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getNome() + FIELD_SEPARATOR;
-        output += patrimonio.getTipo() + FIELD_SEPARATOR;
-        output += patrimonio.getFinalidade() + FIELD_SEPARATOR;
-        output += patrimonio.getStatus().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getIndiceDepreciacao().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getValorCompra().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataCompra().getTime().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataSaida().getTime().toString() + FIELD_SEPARATOR;
-        output += patrimonio.getDataBaixa().getTime().toString();
-        
-        return output;
+        if (patrimonio != null) {
+            if (PatrimonioAccessService.update(patrimonio))
+                resposta = "S";
+            else
+                resposta = "N";
+        } else
+            resposta = "F";
+        return resposta;
     }
-    
+
+    /**
+     * Remove um Patrimônio do DB.
+     * 
+     * @param id
+     * @return response code
+     * @author Samuel Simonetti
+     */
+    public static String deletaPatrimonio(String id) {
+        
+        String resposta = "";
+        Patrimonio patrimonio = PatrimonioAccessService.getPatrimonioById(id);
+        
+        if (patrimonio != null) {
+            if (PatrimonioAccessService.delete(patrimonio))
+                resposta = "S";
+            else
+                resposta = "N";
+        } else
+            resposta = "F";
+        return resposta;
+    }
 }

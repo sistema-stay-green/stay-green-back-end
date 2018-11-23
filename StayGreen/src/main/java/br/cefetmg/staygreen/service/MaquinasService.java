@@ -22,7 +22,14 @@ import java.util.Calendar;
  */
 
 public class MaquinasService {
-
+    
+    
+    private static int diasEntre(Calendar dataInicio, Calendar dataFinal){
+        long end = dataFinal.getTimeInMillis();
+        long start = dataInicio.getTimeInMillis();
+        return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
+    }
+    
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -34,7 +41,6 @@ public class MaquinasService {
      */
     public static String Cadastrar(Patrimonio maquina, int quantidade, 
             Calendar dataCompra){
-        
         try{
             maquina.setStatus("EM_POSSE");
             maquina.setDataCompra(dataCompra);
@@ -62,26 +68,21 @@ public class MaquinasService {
      * @return 
      */
     public static String Venda(Patrimonio maquina, Calendar dataBaixa){
-        if(maquina.getStatus() == PatrimonioStatusEnum.VENDIDO){
-            return "Maquina já vendida";
-        }
-        else {
             try{
+                maquina.setDataBaixa(dataBaixa);
+                maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
+                PatrimonioAccessService.update(maquina);
                 Transacao venda = new Transacao(null,
                         maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
                         getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
                 TransacaoAccessService.insert(venda);
-                maquina.setDataBaixa(dataBaixa);
-                maquina.setStatus("VENDIDO");
-                PatrimonioAccessService.update(maquina);
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
                 return "ERRO: "+ex;
             }
-        }
     }
     
     /**
@@ -91,36 +92,40 @@ public class MaquinasService {
      * @param maquina
      * @param request
      * @param dataSaida
+     * @param dataRetorno
      * @return 
      */
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
-            Calendar dataSaida){
-        if(maquina.getStatus() == PatrimonioStatusEnum.ALUGADO){
-            return "Maquina já foi alugada";
-        }
-        else {
-            try{
-                Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
-                        Double.parseDouble(request.
-                        getParameter("valorAluguel")), Integer.parseInt(request.
-                        getParameter("periodoAluguel")), dataSaida);
-                maquina.setDataSaida(dataSaida);
-                maquina.setStatus("ALUGADO");
-                AluguelAccessService.insert(aluguel);
-                PatrimonioAccessService.update(maquina);
-                ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-                
-                if(lastId.next()){
-                    maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
-                }
-                return JSON.stringify(maquina);
-            }
-            catch(Exception ex){
-                return "ERRO: "+ex;
-            }
+        Calendar dataSaida, Calendar dataRetorno){
+        try{
             
+            // Exemplo de como pegar a maquina antiga e editar a dataCompra dela
+            Patrimonio maquinaAntiga = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
+            maquina.setDataCompra(maquinaAntiga.getDataCompra());
+            // Fim do exemplo
+            maquina.setDataSaida(dataSaida);
+            maquina.setDataRetorno(dataRetorno);
+            maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
+            
+            PatrimonioAccessService.update(maquina);
+            Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
+                    Double.parseDouble(request.getParameter("valorAluguel")),
+                    TransacaoEAluguelService.diasEntre(dataSaida,dataRetorno),
+                    dataSaida);
+            AluguelAccessService.insert(aluguel);
+            ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
+
+            if(lastId.next()){
+                maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
+            }
+            return JSON.stringify(maquina);
+        }
+        catch(Exception ex){
+            return "ERRO: "+ex;
         }
     }
+    
 
     /**
      * Usado ao descartar uma maquina. 
@@ -128,19 +133,19 @@ public class MaquinasService {
      * @param maquina
      * @return 
      */
-    public static String Descarte(Patrimonio maquina){
-        if(maquina.getStatus() == PatrimonioStatusEnum.DESCARTADO){
-            return "Maquina já foi descartada";
-        }
-        else {
+    public static String Descarte(Patrimonio maquina, Calendar dataBaixa){
+            
             try{
-                PatrimonioAccessService.delete(maquina);
+                maquina.setStatus(PatrimonioStatusEnum.DESCARTADO);
+                maquina.setDataBaixa(dataBaixa);
+                maquina.setDataSaida((Calendar) null);
+                maquina.setDataRetorno((Calendar) null);
+                PatrimonioAccessService.update(maquina);
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
                 return "ERRO: "+ex;
             }
-        }
     }
     
     /**
@@ -151,59 +156,23 @@ public class MaquinasService {
      * @return 
      */
     public static String Manuntenir(Patrimonio maquina, Calendar dataRetorno){
-        if(maquina.getStatus() == PatrimonioStatusEnum.EM_MANUTENCAO){
-            return "Maquina já está em manutenção";
-        }
-        else {
             try{
                 maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
                 maquina.setDataRetorno(dataRetorno);
+                PatrimonioAccessService.update(maquina);
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
                 return "ERRO: "+ex;
             }
         }
-    }
     /**
      * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
      * @param maquina
-     * @param maquinaAtualizada
      * @return 
      */
-    public static String Editar(Patrimonio maquina, Patrimonio maquinaAtualizada){
-       
+    public static String Editar(Patrimonio maquina){
         try{
-            if(maquinaAtualizada.getDataBaixa()!=null){
-                maquina.setDataBaixa(maquinaAtualizada.getDataBaixa());
-            }
-            if(maquinaAtualizada.getDataCompra()!=null){
-                maquina.setDataCompra(maquinaAtualizada.getDataCompra());
-            }
-            if(maquinaAtualizada.getDataSaida()!=null){
-                maquina.setDataSaida(maquinaAtualizada.getDataSaida());
-            }
-            if(maquinaAtualizada.getDataRetorno()!=null){
-                maquina.setDataRetorno(maquinaAtualizada.getDataRetorno());
-            }
-            if(maquinaAtualizada.getFinalidade()!=null){
-                maquina.setFinalidade(maquinaAtualizada.getFinalidade());
-            }
-            if(maquinaAtualizada.getNome()!=null){
-                maquina.setNome(maquinaAtualizada.getNome());
-            }
-            if(maquinaAtualizada.getIndiceDepreciacao()!=null){
-                maquina.setIndiceDepreciacao(maquinaAtualizada.getIndiceDepreciacao());
-            }
-            if(maquinaAtualizada.getValorCompra()!=null){
-                maquina.setValorCompra(maquinaAtualizada.getValorCompra());
-            }
-            if(maquinaAtualizada.getTipo()!=null){
-                maquina.setTipo(maquinaAtualizada.getTipo());
-            }
-            if(maquinaAtualizada.getStatus()!=null){
-                maquina.setStatus((PatrimonioStatusEnum) maquinaAtualizada.getStatus());
-            }
             PatrimonioAccessService.update(maquina);
             return JSON.stringify(maquina);
         }

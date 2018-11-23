@@ -11,11 +11,11 @@ package br.cefetmg.staygreen.table;
  * @version 1.0
  */
 public enum TarefaTipoEnum {
-    ADUBAÇÃO,
-    IRRIGAÇÃO,
+    ADUBACAO,
+    IRRIGACAO,
     ARAR,
-    MAQUINÁRIO,
+    MAQUINARIO,
     COLHEITA, 
-    PECUÁRIA,
+    PECUARIA,
     OUTRAS
 }
