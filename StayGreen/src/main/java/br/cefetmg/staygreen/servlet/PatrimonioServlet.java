@@ -39,7 +39,6 @@ public class PatrimonioServlet extends HttpServlet {
         
         try(PrintWriter out = response.getWriter()) {
             
-            response.setContentType("text/html;charset=UTF-8");
             String resposta = "";
         
             switch(request.getParameter("action")){
