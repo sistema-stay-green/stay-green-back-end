@@ -12,6 +12,7 @@ import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
@@ -64,6 +65,8 @@ public class MaquinasService {
             try{
                 maquina.setDataBaixa(dataBaixa);
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
+                maquina.setDataSaida(new Date(0, 0, 0));
+                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
                 maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
@@ -126,8 +129,8 @@ public class MaquinasService {
             try{
                 maquina.setStatus(PatrimonioStatusEnum.DESCARTADO);
                 maquina.setDataBaixa(dataBaixa);
-                maquina.setDataSaida((Calendar) null);
-                maquina.setDataRetorno((Calendar) null);
+                maquina.setDataSaida(new Date(0, 0, 0));
+                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
                 maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
