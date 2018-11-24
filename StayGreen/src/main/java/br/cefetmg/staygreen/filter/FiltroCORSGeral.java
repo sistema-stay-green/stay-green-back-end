@@ -30,6 +30,8 @@ public class FiltroCORSGeral implements Filter {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type");
         response.addHeader("Access-Control-Max-Age", "86400");
+        response.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("utf-8");
         chain.doFilter(req, res);
     }
 

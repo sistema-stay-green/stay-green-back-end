@@ -36,6 +36,7 @@ public class DadosVendasServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 
         // Dados do comprador

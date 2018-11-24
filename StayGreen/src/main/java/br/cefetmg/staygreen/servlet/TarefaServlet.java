@@ -40,7 +40,6 @@ public class TarefaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
         ArrayList<Tarefa> tarefas = TarefaAccessService.getAll();
         String resultado = "";
         resultado += JSON.stringify(tarefas);

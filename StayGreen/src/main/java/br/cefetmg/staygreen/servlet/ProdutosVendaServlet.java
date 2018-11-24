@@ -31,7 +31,6 @@ public class ProdutosVendaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         // Configura o tipo de resposta como JSON
-        response.setContentType("application/json;charset=UTF-8");
         
         List<Produto> produtos = (List<Produto>) SQL.getRegistros(Produto.class);
         String resultado = JSON.stringify(produtos);

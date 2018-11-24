@@ -51,7 +51,6 @@ public class VendasEncaminhamentosServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        response.setContentType("application/json;charset=UTF-8");
         
         List<RelatorioEntry> relatorio = new LinkedList();
         

@@ -29,7 +29,6 @@ public class UpdateUsuarioServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         UsuarioService service = new UsuarioService();
         Usuario usuario = service.getUsuarioByEmail(req.getParameter("loginAntigo"));
         

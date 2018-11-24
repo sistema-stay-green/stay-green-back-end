@@ -36,7 +36,7 @@ public class TarefaBDServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        
         String resposta = "";
         Tarefa tarefa = JSON.parse(request.getParameter("tarefa"), Tarefa.class);
         if(tarefa != null) {

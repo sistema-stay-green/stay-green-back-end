@@ -28,7 +28,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+        
         Usuario usuario = new Usuario(
             null,
             req.getParameter("nome"),

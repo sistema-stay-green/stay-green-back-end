@@ -61,7 +61,6 @@ public class ControleProducaoServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("text/html;charset=UTF-8");
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
