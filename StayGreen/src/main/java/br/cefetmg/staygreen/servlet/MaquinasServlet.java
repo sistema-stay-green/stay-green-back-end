@@ -16,9 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.service.PatrimonioAccessService;
-import br.cefetmg.staygreen.service.TransacaoEAluguelService;
+import br.cefetmg.staygreen.service.ControleDeMaquinasUtilService;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Gabriel Cruz
@@ -42,7 +41,7 @@ public class MaquinasServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()){
             
-            Patrimonio maquina = JSON.parse(request.getParameter("maquinasJSON"),
+            Patrimonio maquina =JSON.parse(request.getParameter("maquinasJSON"),
                     Patrimonio.class);
             String resposta = "",
                    stringDataCompra = request.getParameter("dataCompra"),
@@ -53,43 +52,92 @@ public class MaquinasServlet extends HttpServlet {
             int quantidade = Integer.parseInt(stringQuantidade);
                        
             switch(request.getParameter("acao")){
+                /**
+                * O Parametro "acao" será igual ao carcacter 'c' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * compra, candastrando-a
+                */
                 case "c":
-                    resposta = MaquinasService.Cadastrar(maquina, quantidade, 
-                            TransacaoEAluguelService.
+                    System.out.println(ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataCompra));
+                    resposta = MaquinasService.Cadastrar(maquina, quantidade, 
+                            ControleDeMaquinasUtilService.
+                            converteStringToCalendar(stringDataCompra));
+                    System.out.println(resposta);
                     break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'v' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * vende-la
+                */
                 case "v":
-                    resposta = MaquinasService.Venda(maquina,TransacaoEAluguelService.
+                    resposta = MaquinasService.Venda(maquina,
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa));
                     break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'a' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * aluga-la, por valor pré-determinado
+                */
                 case "a":
                     resposta = MaquinasService.Aluguel(maquina, request,
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataSaida),
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'd' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * descarta-la
+                */
                 case "d":
-                    resposta = MaquinasService.Descarte(maquina, TransacaoEAluguelService.
+                    resposta = MaquinasService.Descarte(maquina, 
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataBaixa) );
                     break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'm' caso, a ação 
+                * desejada pelo usuário a ser feita, em uma maquina, seja a de 
+                * manuiteni-la
+                */
                 case "m":
                     resposta = MaquinasService.Manuntenir(maquina,
-                            TransacaoEAluguelService.
+                            ControleDeMaquinasUtilService.
                             converteStringToCalendar(stringDataRetorno));
                     break;
-
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'r' caso, a ação 
+                * desejada pelo usuário a ser feita seja retornar os dados de 
+                * todas as maquinas presentes no Data Base
+                */
                 case "r":      
                     ArrayList<Patrimonio> maquinas =PatrimonioAccessService.
                             get("WHERE tipoPatrimonio = 'MAQUINA'");
                     resposta = JSON.stringify(maquinas);              
                     break;
+                    
+                /**
+                * O Parametro "acao" será igual ao carcacter 'e' caso, a ação 
+                * desejada pelo usuário a ser feita seja editar qualquer um das
+                * suas variáveis de classe
+                */
                 case "e":
-                    maquina.setDataCompra
-                            (TransacaoEAluguelService.
-                            converteStringToCalendar(stringDataCompra)); 
-                    resposta = MaquinasService.Editar(maquina);
+                    resposta = MaquinasService.Editar(maquina,
+                            ControleDeMaquinasUtilService.
+                            converteStringToCalendar(stringDataCompra));
                     break;
+                    
+                /**
+                * Caso o Parametro "acao" for diferente à todos os carcacteres 
+                * anteriores, acusará que a opção selecionada está equivocada
+                */
                 default: 
                     throw new IllegalArgumentException("Opção Invalida");
             }

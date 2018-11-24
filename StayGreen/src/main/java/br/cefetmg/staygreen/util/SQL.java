@@ -117,6 +117,7 @@ public final class SQL {
     public static boolean update(Object objeto) throws NotTableException {
         
         Map<String, String> campos = getCampos(objeto, false);
+        System.out.println(campos);
         String nomeId = getNomeId(objeto.getClass());
         String id = campos.remove(String.format("`%s`", nomeId));
         

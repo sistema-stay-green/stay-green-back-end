@@ -12,10 +12,10 @@ import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.table.Patrimonio;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
+import java.sql.Date;
 import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Gabriel Cruz
@@ -24,12 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MaquinasService {
     
-    
-    public static int diasEntre(Calendar dataInicio, Calendar dataFinal){
-        long end = dataFinal.getTimeInMillis();
-        long start = dataInicio.getTimeInMillis();
-        return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
-    }
     /**
      * Usado ao comprar uma maquina. 
      * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
@@ -37,7 +31,7 @@ public class MaquinasService {
      * @param maquina
      * @param quantidade
      * @param dataCompra
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Cadastrar(Patrimonio maquina, int quantidade, 
             Calendar dataCompra){
@@ -46,11 +40,11 @@ public class MaquinasService {
             maquina.setDataCompra(dataCompra);
             PatrimonioAccessService.insert(maquina);
             maquina.setId(SQL.getLastInsertId());
-            Transacao compra = new Transacao(null,
-                    maquina.getId().longValue(),TransacaoEAluguelService.
-                    calculaValorAtual(dataCompra,maquina.
-                    getIndiceDepreciacao(),maquina.getValorCompra()),quantidade, 
-                    dataCompra,TipoTransacaoEnum.MAQUINA);
+            Transacao compra = new Transacao(null, maquina.getId().longValue(),
+                    ((-1)*ControleDeMaquinasUtilService.
+                    calculaValorAtual(dataCompra,maquina.getIndiceDepreciacao(),
+                    maquina.getValorCompra())),quantidade, dataCompra,
+                    TipoTransacaoEnum.MAQUINA);
             TransacaoAccessService.insert(compra);
             return JSON.stringify(maquina);
         }
@@ -65,15 +59,19 @@ public class MaquinasService {
      * tabela transação
      * @param maquina
      * @param dataBaixa
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Venda(Patrimonio maquina, Calendar dataBaixa){
             try{
                 maquina.setDataBaixa(dataBaixa);
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
+                maquina.setDataSaida(new Date(0, 0, 0));
+                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 Transacao venda = new Transacao(null,
-                        maquina.getId().longValue(),TransacaoEAluguelService.
+                        maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
                         getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
@@ -93,25 +91,25 @@ public class MaquinasService {
      * @param request
      * @param dataSaida
      * @param dataRetorno
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
         try{
+            
+            maquina.getDataCompra();
             maquina.setDataSaida(dataSaida);
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
+            
             PatrimonioAccessService.update(maquina);
+            maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
             Aluguel aluguel = new Aluguel(null, maquina.getId().longValue(),
-                    Double.parseDouble(request.
-                    getParameter("valorAluguel")),
-                    diasEntre(dataSaida, dataRetorno), dataSaida);
+                    Double.parseDouble(request.getParameter("valorAluguel")),
+                    ControleDeMaquinasUtilService.diasEntre(dataSaida,dataRetorno),
+                    dataSaida);
             AluguelAccessService.insert(aluguel);
-            ResultSet lastId = SQL.query("SELECT LAST_INSERT_ID()");
-
-            if(lastId.next()){
-                maquina.setId(lastId.getInt("LAST_INSERT_ID()"));
-            }
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
@@ -124,16 +122,18 @@ public class MaquinasService {
      * Usado ao descartar uma maquina. 
      * Muda o Estado da maquina para DESCARTADO
      * @param maquina
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Descarte(Patrimonio maquina, Calendar dataBaixa){
             
             try{
                 maquina.setStatus(PatrimonioStatusEnum.DESCARTADO);
                 maquina.setDataBaixa(dataBaixa);
-                maquina.setDataSaida((Calendar) null);
-                maquina.setDataRetorno((Calendar) null);
+                maquina.setDataSaida(new Date(0, 0, 0));
+                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -146,13 +146,15 @@ public class MaquinasService {
      * Muda o Estado da maquina para EM_MANUTENCAO
      * @param maquina
      * @param dataRetorno
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Manuntenir(Patrimonio maquina, Calendar dataRetorno){
             try{
                 maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
                 maquina.setDataRetorno(dataRetorno);
                 PatrimonioAccessService.update(maquina);
+                maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
                 return JSON.stringify(maquina);
             }
             catch(Exception ex){
@@ -162,12 +164,14 @@ public class MaquinasService {
     /**
      * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
      * @param maquina
-     * @param maquinaAtualizada
-     * @return 
+     * @return o stringfy da maquina, para que o front-end possa utilizar
      */
-    public static String Editar(Patrimonio maquina){
+    public static String Editar(Patrimonio maquina, Calendar dataCompra){
         try{
+            maquina.setDataCompra(dataCompra);
             PatrimonioAccessService.update(maquina);
+            maquina = PatrimonioAccessService.getPatrimonioById
+                (Integer.toString(maquina.getId()));
             return JSON.stringify(maquina);
         }
         catch(Exception ex){
