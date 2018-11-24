@@ -5,6 +5,7 @@
  */
 package br.cefetmg.staygreen.service;
 
+import br.cefetmg.staygreen.table.NomeProdutoEnum;
 import br.cefetmg.staygreen.table.Tarefa;
 import br.cefetmg.staygreen.table.TarefaTipoEnum;
 import br.cefetmg.staygreen.util.Data;
@@ -35,6 +36,7 @@ public class TarefaAccessService {
     private static final String QUANT_PRODUZ_COLUMN;
     private static final String INSUMOS_COLUMN;
     private static final String QUANT_INSUMOS_COLUMN;
+    private static final String PRODUTO_PRODUZIDO_COLUMN;
     
     //Inicialização das constantes
     static{
@@ -48,6 +50,7 @@ public class TarefaAccessService {
         QUANT_PRODUZ_COLUMN = "quantProduzTarefa";
         INSUMOS_COLUMN = "insumosTarefa";
         QUANT_INSUMOS_COLUMN = "quantInsumosTarefa";
+        PRODUTO_PRODUZIDO_COLUMN = "produtoProduzido";
     }
     
     /**
@@ -151,6 +154,8 @@ public class TarefaAccessService {
                     tarefa.setInsumosTarefa(result.getString(INSUMOS_COLUMN));
                     tarefa.setQuantInsumosTarefa(result
                             .getInt(QUANT_INSUMOS_COLUMN));
+                    tarefa.setProdutoProduzido(NomeProdutoEnum.converter(
+                            result.getString(PRODUTO_PRODUZIDO_COLUMN)));
                     
                     tarefas.add(tarefa);
                     

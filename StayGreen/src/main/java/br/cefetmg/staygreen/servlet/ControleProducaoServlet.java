@@ -172,7 +172,7 @@ public class ControleProducaoServlet extends HttpServlet {
                 resposta = RelatoriosControleProducaoService.relatorio1(request.getParameter("id"));
                 break;
             case "relatorio2":
-                resposta = RelatoriosControleProducaoService.relatorio2(request.getParameter("id"));
+                resposta = RelatoriosControleProducaoService.relatorio2().toString();
                 break;
             default:
         }

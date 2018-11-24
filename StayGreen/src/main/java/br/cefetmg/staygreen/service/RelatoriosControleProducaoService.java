@@ -5,11 +5,14 @@
  */
 package br.cefetmg.staygreen.service;
 
+import br.cefetmg.staygreen.table.NomeProdutoEnum;
+import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.table.Tarefa;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -58,60 +61,80 @@ public class RelatoriosControleProducaoService {
         return JSON.stringify(transacaos);
     }
 
-    /**
-     *
-     * @param id
-     * @return
-     */
-    public static String relatorio2(String id) {
+    public static ArrayList<String> relatorio2() {
+        ArrayList<Tarefa> tarefas = TarefaAccessService.getAll();
+        ArrayList<Integer> producaoIndividual = new ArrayList(4);
+        producaoIndividual.add(0, 0);
+        producaoIndividual.add(1, 0);
+        producaoIndividual.add(2, 0);
+        producaoIndividual.add(3, 0);
+        for (int i = 0; i < tarefas.size(); i++) {
+            switch (tarefas.get(i).getProdutoProduzido()) {
+                case LEITE:
+                    producaoIndividual.set(0, producaoIndividual.get(0) + relatorio2Check(tarefas.get(i)));
+                    break;
+                case CAFE_ROBUSTA:
+                    producaoIndividual.set(1, producaoIndividual.get(1) + relatorio2Check(tarefas.get(i)));
+                    break;
+                case CAFE_BOURBON:
+                    producaoIndividual.set(2, producaoIndividual.get(2) + relatorio2Check(tarefas.get(i)));
+                    break;
+                case CAFE_ARABICA:
+                    producaoIndividual.set(3, producaoIndividual.get(3) + relatorio2Check(tarefas.get(i)));
+                    break;
+                default:
+            }
+        }
+        ArrayList<String> producaoTotal = new ArrayList();
+        producaoTotal.add(String.valueOf(producaoIndividual.get(0)));
+        producaoTotal.add(String.valueOf(producaoIndividual.get(1)));
+        producaoTotal.add(String.valueOf(producaoIndividual.get(2)));
+        producaoTotal.add(String.valueOf(producaoIndividual.get(3)));
+
+        
+        return producaoTotal;
+    }
+
+    public static Integer relatorio2Check(Tarefa tarefa) {
         int diaAtual = Calendar.getInstance().get(Calendar.DATE);
         int mesAtual = Calendar.getInstance().get(Calendar.MONTH);
         int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
         int diaTarefa;
         int mesTarefa;
         int anoTarefa;
-        ArrayList<Integer> resultados = new ArrayList();
-        ArrayList<Tarefa> tarefas = TarefaAccessService.get("SELECT * FROM `tarefa`");
-        for (int i = 0; i < tarefas.size(); i++) {
-            diaTarefa = tarefas.get(i).getDataInicialTarefa().get(Calendar.DATE);
-            mesTarefa = tarefas.get(i).getDataInicialTarefa().get(Calendar.MONTH);
-            anoTarefa = tarefas.get(i).getDataInicialTarefa().get(Calendar.YEAR);
-            if (diaAtual >= diaTarefa && mesAtual >= mesTarefa && anoAtual >= anoTarefa) {
-                if ((diaAtual - 7) <= diaTarefa) {
-                    switch (tarefas.get(i).getPeriodRepetTarefa()) {
-                        case 1:
-                            resultados.add((diaAtual - diaTarefa) * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 2:
-                            resultados.add((diaAtual - diaTarefa) / 2 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 3:
-                            resultados.add((diaAtual - diaTarefa) / 3 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 4:
-                            resultados.add((diaAtual - diaTarefa) / 4 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 5:
-                            resultados.add((diaAtual - diaTarefa) / 5 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 6:
-                            resultados.add((diaAtual - diaTarefa) / 6 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        case 7:
-                            resultados.add((diaAtual - diaTarefa) / 7 * tarefas.get(i).getQuantProduzTarefa());
-                            break;
-                        default:
-                    }
+        int resultado = 0;
+        diaTarefa = tarefa.getDataInicialTarefa().get(Calendar.DATE);
+        mesTarefa = tarefa.getDataInicialTarefa().get(Calendar.MONTH);
+        anoTarefa = tarefa.getDataInicialTarefa().get(Calendar.YEAR);
+        if (diaAtual >= diaTarefa && mesAtual >= mesTarefa && anoAtual >= anoTarefa) {
+            if ((diaAtual - 7) <= diaTarefa) {
+                switch (tarefa.getPeriodRepetTarefa()) {
+                    case 1:
+                        resultado = (diaAtual - diaTarefa) * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 2:
+                        resultado = (diaAtual - diaTarefa) / 2 * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 3:
+                        resultado = (diaAtual - diaTarefa) / 3 * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 4:
+                        resultado = (diaAtual - diaTarefa) / 4 * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 5:
+                        resultado = (diaAtual - diaTarefa) / 5 * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 6:
+                        resultado = (diaAtual - diaTarefa) / 6 * tarefa.getQuantProduzTarefa();
+                        break;
+                    case 7:
+                        resultado = (diaAtual - diaTarefa) / 7 * tarefa.getQuantProduzTarefa();
+                        break;
+                    default:
                 }
             }
         }
-        int aux = 0;
-        for(int i = 0; i < resultados.size(); i++){
-            aux += resultados.get(i);
-        }
-        System.out.println(resultados.toString());
-
-        return String.valueOf(aux);
+        return resultado;
     }
 
 }

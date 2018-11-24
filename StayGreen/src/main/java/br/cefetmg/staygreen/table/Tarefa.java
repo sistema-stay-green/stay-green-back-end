@@ -32,6 +32,9 @@ public class Tarefa {
     private Integer quantProduzTarefa;
     private String insumosTarefa;
     private Integer quantInsumosTarefa;
+    private NomeProdutoEnum produtoProduzido;
+
+   
     
     //Constructors
     
@@ -61,23 +64,30 @@ public class Tarefa {
     }
 
     /**
-     * Cria uma tarefa com todos as colunas preenchidas.
-     * @param idTarefa Id da tarefa
-     * @param nomeTarefa Nome da tarefa
-     * @param descrTarefa descrição da tarefa
-     * @param tipoTarefa O tipo da tarefa
-     * @param dataInicialTarefa Objeto Calendar com a data marcada para a tarefa
-     * @param periodRepetTarefa Número de repetições da tarefa
-     * @param gastoTarefa Gasto da tarefa
+     *
+     * @param idTarefa
+     * @param nomeTarefa
+     * @param descrTarefa
+     * @param tipoTarefa
+     * @param dataInicialTarefa
+     * @param periodRepetTarefa
+     * @param gastoTarefa
      * @param quantProduzTarefa
      * @param insumosTarefa
      * @param quantInsumosTarefa
+     * @param produtoProduzido
      */
-    public Tarefa(Long idTarefa, String nomeTarefa, String descrTarefa, 
-            TarefaTipoEnum tipoTarefa, Calendar dataInicialTarefa, 
-            Integer periodRepetTarefa, Double gastoTarefa, 
-            Integer quantProduzTarefa, String insumosTarefa, 
-            Integer quantInsumosTarefa) {
+    public Tarefa(Long idTarefa,
+            String nomeTarefa,
+            String descrTarefa,
+            TarefaTipoEnum tipoTarefa,
+            Calendar dataInicialTarefa,
+            Integer periodRepetTarefa,
+            Double gastoTarefa,
+            Integer quantProduzTarefa,
+            String insumosTarefa,
+            Integer quantInsumosTarefa,
+            NomeProdutoEnum produtoProduzido) {
         this.idTarefa = idTarefa;
         this.nomeTarefa = nomeTarefa;
         this.descrTarefa = descrTarefa;
@@ -88,24 +98,27 @@ public class Tarefa {
         this.quantProduzTarefa = quantProduzTarefa;
         this.insumosTarefa = insumosTarefa;
         this.quantInsumosTarefa = quantInsumosTarefa;
+        this.produtoProduzido = produtoProduzido;
     }
+
     
-    /**
-     * Cria uma tarefa com dados de um ResultSet
-     * @param tarefa ResultSet com os dados
-     * @throws SQLException 
-     */
-    public Tarefa(ResultSet tarefa) throws SQLException {
-        this(tarefa.getLong("idTarefa"), tarefa.getString("nomeTarefa"), 
-                tarefa.getString("descrTarefa"), TarefaTipoEnum.valueOf(tarefa
-                        .getString("tipoTarefa")),
-                dateToCalendar(tarefa.getDate("dataInicialTarefa")), 
-                tarefa.getInt("periodRepetTarefa"), 
-                tarefa.getDouble("gastotarefa"), 
-                tarefa.getInt("quantProduzTarefa"), 
-                tarefa.getString("insumosTarefa"), 
-                tarefa.getInt("quantInsumosTarefa"));
-    }
+    
+//    /**
+//     * Cria uma tarefa com dados de um ResultSet
+//     * @param tarefa ResultSet com os dados
+//     * @throws SQLException 
+//     */
+//    public Tarefa(ResultSet tarefa) throws SQLException {
+//        this(tarefa.getLong("idTarefa"), tarefa.getString("nomeTarefa"), 
+//                tarefa.getString("descrTarefa"), TarefaTipoEnum.valueOf(tarefa
+//                        .getString("tipoTarefa")),
+//                dateToCalendar(tarefa.getDate("dataInicialTarefa")), 
+//                tarefa.getInt("periodRepetTarefa"), 
+//                tarefa.getDouble("gastotarefa"), 
+//                tarefa.getInt("quantProduzTarefa"), 
+//                tarefa.getString("insumosTarefa"), 
+//                tarefa.getInt("quantInsumosTarefa"));
+//    } 
     
     //Getter e Setter
 
@@ -197,6 +210,19 @@ public class Tarefa {
 
     public void setQuantInsumosTarefa(Integer quantInsumosTarefa) {
         this.quantInsumosTarefa = quantInsumosTarefa;
+    }
+    
+     public NomeProdutoEnum getProdutoProduzido() {
+        return produtoProduzido;
+    }
+
+    public void setProdutoProduzido(NomeProdutoEnum produtoProduzido) {
+        this.produtoProduzido = produtoProduzido;
+    }
+
+    @Override
+    public String toString() {
+        return "Tarefa{" + "idTarefa=" + idTarefa + ", nomeTarefa=" + nomeTarefa + ", descrTarefa=" + descrTarefa + ", tipoTarefa=" + tipoTarefa + ", dataInicialTarefa=" + dataInicialTarefa + ", periodRepetTarefa=" + periodRepetTarefa + ", gastoTarefa=" + gastoTarefa + ", quantProduzTarefa=" + quantProduzTarefa + ", insumosTarefa=" + insumosTarefa + ", quantInsumosTarefa=" + quantInsumosTarefa + ", produtoProduzido=" + produtoProduzido + '}';
     }
 
     
