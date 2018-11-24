@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `Aluguel` (
     `idAluguel` BigInt(20) NOT NULL AUTO_INCREMENT,
     `idMaquina` BigInt(20) DEFAULT NULL,
     `valorAluguel` Double DEFAULT NULL,
-    `periodoAluguel` BigInt DEFAULT NULL,
+    `periodoAluguel` Int DEFAULT NULL,
     `dataInicialAluguel` Date DEFAULT NULL,
     PRIMARY KEY (`idAluguel`)
 )
@@ -42,7 +42,7 @@ CREATE TABLE `EstoqueProdutos`
 (
   `idEstoque` BigInt NOT NULL AUTO_INCREMENT,
   `idProduto` BigInt NOT NULL,
-  `quantProduzidaEstoque` BigInt NOT NULL,
+  `quantProduzidaEstoque` Int NOT NULL,
   `dataProducaoEstoque` Date NOT NULL,
   PRIMARY KEY (`idEstoque`)
 )
@@ -57,8 +57,8 @@ CREATE TABLE `Insumo`
   `nomeInsumo` Varchar(40) NOT NULL,
   `finalidadeInsumo` Varchar(120) NOT NULL,
   `valorCompraInsumo` Double NOT NULL,
-  `quantEstoqueInsumo` BigInt NOT NULL,
-  `pontoAvisoInsumo` BigInt NOT NULL,
+  `quantEstoqueInsumo` Int NOT NULL,
+  `pontoAvisoInsumo` Int NOT NULL,
   PRIMARY KEY (`idInsumo`)
 )
 CHARSET = utf8;
@@ -92,8 +92,8 @@ CREATE TABLE `Produto`
   `nomeProduto` Enum('LEITE', 'CAFE_BOURBON', 'CAFE_ROBUSTA', 'CAFE_ARABICA') NOT NULL,
   `descrProduto` Varchar(120) NOT NULL,
   `valorUnitProduto` Double NOT NULL,
-  `quantEstoqueProduto` BigInt NOT NULL,
-  `pontoAvisoProduto` BigInt NOT NULL,
+  `quantEstoqueProduto` Int NOT NULL,
+  `pontoAvisoProduto` Int NOT NULL,
   `fotoMercadoria` Varchar(200) NOT NULL,
   `unidMedProduto` Enum('KG', 'L') NOT NULL,
   PRIMARY KEY (`idProduto`)
@@ -127,7 +127,7 @@ CREATE TABLE `Transacao`
 (
   `idTransacao` BigInt NOT NULL AUTO_INCREMENT,
   `valorTransacao` Double NOT NULL,
-  `quantTransacao` BigInt NOT NULL DEFAULT 1,
+  `quantTransacao` Int NOT NULL DEFAULT 1,
   `dataTransacao` Date NOT NULL,
   `idItemTransacao` BigInt NOT NULL,
   `tipoTransacao` Enum('PATRIMONIO', 'INSUMO', 'PRODUTO', 'MAQUINA') NOT NULL,
@@ -157,10 +157,10 @@ CREATE TABLE `VendaUsuario`
 (
   `idVenda` BigInt NOT NULL AUTO_INCREMENT,
   `idTransacao` BigInt NOT NULL,
-  `freteVenda` Double NOT NULL,
-  `tempoEntregaVenda` BigInt NOT NULL,
   `idComprador` BigInt NOT NULL,
-  `numeroVenda` BigInt NOT NULL,
+  `freteVenda` Double NOT NULL,
+  `tempoEntregaVenda` Int NOT NULL,
+  `numeroVenda` Int NOT NULL,
   PRIMARY KEY (`idVenda`)
 )
 CHARSET = utf8;
