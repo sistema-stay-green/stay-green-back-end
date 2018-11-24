@@ -15,7 +15,7 @@ import br.cefetmg.staygreen.annotation.Id;
  * @version 1.0
  * @see br.cefetmg.staygreen.service.UsuarioService
  */
-@Tabela("Usuario")
+@Tabela("usuario")
 public class Usuario {
     
     @Id
@@ -37,6 +37,8 @@ public class Usuario {
         this.cnpjUsuario = cnpjUsuario;
         this.saldoUsuario = saldoUsuario;
     }
+    
+    public Usuario(){ }
     
     /* Getters e Setters */
 

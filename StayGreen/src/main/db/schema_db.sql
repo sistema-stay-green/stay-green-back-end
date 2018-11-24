@@ -143,7 +143,7 @@ CREATE TABLE `Usuario`
   `idUsuario` BigInt NOT NULL AUTO_INCREMENT,
   `nomeUsuario` Varchar(40) NOT NULL,
   `emailUsuario` Varchar(40) NOT NULL,
-  `senhaUsuario` Varchar(20) NOT NULL,
+  `senhaUsuario` Varchar(128) NOT NULL,
   `cnpjUsuario` Varchar(40) NOT NULL,
   `saldoUsuario` Double NOT NULL,
   PRIMARY KEY (`idUsuario`)

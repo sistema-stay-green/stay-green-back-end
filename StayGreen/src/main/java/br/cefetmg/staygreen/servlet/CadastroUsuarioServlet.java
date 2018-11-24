@@ -32,7 +32,7 @@ public class CadastroUsuarioServlet extends HttpServlet {
         Usuario usuario = new Usuario(
             null,
             req.getParameter("nome"),
-            req.getParameter("email"),
+            req.getParameter("login"),
             IO.criptografar(req.getParameter("senha")),
             req.getParameter("cnpj"),
             Double.parseDouble(req.getParameter("saldo"))

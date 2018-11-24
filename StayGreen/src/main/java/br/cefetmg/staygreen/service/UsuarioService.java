@@ -20,11 +20,14 @@ import java.util.Objects;
  */
 public class UsuarioService {
     
-    public boolean checkPassword(Usuario usuario) {
+    public boolean checkPassword(String email, String senha) {
         
-        Usuario usuarioOriginal = getUsuarioById(usuario.getIdUsuario());
+        Usuario usuarioOriginal = getUsuarioByEmail(email);
         
-        return IO.criptografar(usuario.getSenhaUsuario())
+        if (usuarioOriginal == null)
+            return false; 
+        
+        return IO.criptografar(senha)
                 .equals(usuarioOriginal.getSenhaUsuario());
             
         
@@ -45,6 +48,26 @@ public class UsuarioService {
                 
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+        
+    }
+    
+    public Usuario getUsuarioByEmail(String email) {
+        
+        List<Usuario> usuarios = SQL.getRegistros(Usuario.class);
+        System.out.println(usuarios);
+        
+        try {
+            Usuario[] resultado = usuarios.stream()
+                    .filter(u -> u.getEmailUsuario().equals(email))
+                    .toArray(Usuario[]::new);
+            if (resultado.length != 1)
+                throw new InvalidIdException();
+            else
+                return resultado[0];
+                
+        } catch (Exception ex) {
+            return null;
         }
         
     }
