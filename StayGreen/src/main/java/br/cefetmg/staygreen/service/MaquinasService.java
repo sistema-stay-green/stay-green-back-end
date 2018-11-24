@@ -23,17 +23,17 @@ import java.util.Calendar;
  */
 
 public class MaquinasService {
-    
+
     /**
-     * Usado ao comprar uma maquina. 
-     * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à 
+     * Usado ao comprar uma maquina.
+     * Muda o Estado da maquina para EM_POSSE e adiciona uma nova transação à
      * tabela transação
      * @param maquina
      * @param quantidade
      * @param dataCompra
      * @return o stringfy da maquina, para que o front-end possa utilizar
      */
-    public static String Cadastrar(Patrimonio maquina, int quantidade, 
+    public static String Cadastrar(Patrimonio maquina, int quantidade,
             Calendar dataCompra){
         try{
             maquina.setStatus("EM_POSSE");
@@ -52,10 +52,10 @@ public class MaquinasService {
             return "ERRO: "+ex;
         }
     }
-    
+
     /**
-     * Usado ao vender uma maquina. 
-     * Muda o Estado da maquina para VENDIDO e adiciona uma nova transação à 
+     * Usado ao vender uma maquina.
+     * Muda o Estado da maquina para VENDIDO e adiciona uma nova transação à
      * tabela transação
      * @param maquina
      * @param dataBaixa
@@ -65,15 +65,13 @@ public class MaquinasService {
             try{
                 maquina.setDataBaixa(dataBaixa);
                 maquina.setStatus(PatrimonioStatusEnum.VENDIDO);
-                maquina.setDataSaida(new Date(0, 0, 0));
-                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
                 maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
                 Transacao venda = new Transacao(null,
                         maquina.getId().longValue(),ControleDeMaquinasUtilService.
                         calculaValorAtual(maquina.getDataCompra(),maquina.
-                        getIndiceDepreciacao(), maquina.getValorCompra()), 1, 
+                        getIndiceDepreciacao(), maquina.getValorCompra()), 1,
                         dataBaixa,TipoTransacaoEnum.MAQUINA);
                 TransacaoAccessService.insert(venda);
                 return JSON.stringify(maquina);
@@ -82,10 +80,10 @@ public class MaquinasService {
                 return "ERRO: "+ex;
             }
     }
-    
+
     /**
-     * Usado ao alugar uma maquina. 
-     * Muda o Estado da maquina para ALUGADO e adiciona um novo aluguel à 
+     * Usado ao alugar uma maquina.
+     * Muda o Estado da maquina para ALUGADO e adiciona um novo aluguel à
      * tabela aluguel
      * @param maquina
      * @param request
@@ -96,12 +94,12 @@ public class MaquinasService {
     public static String Aluguel(Patrimonio maquina, HttpServletRequest request,
         Calendar dataSaida, Calendar dataRetorno){
         try{
-            
+
             maquina.getDataCompra();
             maquina.setDataSaida(dataSaida);
             maquina.setDataRetorno(dataRetorno);
             maquina.setStatus(PatrimonioStatusEnum.ALUGADO);
-            
+
             PatrimonioAccessService.update(maquina);
             maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
@@ -116,21 +114,19 @@ public class MaquinasService {
             return "ERRO: "+ex;
         }
     }
-    
+
 
     /**
-     * Usado ao descartar uma maquina. 
+     * Usado ao descartar uma maquina.
      * Muda o Estado da maquina para DESCARTADO
      * @param maquina
      * @return o stringfy da maquina, para que o front-end possa utilizar
      */
     public static String Descarte(Patrimonio maquina, Calendar dataBaixa){
-            
+
             try{
                 maquina.setStatus(PatrimonioStatusEnum.DESCARTADO);
                 maquina.setDataBaixa(dataBaixa);
-                maquina.setDataSaida(new Date(0, 0, 0));
-                maquina.setDataRetorno(new Date(0, 0, 0));
                 PatrimonioAccessService.update(maquina);
                 maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
@@ -140,9 +136,9 @@ public class MaquinasService {
                 return "ERRO: "+ex;
             }
     }
-    
+
     /**
-     * Usado ao manutenir uma maquina. 
+     * Usado ao manutenir uma maquina.
      * Muda o Estado da maquina para EM_MANUTENCAO
      * @param maquina
      * @param dataRetorno
@@ -162,7 +158,7 @@ public class MaquinasService {
             }
         }
     /**
-     * Usado ao atualizar uma maquina de uma forma que não foi descrita acima. 
+     * Usado ao atualizar uma maquina de uma forma que não foi descrita acima.
      * @param maquina
      * @return o stringfy da maquina, para que o front-end possa utilizar
      */
