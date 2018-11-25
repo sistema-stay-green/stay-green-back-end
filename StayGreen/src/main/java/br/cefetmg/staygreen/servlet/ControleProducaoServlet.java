@@ -58,7 +58,6 @@ public class ControleProducaoServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
@@ -70,8 +69,8 @@ public class ControleProducaoServlet extends HttpServlet {
          * Atualizar: Atualizar produto ou insumo no BD. Buscar: Buscar produto
          * ou insumo no BD. BuscarTodos: Buscar todos os produtos ou insumos no
          * BD. Filtro: Buscar produto(s) ou insumo(s) específicos. Relatorio1:
-         * Relatório de histórico de mercadorias/período. Relatorio2:
-         * BUILDING...
+         * Relatório de histórico de mercadorias/período. Relatorio2: Relatório
+         * da produção semanal.
          *
          *
          */
@@ -114,13 +113,15 @@ public class ControleProducaoServlet extends HttpServlet {
                 break;
             case "buscar":
                 if (tipo.equals("produto")) {
-                    Produto produto = ProdutoService.getProdutoPorId(request.getParameter("id"));
+                    Produto produto = ProdutoService.getProdutoPorId(
+                            request.getParameter("id"));
                     if (produto.getIdProduto() != null) {
                         resposta = JSON.stringify(produto);
                         res = true;
                     }
                 } else {
-                    insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
+                    insumo = InsumoService.getInsumoPorId(
+                            request.getParameter("id"));
                     if (insumo.getIdInsumo() != null) {
                         resposta = JSON.stringify(insumo);
                         res = true;
@@ -140,45 +141,72 @@ public class ControleProducaoServlet extends HttpServlet {
                     }
                 }
                 break;
-            case "filtro":               
+            case "filtro":
                 if (tipo.equals("produto")) {
                     switch (request.getParameter("id")) {
-                        case "todosP": 
+                        case "todosP":
                             if (ProdutoService.get("") != null) {
                                 res = true;
                                 resposta = JSON.stringify(ProdutoService.get(""));
                             }
                             break;
                         case "estoqueBaixoP":
-                            if (ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC") != null) {
+                            if (ProdutoService.get(
+                                    "ORDER BY `produto`.`quantEstoqueProduto` "
+                                    + "ASC") != null) {
                                 res = true;
-                                resposta = JSON.stringify(ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC"));
+                                resposta = JSON.stringify(ProdutoService.get(
+                                        "ORDER BY `produto`.`quantEstoqueProduto"
+                                        + "` ASC"));
                             }
                             break;
                         case "foraEstoqueP":
-                            if (ProdutoService.get("WHERE `quantEstoqueProduto` = 0") != null) {
+                            if (ProdutoService.get("WHERE `quantEstoqueProduto`"
+                                    + " = 0") != null) {
                                 res = true;
-                                resposta = JSON.stringify(ProdutoService.get("WHERE `quantEstoqueProduto` = 0"));
+                                resposta = JSON.stringify(ProdutoService.get(
+                                        "WHERE `quantEstoqueProduto` = 0"));
                             }
                             break;
                         case "maisVendidosP":
-                            ArrayList<Transacao> transacaos = TransacaoService.get("WHERE `tipoTransacao` = \"PRODUTO\" AND `valorTransacao` > 0 AND `quantTransacao` < 0 ORDER BY `transacao`.`valorTransacao` DESC");
+                            ArrayList<Transacao> transacaos;
+                            transacaos = TransacaoService.get(
+                                    "WHERE `tipoTransacao` = \"PRODUTO\" AND"
+                                    + " `valorTransacao` > 0 AND"
+                                    + " `quantTransacao` < 0 ORDER BY"
+                                    + " `transacao`.`valorTransacao`"
+                                    + " DESC");
                             if (transacaos != null) {
-                                Map<Integer, Integer> quantidade = new HashMap<>();
+                                Map<Integer, Integer> quantidade;
+                                quantidade = new HashMap<>();
                                 ArrayList<Produto> produtos = new ArrayList();
                                 quantidade.put(1, 0);
                                 quantidade.put(2, 0);
                                 quantidade.put(3, 0);
                                 quantidade.put(4, 0);
                                 for (int i = 0; i < transacaos.size(); i++) {
-                                    quantidade.put(transacaos.get(i).getIdItemTransacao().intValue(),
-                                            quantidade.get(transacaos.get(i).getIdItemTransacao().intValue()) + transacaos.get(i).getQuantTransacao());
-                                } 
+                                    quantidade.put(transacaos.get(i)
+                                            .getIdItemTransacao().intValue(),
+                                            quantidade.get(transacaos.get(i)
+                                                    .getIdItemTransacao()
+                                                    .intValue())
+                                            + transacaos.get(i)
+                                                    .getQuantTransacao());
+                                }
                                 quantidade.entrySet().stream()
-                                        .sorted((chave1, chave2) -> -chave2.getValue().compareTo(chave1.getValue()))
-                                        .forEach(chave3 -> {System.out.println(chave3.getKey() + "" + chave3.getValue()); produtos.add(ProdutoService.getProdutoPorId(String.valueOf(chave3.getKey())));});
+                                        .sorted((chave1, chave2)
+                                                -> chave2.getValue()
+                                                .compareTo(chave1.getValue()))
+                                        .forEach(chave3 -> {
+                                            System.out.println(chave3.getKey()
+                                                    + ""
+                                                    + chave3.getValue());
+                                            produtos.add(ProdutoService
+                                                    .getProdutoPorId(String
+                                                            .valueOf(chave3
+                                                                    .getKey())));
+                                        });
                                 resposta = JSON.stringify(produtos);
-                                System.out.println(quantidade);
                                 res = true;
                             } else {
                                 res = false;
@@ -195,15 +223,20 @@ public class ControleProducaoServlet extends HttpServlet {
                             }
                             break;
                         case "estoqueBaixoI":
-                            if (InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC") != null) {
+                            if (InsumoService.get("ORDER BY `insumo`."
+                                    + "`quantEstoqueInsumo` ASC") != null) {
                                 res = true;
-                                resposta = JSON.stringify(InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC"));
+                                resposta = JSON.stringify(InsumoService.get(
+                                        "ORDER BY `insumo`.`quantEstoqueInsumo`"
+                                        + " ASC"));
                             }
                             break;
                         case "foraEstoqueI":
-                            if (InsumoService.get("WHERE `quantEstoqueInsumo` = 0") != null) {
+                            if (InsumoService.get("WHERE `quantEstoqueInsumo`"
+                                    + " = 0") != null) {
                                 res = true;
-                                resposta = JSON.stringify(InsumoService.get("WHERE `quantEstoqueInsumo` = 0"));
+                                resposta = JSON.stringify(InsumoService.get(
+                                        "WHERE `quantEstoqueInsumo` = 0"));
                             }
                             break;
                         default:
@@ -212,17 +245,18 @@ public class ControleProducaoServlet extends HttpServlet {
                 }
                 break;
             case "relatorio1":
-                resposta = RelatoriosControleProducaoService.relatorio1(request.getParameter("id"));
+                resposta = RelatoriosControleProducaoService.relatorio1(
+                        request.getParameter("id"));
                 if (resposta != null) {
                     res = true;
                 }
                 break;
             case "relatorio2":
-                resposta = JSON.stringify(RelatoriosControleProducaoService.relatorio2());
+                resposta = JSON.stringify(RelatoriosControleProducaoService
+                        .relatorio2());
                 if (resposta != null) {
                     res = true;
                 }
-                System.out.println(resposta);
                 break;
             default:
         }

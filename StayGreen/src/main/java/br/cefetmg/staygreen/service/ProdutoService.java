@@ -192,8 +192,10 @@ public class ProdutoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarProduto(Produto produto) {
-        Produto p = ProdutoService.getProdutoPorId(String.valueOf(produto.getIdProduto()));
-        if (!Objects.equals(p.getQuantEstoqueProduto(), produto.getQuantEstoqueProduto())) {
+        Produto p = ProdutoService.getProdutoPorId(
+                String.valueOf(produto.getIdProduto()));
+        if (!Objects.equals(p.getQuantEstoqueProduto(),
+                produto.getQuantEstoqueProduto())) {
             EstoqueProdutos estoque = new EstoqueProdutos();
             estoque.setDataProducaoEstoque(Calendar.getInstance());
             estoque.setIdProduto(produto.getIdProduto());
@@ -223,12 +225,14 @@ public class ProdutoService {
             produto.setPontoAvisoProduto(0);
             estoque.setDataProducaoEstoque(Calendar.getInstance());
             estoque.setIdProduto(produto.getIdProduto());
-            estoque.setQuantProduzidaEstoque(produto.getQuantEstoqueProduto() * -1);
+            estoque.setQuantProduzidaEstoque(
+                    produto.getQuantEstoqueProduto() * -1);
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setIdItemTransacao(produto.getIdProduto());
             transacao.setQuantTransacao(produto.getQuantEstoqueProduto() * -1);           
             transacao.setTipoTransacao("PRODUTO");
-            transacao.setValorTransacao(produto.getQuantEstoqueProduto() * produto.getValorUnitProduto() * -1);
+            transacao.setValorTransacao(produto.getQuantEstoqueProduto()
+                    * produto.getValorUnitProduto() * -1);
             produto.setValorUnitProduto(0.0);
             produto.setQuantEstoqueProduto(0);
             if (TransacaoService.AdicionarTransacao(transacao)) {

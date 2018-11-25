@@ -5,14 +5,11 @@
  */
 package br.cefetmg.staygreen.service;
 
-import br.cefetmg.staygreen.table.NomeProdutoEnum;
-import br.cefetmg.staygreen.table.Produto;
 import br.cefetmg.staygreen.table.Tarefa;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +40,7 @@ public class RelatoriosControleProducaoService {
             case "semanal":
                 dataAtual = Calendar.getInstance();
                 dataLimite = Calendar.getInstance();
-                dataLimite.add(Calendar.DATE, -7);
+                dataLimite.add(Calendar.WEEK_OF_YEAR, -1);
                 break;
             case "mensal":
                 dataAtual = Calendar.getInstance();
@@ -63,6 +60,14 @@ public class RelatoriosControleProducaoService {
         return JSON.stringify(transacaos);
     }
 
+     /**
+     * Método que  gera o Relatório de produção, este utiliza as informações de
+     * produção das tarefas da agenda eletrônica, para fazer o cálculo da
+     * produção semanal.     *
+     * 
+     * @return Map<String, Integer> Retorna um map, com as informações da
+     * produção total da semana.
+     */
     public static Map<String, Integer> relatorio2() {
         ArrayList<Tarefa> tarefas = TarefaAccessService.getAll();
         ArrayList<Integer> producaoIndividual = new ArrayList(4);
@@ -73,17 +78,21 @@ public class RelatoriosControleProducaoService {
         for (int i = 0; i < tarefas.size(); i++) {
             switch (tarefas.get(i).getProdutoProduzido()) {
                 case LEITE:
-                    producaoIndividual.set(0, producaoIndividual.get(0) + relatorio2Check(tarefas.get(i)));
+                    producaoIndividual.set(0, producaoIndividual.get(0)
+                            + relatorio2Check(tarefas.get(i)));
                     break;
                 case CAFE_ROBUSTA:
-                    producaoIndividual.set(1, producaoIndividual.get(1) + relatorio2Check(tarefas.get(i)));
+                    producaoIndividual.set(1, producaoIndividual.get(1)
+                            + relatorio2Check(tarefas.get(i)));
                     break;
                 case CAFE_BOURBON:
                     System.out.println("bourbon");
-                    producaoIndividual.set(2, producaoIndividual.get(2) + relatorio2Check(tarefas.get(i)));
+                    producaoIndividual.set(2, producaoIndividual.get(2)
+                            + relatorio2Check(tarefas.get(i)));
                     break;
                 case CAFE_ARABICA:
-                    producaoIndividual.set(3, producaoIndividual.get(3) + relatorio2Check(tarefas.get(i)));
+                    producaoIndividual.set(3, producaoIndividual.get(3)
+                            + relatorio2Check(tarefas.get(i)));
                     break;
                 default:
             }
@@ -96,6 +105,14 @@ public class RelatoriosControleProducaoService {
         return producaoTotal;
     }
 
+    /**
+     * Método auxiliar do relatório2, serve para fazer operações lógicas
+     * repetitivas e parecidas, recebe uma tarefa como paramentro e calcula
+     * sua produção individual.
+     * 
+     * @param tarefa
+     * @return inteiro da produção individual de uma tarefa.
+     */
     public static Integer relatorio2Check(Tarefa tarefa) {
         Calendar dataAtual = Calendar.getInstance();
         Calendar dataTarefa = tarefa.getDataInicialTarefa();

@@ -50,7 +50,7 @@ public class Insumo {
     }
 
     /**
-     *  
+     * Método para ler o id de um objeto insumo
      * @return Id de um objeto insumo
      */
     public Long getIdInsumo() {
@@ -58,7 +58,7 @@ public class Insumo {
     }
 
     /**
-     * Define o id de um objeto insumo
+     * Método para gravar o id de um objeto insumo
      * @param idInsumo
      */
     public void setIdInsumo(Long idInsumo) {
@@ -66,7 +66,7 @@ public class Insumo {
     }
 
     /**
-     * 
+     * Método para ler o nome de um insumo.
      * @return nome de um objeto insumo
      */
     public String getNomeInsumo() {
@@ -74,7 +74,7 @@ public class Insumo {
     }
 
     /**
-     * Define o nome de um objeto insumo
+     * Método para gravar o nome de um insumo.
      * @param nomeInsumo
      */
     public void setNomeInsumo(String nomeInsumo) {
@@ -82,7 +82,7 @@ public class Insumo {
     }
 
     /**
-     *
+     * Método para ler a finalidade de um objeto insumo
      * @return a finalidade de um objeto insumo
      */
     public String getFinalidadeInsumo() {
@@ -90,7 +90,7 @@ public class Insumo {
     }
 
     /**
-     * Define o nome de um objeto insumo
+     * Método para gravar a finalidade de um objeto insumo
      * @param finalidadeInsumo
      */
     public void setFinalidadeInsumo(String finalidadeInsumo) {
@@ -98,7 +98,7 @@ public class Insumo {
     }
 
     /**
-     * 
+     * Método para ler o valor de cada unidade de um objeto insumo
      * @return o valor de cada unidade de um objeto insumo
      */
     public Double getValorCompraInsumo() {
@@ -106,7 +106,7 @@ public class Insumo {
     }
 
     /**
-     * Define o valor de cada unidade de um objeto insumo
+     * Método para gravar o valor de cada unidade de um objeto insumo
      * @param valorCompraInsumo
      */
     public void setValorCompraInsumo(Double valorCompraInsumo) {
@@ -114,7 +114,7 @@ public class Insumo {
     }
 
     /**
-     * 
+     * Método para ler o estoque de um objeto insumo
      * @return estoque de um objeto insumo
      */
     public Integer getQuantEstoqueInsumo() {
@@ -122,7 +122,7 @@ public class Insumo {
     }
 
     /**
-     * Define o estoque de um objeto insumo
+     * Método para gravar o estoque de um objeto insumo
      * @param quantEstoqueInsumo
      */
     public void setQuantEstoqueInsumo(Integer quantEstoqueInsumo) {
@@ -130,7 +130,7 @@ public class Insumo {
     }
 
     /**
-     *  
+     *  Método para ler o ponto de aviso para o estoque baixo de um insumo
      * @return ponto de aviso para o estoque baixo de um objeto insumo
      */
     public Integer getPontoAvisoInsumo() {
@@ -138,7 +138,7 @@ public class Insumo {
     }
 
     /**
-     * Define o ponto de aviso para o estoque baixo de um objeto insumo
+     * Método para gravar o ponto de aviso para o estoque baixo de um insumo
      * @param pontoAvisoInsumo
      */
     public void setPontoAvisoInsumo(Integer pontoAvisoInsumo) {
@@ -147,8 +147,8 @@ public class Insumo {
     
     @Override
     /**
-     *
-     * @return String de todas as propriedas do objeto insumo
+     * Método para transformar o objeto Insumo em string.
+     * @return String das propriedades do objeto e seus valores.
      */
     public String toString() {
         return "Insumo{" + "id=" + idInsumo + ", nomeInsumo=" + nomeInsumo

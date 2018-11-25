@@ -189,7 +189,8 @@ public class InsumoService {
             }
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
-            transacao.setValorTransacao(insumo.getValorCompraInsumo() * insumo.getQuantEstoqueInsumo() * -1);
+            transacao.setValorTransacao(insumo.getValorCompraInsumo()
+                    * insumo.getQuantEstoqueInsumo() * -1);
             transacao.setTipoTransacao("INSUMO");
             return TransacaoService.AdicionarTransacao(transacao);
         } else {
@@ -204,8 +205,10 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean atualizarInsumo(Insumo insumo) {
-        Insumo in = InsumoService.getInsumoPorId(String.valueOf(insumo.getIdInsumo()));
-        if (!Objects.equals(in.getQuantEstoqueInsumo(), insumo.getQuantEstoqueInsumo())) {
+        Insumo in = InsumoService.getInsumoPorId(
+                String.valueOf(insumo.getIdInsumo()));
+        if (!Objects.equals(in.getQuantEstoqueInsumo(),
+                insumo.getQuantEstoqueInsumo())) {
             Transacao transacao = new Transacao();
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setIdItemTransacao(insumo.getIdInsumo());
@@ -214,9 +217,11 @@ public class InsumoService {
                 in.setValorCompraInsumo(0.0);
                 in.setPontoAvisoInsumo(0);
             }
-            int aux = insumo.getQuantEstoqueInsumo() - in.getQuantEstoqueInsumo();                    
+            int aux = insumo.getQuantEstoqueInsumo()
+                    - in.getQuantEstoqueInsumo();                    
             if(aux > 0){
-                transacao.setValorTransacao(aux * insumo.getValorCompraInsumo() * -1);
+                transacao.setValorTransacao(aux
+                        * insumo.getValorCompraInsumo() * -1);
                 transacao.setQuantTransacao(aux);
             }else{
                 transacao.setValorTransacao(0);

@@ -13,6 +13,12 @@ package br.cefetmg.staygreen.table;
 public enum UnidadesMedidaProdutoEnum {
     KG, L;
     
+    /**
+     * @author Arthur
+     * Método para converter objetos para o tipo UnidadesMedidaProdutoEnum
+     * @param id
+     * @return UnidadesMedidaProdutoEnum
+     */
     public static UnidadesMedidaProdutoEnum converter(Object id) {
         for (UnidadesMedidaProdutoEnum tipo : values()) {
             if (tipo.toString().equals(id)) {
