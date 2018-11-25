@@ -90,7 +90,7 @@ public class ControleDeMaquinasUtilService {
      * @return Calendar dataAtual, a data que atual no momento que a função for 
      * ser chamada.
      */
-    private static Calendar dataAtual(){
+    public static Calendar dataAtual(){
         return Calendar.getInstance();
     }
     
