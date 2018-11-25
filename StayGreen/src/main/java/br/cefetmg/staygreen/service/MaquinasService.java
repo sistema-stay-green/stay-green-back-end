@@ -148,6 +148,7 @@ public class MaquinasService {
             try{
                 maquina.setStatus(PatrimonioStatusEnum.EM_MANUTENCAO);
                 maquina.setDataRetorno(dataRetorno);
+                maquina.setDataSaida(ControleDeMaquinasUtilService.dataAtual());
                 PatrimonioAccessService.update(maquina);
                 maquina = PatrimonioAccessService.getPatrimonioById
                 (Integer.toString(maquina.getId()));
