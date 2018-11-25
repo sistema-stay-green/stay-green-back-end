@@ -29,7 +29,8 @@ public class VendasFretesServlet extends HttpServlet {
         
         RegioesDoBrasilEnum regiao = RegioesDoBrasilEnum.valueOf(
                 request.getParameter("regiao"));
-        Double valor = Double.parseDouble(request.getParameter("valor"));
+        String valorString = request.getParameter("valorFrete");
+        Double valor = Double.parseDouble(valorString);
         
         List<Frete> fretes = SQL.getRegistros(Frete.class);
         
