@@ -7,6 +7,7 @@ package br.cefetmg.staygreen.table;
 
 import br.cefetmg.staygreen.annotation.Id;
 import br.cefetmg.staygreen.annotation.Tabela;
+import java.util.Calendar;
 
 /**
  * Classe da tabela de vendas
@@ -23,7 +24,7 @@ public class VendaUsuario {
     private Long idTransacao;
     private Long idComprador;
     private Double freteVenda;
-    private Integer tempoEntregaVenda;
+    private Calendar tempoEntregaVenda;
     private Integer numeroVenda;
 
     /**
@@ -32,10 +33,10 @@ public class VendaUsuario {
      * @param idTransacao idTransacao da venda na tabela transação
      * @param idComprador idComprador do comprador
      * @param freteVenda preço do frete da venda
-     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param tempoEntregaVenda dia de entrega da venda
      * @param numeroVenda numero da venda
      */
-    public VendaUsuario(Long idVenda, Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
+    public VendaUsuario(Long idVenda, Long idTransacao, Long idComprador, Double freteVenda, Calendar tempoEntregaVenda, Integer numeroVenda) {
         this.idVenda = idVenda;
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
@@ -49,10 +50,10 @@ public class VendaUsuario {
      * @param idTransacao idVenda da venda na tabela transação
      * @param idComprador idVenda do comprador
      * @param freteVenda preço do frete da venda
-     * @param tempoEntregaVenda tempo de entrega da venda
+     * @param tempoEntregaVenda dia de entrega da venda
      * @param numeroVenda numero da venda
      */
-    public VendaUsuario(Long idTransacao, Long idComprador, Double freteVenda, Integer tempoEntregaVenda, Integer numeroVenda) {
+    public VendaUsuario(Long idTransacao, Long idComprador, Double freteVenda, Calendar tempoEntregaVenda, Integer numeroVenda) {
         this.idTransacao = idTransacao;
         this.idComprador = idComprador;
         this.freteVenda = freteVenda;
@@ -99,11 +100,11 @@ public class VendaUsuario {
         this.freteVenda = freteVenda;
     }
 
-    public Integer getTempoEntregaVenda() {
+    public Calendar getTempoEntregaVenda() {
         return tempoEntregaVenda;
     }
 
-    public void setTempoEntregaVenda(Integer tempoEntregaVenda) {
+    public void setTempoEntregaVenda(Calendar tempoEntregaVenda) {
         this.tempoEntregaVenda = tempoEntregaVenda;
     }
 

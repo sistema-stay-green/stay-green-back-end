@@ -60,7 +60,6 @@ public class DadosVendasServlet extends HttpServlet {
         
         //Pega dados da venda
         Double freteVenda = Double.parseDouble(request.getParameter("freteVenda"));
-        Integer tempoEntregaVenda = Integer.parseInt(request.getParameter("tempoEntregaVenda"));
         
         //Confere se a tabela vendas está vazia
         ResultSet resultSetAux = SQL.query("SELECT COUNT(*) AS total FROM VendaUsuario");
@@ -95,6 +94,7 @@ public class DadosVendasServlet extends HttpServlet {
         TipoTransacaoEnum tipoTransacao = TipoTransacaoEnum.PRODUTO;
         
         Calendar dataTransacao = Calendar.getInstance();
+        dataTransacao.clear();
         dataTransacao.set(ano, mes, dia);
         
         //Para cada transacao
@@ -125,6 +125,14 @@ public class DadosVendasServlet extends HttpServlet {
             
             //id da transacao
             Long idTransacao = new Long(SQL.getLastInsertId());
+            
+            Calendar tempoEntregaVenda = Calendar.getInstance();
+            tempoEntregaVenda.clear();
+            tempoEntregaVenda.set(
+                    Integer.parseInt(request.getParameter("anoEntregaVenda")),
+                    Integer.parseInt(request.getParameter("mesEntregaVenda")),
+                    Integer.parseInt(request.getParameter("diaEntregaVenda"))
+                    );
             
             //Insere a venda
             VendaUsuario venda = new VendaUsuario(idTransacao, idComprador,
