@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -61,7 +63,7 @@ public class RelatoriosControleProducaoService {
         return JSON.stringify(transacaos);
     }
 
-    public static ArrayList<String> relatorio2() {
+    public static Map<String, Integer> relatorio2() {
         ArrayList<Tarefa> tarefas = TarefaAccessService.getAll();
         ArrayList<Integer> producaoIndividual = new ArrayList(4);
         producaoIndividual.add(0, 0);
@@ -77,6 +79,7 @@ public class RelatoriosControleProducaoService {
                     producaoIndividual.set(1, producaoIndividual.get(1) + relatorio2Check(tarefas.get(i)));
                     break;
                 case CAFE_BOURBON:
+                    System.out.println("bourbon");
                     producaoIndividual.set(2, producaoIndividual.get(2) + relatorio2Check(tarefas.get(i)));
                     break;
                 case CAFE_ARABICA:
@@ -84,54 +87,46 @@ public class RelatoriosControleProducaoService {
                     break;
                 default:
             }
-        }
-        ArrayList<String> producaoTotal = new ArrayList();
-        producaoTotal.add(String.valueOf(producaoIndividual.get(0)));
-        producaoTotal.add(String.valueOf(producaoIndividual.get(1)));
-        producaoTotal.add(String.valueOf(producaoIndividual.get(2)));
-        producaoTotal.add(String.valueOf(producaoIndividual.get(3)));
-
-        
+        }  
+        Map<String, Integer> producaoTotal = new HashMap<>();
+        producaoTotal.put("LEITE", producaoIndividual.get(0));
+        producaoTotal.put("CAFE_ROBUSTA", producaoIndividual.get(1));
+        producaoTotal.put("CAFE_BOURBON", producaoIndividual.get(2));
+        producaoTotal.put("CAFE_ARABICA", producaoIndividual.get(3));
         return producaoTotal;
     }
 
     public static Integer relatorio2Check(Tarefa tarefa) {
-        int diaAtual = Calendar.getInstance().get(Calendar.DATE);
-        int mesAtual = Calendar.getInstance().get(Calendar.MONTH);
-        int anoAtual = Calendar.getInstance().get(Calendar.YEAR);
-        int diaTarefa;
-        int mesTarefa;
-        int anoTarefa;
+        Calendar dataAtual = Calendar.getInstance();
+        Calendar dataTarefa = tarefa.getDataInicialTarefa();
+        Calendar dataSemana = Calendar.getInstance();
+        dataSemana.add(Calendar.WEEK_OF_YEAR, -1);
+        int semana = dataAtual.get(Calendar.DATE) - dataSemana.get(Calendar.DATE);
         int resultado = 0;
-        diaTarefa = tarefa.getDataInicialTarefa().get(Calendar.DATE);
-        mesTarefa = tarefa.getDataInicialTarefa().get(Calendar.MONTH);
-        anoTarefa = tarefa.getDataInicialTarefa().get(Calendar.YEAR);
-        if (diaAtual >= diaTarefa && mesAtual >= mesTarefa && anoAtual >= anoTarefa) {
-            if ((diaAtual - 7) <= diaTarefa) {
-                switch (tarefa.getPeriodRepetTarefa()) {
-                    case 1:
-                        resultado = (diaAtual - diaTarefa) * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 2:
-                        resultado = (diaAtual - diaTarefa) / 2 * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 3:
-                        resultado = (diaAtual - diaTarefa) / 3 * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 4:
-                        resultado = (diaAtual - diaTarefa) / 4 * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 5:
-                        resultado = (diaAtual - diaTarefa) / 5 * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 6:
-                        resultado = (diaAtual - diaTarefa) / 6 * tarefa.getQuantProduzTarefa();
-                        break;
-                    case 7:
-                        resultado = (diaAtual - diaTarefa) / 7 * tarefa.getQuantProduzTarefa();
-                        break;
-                    default:
-                }
+        if (dataAtual.compareTo(dataTarefa) > 0) {
+            switch (tarefa.getPeriodRepetTarefa()) {
+                case 1:
+                    resultado = semana * tarefa.getQuantProduzTarefa();
+                    break;
+                case 2:
+                    resultado = semana / 2 * tarefa.getQuantProduzTarefa();
+                    break;
+                case 3:
+                    resultado = semana / 3 * tarefa.getQuantProduzTarefa();
+                    break;
+                case 4:
+                    resultado = semana / 4 * tarefa.getQuantProduzTarefa();
+                    break;
+                case 5:
+                    resultado = semana / 5 * tarefa.getQuantProduzTarefa();
+                    break;
+                case 6:
+                    resultado = semana / 6 * tarefa.getQuantProduzTarefa();
+                    break;
+                case 7:
+                    resultado = tarefa.getQuantProduzTarefa();
+                    break;
+                default:
             }
         }
         return resultado;

@@ -152,13 +152,13 @@ public class ControleProducaoServlet extends HttpServlet {
                         case "estoqueBaixoP":
                             if (ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC") != null) {
                                 res = true;
-                                resposta = JSON.stringify(ProdutoService.get(""));
+                                resposta = JSON.stringify(ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC"));
                             }
                             break;
                         case "foraEstoqueP":
                             if (ProdutoService.get("WHERE `quantEstoqueProduto` = 0") != null) {
                                 res = true;
-                                resposta = JSON.stringify(ProdutoService.get(""));
+                                resposta = JSON.stringify(ProdutoService.get("WHERE `quantEstoqueProduto` = 0"));
                             }
                             break;
                         case "maisVendidosP":
@@ -173,11 +173,12 @@ public class ControleProducaoServlet extends HttpServlet {
                                 for (int i = 0; i < transacaos.size(); i++) {
                                     quantidade.put(transacaos.get(i).getIdItemTransacao().intValue(),
                                             quantidade.get(transacaos.get(i).getIdItemTransacao().intValue()) + transacaos.get(i).getQuantTransacao());
-                                }
+                                } 
                                 quantidade.entrySet().stream()
                                         .sorted((chave1, chave2) -> -chave2.getValue().compareTo(chave1.getValue()))
-                                        .forEach(chave3 -> produtos.add(ProdutoService.getProdutoPorId(String.valueOf(chave3.getKey()))));
+                                        .forEach(chave3 -> {System.out.println(chave3.getKey() + "" + chave3.getValue()); produtos.add(ProdutoService.getProdutoPorId(String.valueOf(chave3.getKey())));});
                                 resposta = JSON.stringify(produtos);
+                                System.out.println(quantidade);
                                 res = true;
                             } else {
                                 res = false;
@@ -196,13 +197,13 @@ public class ControleProducaoServlet extends HttpServlet {
                         case "estoqueBaixoI":
                             if (InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC") != null) {
                                 res = true;
-                                resposta = JSON.stringify(InsumoService.get(""));
+                                resposta = JSON.stringify(InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC"));
                             }
                             break;
                         case "foraEstoqueI":
                             if (InsumoService.get("WHERE `quantEstoqueInsumo` = 0") != null) {
                                 res = true;
-                                resposta = JSON.stringify(InsumoService.get(""));
+                                resposta = JSON.stringify(InsumoService.get("WHERE `quantEstoqueInsumo` = 0"));
                             }
                             break;
                         default:
@@ -217,10 +218,11 @@ public class ControleProducaoServlet extends HttpServlet {
                 }
                 break;
             case "relatorio2":
-                resposta = RelatoriosControleProducaoService.relatorio2().toString();
+                resposta = JSON.stringify(RelatoriosControleProducaoService.relatorio2());
                 if (resposta != null) {
                     res = true;
                 }
+                System.out.println(resposta);
                 break;
             default:
         }
@@ -231,8 +233,6 @@ public class ControleProducaoServlet extends HttpServlet {
             if (res == true && resposta.equals("")) {
                 resposta = " {\"resultado\":\"SUCESSO\"}";
             }
-            System.out.println(res + "haahha");
-            System.out.println(resposta);
             out.println(resposta);
         }
     }

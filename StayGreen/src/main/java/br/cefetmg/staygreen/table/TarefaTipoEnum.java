@@ -17,5 +17,5 @@ public enum TarefaTipoEnum {
     MAQUINARIO,
     COLHEITA, 
     PECUARIA,
-    OUTRAS
+    OUTRAS;
 }
