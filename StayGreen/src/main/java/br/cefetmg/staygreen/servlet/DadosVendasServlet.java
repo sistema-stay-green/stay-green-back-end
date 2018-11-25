@@ -11,9 +11,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import br.cefetmg.staygreen.service.EstoqueService;
 import br.cefetmg.staygreen.table.Comprador;
 import br.cefetmg.staygreen.table.ModosPagamentoEnum;
 import br.cefetmg.staygreen.table.Produto;
+import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.util.SQL;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.VendaUsuario;
@@ -104,7 +106,6 @@ public class DadosVendasServlet extends HttpServlet {
             transacao.setTipoTransacao(tipoTransacao);
             
             Long idProduto = transacao.getIdItemTransacao();
-            
             ResultSet estoqueProdutoRS = SQL.query("SELECT `quantEstoqueProduto` FROM " 
                     + SQL.getNomeTabela(Produto.class) + " WHERE `idProduto`=" 
                     + idProduto);
@@ -113,6 +114,8 @@ public class DadosVendasServlet extends HttpServlet {
                 SQL.update(new Produto(idProduto, null, null, null, null,
                         estoqueProduto - transacao.getQuantTransacao(),
                         null, null));
+                EstoqueService.AdicionarEstoque(new EstoqueProdutos(null, idProduto,
+                        estoqueProduto - transacao.getQuantTransacao(), dataTransacao));
             }
             
             //Transforma a quantidade em um valor negativo
