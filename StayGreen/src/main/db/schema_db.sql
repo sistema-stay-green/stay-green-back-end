@@ -159,7 +159,7 @@ CREATE TABLE `VendaUsuario`
   `idTransacao` BigInt NOT NULL,
   `idComprador` BigInt NOT NULL,
   `freteVenda` Double NOT NULL,
-  `tempoEntregaVenda` Int NOT NULL,
+  `tempoEntregaVenda` Date NOT NULL,
   `numeroVenda` Int NOT NULL,
   PRIMARY KEY (`idVenda`)
 )
