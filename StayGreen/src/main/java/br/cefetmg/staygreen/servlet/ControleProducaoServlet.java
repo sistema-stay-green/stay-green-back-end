@@ -13,6 +13,7 @@ import br.cefetmg.staygreen.service.TransacaoService;
 import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.table.Insumo;
 import br.cefetmg.staygreen.table.Produto;
+import static br.cefetmg.staygreen.table.TipoTransacaoEnum.PRODUTO;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.util.SQL;
@@ -20,6 +21,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -66,24 +70,22 @@ public class ControleProducaoServlet extends HttpServlet {
         String tipo = request.getParameter("tipo");
         Boolean res = false;
         /**
-         * Switch que define qual operação será feita, são elas:
-         * Adicionar: Adicionar insumos ao BD.
-         * Remover: Remover produto ou insumo do BD.
+         * Switch que define qual operação será feita, são elas: Adicionar:
+         * Adicionar insumos ao BD. Remover: Remover produto ou insumo do BD.
          * RemoverTodos: Remover todos os produtos ou todos os insumos do BD.
-         * Atualizar: Atualizar produto ou insumo no BD.
-         * Buscar: Buscar produto ou insumo no BD.
-         * BuscarTodos: Buscar todos os produtos ou insumos no BD.
-         * Filtro: Buscar produto(s) ou insumo(s) específicos.
-         * Relatorio1: Relatório de histórico de mercadorias/período.
-         * Relatorio2: BUILDING...
+         * Atualizar: Atualizar produto ou insumo no BD. Buscar: Buscar produto
+         * ou insumo no BD. BuscarTodos: Buscar todos os produtos ou insumos no
+         * BD. Filtro: Buscar produto(s) ou insumo(s) específicos. Relatorio1:
+         * Relatório de histórico de mercadorias/período. Relatorio2:
+         * BUILDING...
          *
-         * 
+         *
          */
         switch (operacao) {
             case "adicionar":
-                    Insumo insumo = JSON.parse(request.getParameter("JSON"),
-                            Insumo.class);
-                    res = InsumoService.AdicionarInsumo(insumo);
+                Insumo insumo = JSON.parse(request.getParameter("JSON"),
+                        Insumo.class);
+                res = InsumoService.AdicionarInsumo(insumo);
                 break;
             case "remover":
                 if (tipo.equals("produto")) {
@@ -95,7 +97,7 @@ public class ControleProducaoServlet extends HttpServlet {
                 }
                 break;
             case "removerTodos":
-                if (tipo.equals("produto")) { 
+                if (tipo.equals("produto")) {
                     res = ProdutoService.deletarProdutoTodos();
                 } else {
                     res = InsumoService.deletarInsumoTodos();
@@ -119,48 +121,89 @@ public class ControleProducaoServlet extends HttpServlet {
             case "buscar":
                 if (tipo.equals("produto")) {
                     Produto produto = ProdutoService.getProdutoPorId(request.getParameter("id"));
-                    resposta = JSON.stringify(produto);
+                    if (produto.getIdProduto() != null) {
+                        resposta = JSON.stringify(produto);
+                        res = true;
+                    }
                 } else {
                     insumo = InsumoService.getInsumoPorId(request.getParameter("id"));
-                    resposta = JSON.stringify(insumo);
+                    if (insumo.getIdInsumo() != null) {
+                        resposta = JSON.stringify(insumo);
+                        res = true;
+                    }
                 }
                 break;
             case "buscarTodos":
                 if (tipo.equals("produto")) {
                     resposta = JSON.stringify(ProdutoService.get(""));
+                    if (resposta != null) {
+                        res = true;
+                    }
                 } else {
                     resposta = JSON.stringify(InsumoService.get(""));
+                    if (resposta != null) {
+                        res = true;
+                    }
                 }
                 break;
             case "filtro":
                 if (tipo.equals("produto")) {
-                    switch(request.getParameter("id")){
+                    switch (request.getParameter("id")) {
                         case "todosP":
                             resposta = JSON.stringify(ProdutoService.get(""));
+                            if (resposta != null) {
+                                res = true;
+                            }
                             break;
                         case "estoqueBaixoP":
                             resposta = JSON.stringify(ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC"));
+                            if (resposta != null) {
+                                res = true;
+                            }
                             break;
                         case "foraEstoqueP":
                             resposta = JSON.stringify(ProdutoService.get("WHERE `quantEstoqueProduto` = 0"));
+                            if (resposta != null) {
+                                res = true;
+                            }
                             break;
                         case "maisVendidosP":
-                            ArrayList<Transacao> transacaos = TransacaoService.get("WHERE `tipoTransacao` = \"PRODUTO\" ORDER BY `transacao`.`quantTransacao` DESC");
-                            ArrayList<Produto> produtos = new ArrayList<Produto>();
-                            for(int i = 0; i < transacaos.size(); i++){ 
-                                produtos.add(ProdutoService.getProdutoPorId(String.valueOf(transacaos.get(i).getIdItemTransacao())));
+                            ArrayList<Transacao> transacaos = TransacaoService.get("WHERE `tipoTransacao` = \"PRODUTO\" AND `valorTransacao` > 0 AND `quantTransacao` < 0 ORDER BY `transacao`.`valorTransacao` DESC");
+                            if (!transacaos.isEmpty()) {
+                                Map<Integer, Integer> quantidade = new HashMap<>();
+                                ArrayList<Produto> produtos = new ArrayList();
+                                quantidade.put(1, 0);
+                                quantidade.put(2, 0);
+                                quantidade.put(3, 0);
+                                quantidade.put(4, 0);
+                                for (int i = 0; i < transacaos.size(); i++) {
+                                    quantidade.put(transacaos.get(i).getIdItemTransacao().intValue(),
+                                            quantidade.get(transacaos.get(i).getIdItemTransacao().intValue()) + transacaos.get(i).getQuantTransacao());
+                                }
+                                quantidade.entrySet().stream()
+                                        .sorted((chave1, chave2) -> -chave2.getValue().compareTo(chave1.getValue()))
+                                        .forEach(chave3 -> produtos.add(ProdutoService.getProdutoPorId(String.valueOf(chave3.getKey()))));
+                                resposta = JSON.stringify(produtos);
+                                res = true;
+                            } else {
+                                res = false;
                             }
-                            resposta = JSON.stringify(produtos);
                             break;
                         default:
                     }
                 } else {
-                    switch(request.getParameter("id")){
+                    switch (request.getParameter("id")) {
                         case "estoqueBaixoI":
                             resposta = JSON.stringify(InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC"));
+                            if (resposta != null) {
+                                res = true;
+                            }
                             break;
                         case "foraEstoqueI":
                             resposta = JSON.stringify(InsumoService.get("WHERE `quantEstoqueInsumo` = 0"));
+                            if (resposta != null) {
+                                res = true;
+                            }
                             break;
                         default:
                     }
@@ -169,19 +212,26 @@ public class ControleProducaoServlet extends HttpServlet {
                 break;
             case "relatorio1":
                 resposta = RelatoriosControleProducaoService.relatorio1(request.getParameter("id"));
+                if (resposta != null) {
+                    res = true;
+                }
                 break;
             case "relatorio2":
                 resposta = RelatoriosControleProducaoService.relatorio2().toString();
+                if (resposta != null) {
+                    res = true;
+                }
                 break;
             default:
         }
         try (PrintWriter out = response.getWriter()) {
-            if (resposta.equals("") && res == false) {
+            if (res == false) {
                 resposta = " {\"resultado\":\"FALHA\"}";
             }
-            if (resposta.equals("") && res == true){
+            if (res == true && resposta.equals("")) {
                 resposta = " {\"resultado\":\"SUCESSO\"}";
             }
+            System.out.println(res);
             out.println(resposta);
         }
     }
