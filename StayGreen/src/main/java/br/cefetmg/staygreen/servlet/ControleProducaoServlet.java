@@ -63,14 +63,16 @@ public class ControleProducaoServlet extends HttpServlet {
         String tipo = request.getParameter("tipo");
         Boolean res = false;
         /**
-         * Switch que define qual operação será feita, são elas: Adicionar:
-         * Adicionar insumos ao BD. Remover: Remover produto ou insumo do BD.
+         * Switch que define qual operação será feita, são elas:
+         * Adicionar: Adicionar insumos ao BD.
+         * Remover: Remover produto ou insumo do BD.
          * RemoverTodos: Remover todos os produtos ou todos os insumos do BD.
-         * Atualizar: Atualizar produto ou insumo no BD. Buscar: Buscar produto
-         * ou insumo no BD. BuscarTodos: Buscar todos os produtos ou insumos no
-         * BD. Filtro: Buscar produto(s) ou insumo(s) específicos. Relatorio1:
-         * Relatório de histórico de mercadorias/período. Relatorio2: Relatório
-         * da produção semanal.
+         * Atualizar: Atualizar produto ou insumo no BD.
+         * Buscar: Buscar produto ou insumo no BD.
+         * BuscarTodos: Buscar todos os produtos ou insumos no BD.
+         * Filtro: Buscar produto(s) ou insumo(s) específicos.
+         * Relatorio1: Relatório de histórico de mercadorias/período.
+         * Relatorio2: Relatório da produção semanal.
          *
          *
          */
