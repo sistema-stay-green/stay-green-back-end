@@ -42,25 +42,28 @@ public class VendasEncaminhamentosServlet extends HttpServlet {
         private final int dia;
         private final int mes;
         private final int ano;
+        private final int entregaDia;
+        private final int entregaMes;
+        private final int entregaAno;
         private final String nome;
 
-        /**
-         * Produz uma entrada do relat´relatório
-         * @param dia dia da venda
-         * @param mes mes da venda
-         * @param ano ano da venda
-         * @param nome nome do comprador
-         */
-        public RelatorioEntry(int dia, int mes, int ano, String nome) {
+        public RelatorioEntry(int dia, int mes, int ano, int entregaDia, int entregaMes, int entregaAno, String nome) {
             this.dia = dia;
             this.mes = mes;
             this.ano = ano;
+            this.entregaDia = entregaDia;
+            this.entregaMes = entregaMes;
+            this.entregaAno = entregaAno;
             this.nome = nome;
         }
+
+        
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        
+        Boolean atualizaDia = Boolean.parseBoolean(request.getParameter("manda"));
         
         List<RelatorioEntry> relatorio = new LinkedList();
         
@@ -82,8 +85,13 @@ public class VendasEncaminhamentosServlet extends HttpServlet {
                             + SQL.getNomeTabela(Transacao.class)
                             + " WHERE idTransacao=" + idTransacao);
                     if(transacao.next()){
-                        Calendar dataEntrega = Data.dateToCalendar(transacao.getDate("dataTransacao"));
+                        Calendar dataTransacao = Data.dateToCalendar(transacao.getDate("dataTransacao"));
+                        Calendar dataEntrega = venda.getTempoEntregaVenda();
+                        
                         relatorio.add(new RelatorioEntry(
+                                dataTransacao.get(Calendar.DATE),
+                                dataTransacao.get(Calendar.MONTH),
+                                dataTransacao.get(Calendar.YEAR),
                                 dataEntrega.get(Calendar.DATE),
                                 dataEntrega.get(Calendar.MONTH),
                                 dataEntrega.get(Calendar.YEAR), nome));
