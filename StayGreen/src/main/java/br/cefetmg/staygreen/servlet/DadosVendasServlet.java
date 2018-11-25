@@ -19,6 +19,7 @@ import br.cefetmg.staygreen.util.JSON;
 import br.cefetmg.staygreen.table.VendaUsuario;
 import br.cefetmg.staygreen.table.TipoTransacaoEnum;
 import br.cefetmg.staygreen.table.Transacao;
+import java.net.URLDecoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -82,7 +83,10 @@ public class DadosVendasServlet extends HttpServlet {
         
         //Pega as transacoes
         String transacaoJSON = request.getParameter("transacoes");
-        Transacao[] transacoes = JSON.parse(transacaoJSON, Transacao[].class);
+        
+        Transacao[] transacoes = JSON.parse(
+                URLDecoder.decode(transacaoJSON, "UTF-8"),
+                Transacao[].class);
         
         //Data da transacao
         Integer dia = Integer.parseInt(request.getParameter("dia"));
@@ -110,6 +114,11 @@ public class DadosVendasServlet extends HttpServlet {
                         estoqueProduto - transacao.getQuantTransacao(),
                         null, null));
             }
+            
+            //Transforma a quantidade em um valor negativo
+            transacao.setQuantTransacao(
+                    -transacao.getQuantTransacao()
+            );
             
             //Insere transacao
             SQL.insert(transacao);
