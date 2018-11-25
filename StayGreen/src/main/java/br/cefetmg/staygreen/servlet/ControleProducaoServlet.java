@@ -5,23 +5,17 @@
  */
 package br.cefetmg.staygreen.servlet;
 
-import br.cefetmg.staygreen.service.EstoqueService;
 import br.cefetmg.staygreen.service.ProdutoService;
 import br.cefetmg.staygreen.service.InsumoService;
 import br.cefetmg.staygreen.service.RelatoriosControleProducaoService;
 import br.cefetmg.staygreen.service.TransacaoService;
-import br.cefetmg.staygreen.table.EstoqueProdutos;
 import br.cefetmg.staygreen.table.Insumo;
 import br.cefetmg.staygreen.table.Produto;
-import static br.cefetmg.staygreen.table.TipoTransacaoEnum.PRODUTO;
 import br.cefetmg.staygreen.table.Transacao;
 import br.cefetmg.staygreen.util.JSON;
-import br.cefetmg.staygreen.util.SQL;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -146,30 +140,30 @@ public class ControleProducaoServlet extends HttpServlet {
                     }
                 }
                 break;
-            case "filtro":
+            case "filtro":               
                 if (tipo.equals("produto")) {
                     switch (request.getParameter("id")) {
-                        case "todosP":
-                            resposta = JSON.stringify(ProdutoService.get(""));
-                            if (resposta != null) {
+                        case "todosP": 
+                            if (ProdutoService.get("") != null) {
                                 res = true;
+                                resposta = JSON.stringify(ProdutoService.get(""));
                             }
                             break;
                         case "estoqueBaixoP":
-                            resposta = JSON.stringify(ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC"));
-                            if (resposta != null) {
+                            if (ProdutoService.get("ORDER BY `produto`.`quantEstoqueProduto` ASC") != null) {
                                 res = true;
+                                resposta = JSON.stringify(ProdutoService.get(""));
                             }
                             break;
                         case "foraEstoqueP":
-                            resposta = JSON.stringify(ProdutoService.get("WHERE `quantEstoqueProduto` = 0"));
-                            if (resposta != null) {
+                            if (ProdutoService.get("WHERE `quantEstoqueProduto` = 0") != null) {
                                 res = true;
+                                resposta = JSON.stringify(ProdutoService.get(""));
                             }
                             break;
                         case "maisVendidosP":
                             ArrayList<Transacao> transacaos = TransacaoService.get("WHERE `tipoTransacao` = \"PRODUTO\" AND `valorTransacao` > 0 AND `quantTransacao` < 0 ORDER BY `transacao`.`valorTransacao` DESC");
-                            if (!transacaos.isEmpty()) {
+                            if (transacaos != null) {
                                 Map<Integer, Integer> quantidade = new HashMap<>();
                                 ArrayList<Produto> produtos = new ArrayList();
                                 quantidade.put(1, 0);
@@ -193,16 +187,22 @@ public class ControleProducaoServlet extends HttpServlet {
                     }
                 } else {
                     switch (request.getParameter("id")) {
-                        case "estoqueBaixoI":
-                            resposta = JSON.stringify(InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC"));
-                            if (resposta != null) {
+                        case "todosI":
+                            if (InsumoService.get("") != null) {
                                 res = true;
+                                resposta = JSON.stringify(InsumoService.get(""));
+                            }
+                            break;
+                        case "estoqueBaixoI":
+                            if (InsumoService.get("ORDER BY `insumo`.`quantEstoqueInsumo` ASC") != null) {
+                                res = true;
+                                resposta = JSON.stringify(InsumoService.get(""));
                             }
                             break;
                         case "foraEstoqueI":
-                            resposta = JSON.stringify(InsumoService.get("WHERE `quantEstoqueInsumo` = 0"));
-                            if (resposta != null) {
+                            if (InsumoService.get("WHERE `quantEstoqueInsumo` = 0") != null) {
                                 res = true;
+                                resposta = JSON.stringify(InsumoService.get(""));
                             }
                             break;
                         default:
@@ -231,7 +231,8 @@ public class ControleProducaoServlet extends HttpServlet {
             if (res == true && resposta.equals("")) {
                 resposta = " {\"resultado\":\"SUCESSO\"}";
             }
-            System.out.println(res);
+            System.out.println(res + "haahha");
+            System.out.println(resposta);
             out.println(resposta);
         }
     }

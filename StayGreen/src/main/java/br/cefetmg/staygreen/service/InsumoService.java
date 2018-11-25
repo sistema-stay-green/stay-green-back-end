@@ -187,7 +187,6 @@ public class InsumoService {
             } else {
                 return false;
             }
-            System.out.println(SQL.getLastInsertId());
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setQuantTransacao(insumo.getQuantEstoqueInsumo());
             transacao.setValorTransacao(insumo.getValorCompraInsumo() * insumo.getQuantEstoqueInsumo() * -1);
@@ -210,6 +209,11 @@ public class InsumoService {
             Transacao transacao = new Transacao();
             transacao.setDataTransacao(Calendar.getInstance());
             transacao.setIdItemTransacao(insumo.getIdInsumo());
+            if(in.getQuantEstoqueInsumo().equals(-1)){
+                in.setQuantEstoqueInsumo(0);
+                in.setValorCompraInsumo(0.0);
+                in.setPontoAvisoInsumo(0);
+            }
             int aux = insumo.getQuantEstoqueInsumo() - in.getQuantEstoqueInsumo();                    
             if(aux > 0){
                 transacao.setValorTransacao(aux * insumo.getValorCompraInsumo() * -1);
@@ -237,7 +241,6 @@ public class InsumoService {
      * @return True ou False, dependendo do sucesso com a conexão com BD.
      */
     public static boolean deletarInsumo(Insumo insumo) {
-        boolean resultado;
         if (insumo.getIdInsumo() != null) {
             Transacao transacao = new Transacao();
             transacao.setDataTransacao(Calendar.getInstance());

@@ -220,7 +220,6 @@ public class ProdutoService {
             EstoqueProdutos estoque = new EstoqueProdutos();
             Transacao transacao = new Transacao();
             produto.setDescrProduto("-");
-            produto.setFotoMercadoria("-");
             produto.setPontoAvisoProduto(0);
             estoque.setDataProducaoEstoque(Calendar.getInstance());
             estoque.setIdProduto(produto.getIdProduto());
