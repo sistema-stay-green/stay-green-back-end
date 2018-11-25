@@ -29,18 +29,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Produz o relatório de encamiminhamentos e retorna em formato json
  * @author Paulo Vitor
  */
 @WebServlet(name = "VendasEncaminhamentosServlet", urlPatterns = {"/VendasEncaminhamentosServlet"})
 public class VendasEncaminhamentosServlet extends HttpServlet {
     
+    /**
+     * Classe privada que representa uma entrada do relatório
+     */
     private class RelatorioEntry{
-        private int dia;
-        private int mes;
-        private int ano;
-        private String nome;
+        private final int dia;
+        private final int mes;
+        private final int ano;
+        private final String nome;
 
+        /**
+         * Produz uma entrada do relat´relatório
+         * @param dia dia da venda
+         * @param mes mes da venda
+         * @param ano ano da venda
+         * @param nome nome do comprador
+         */
         public RelatorioEntry(int dia, int mes, int ano, String nome) {
             this.dia = dia;
             this.mes = mes;
