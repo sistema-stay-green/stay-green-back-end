@@ -63,8 +63,6 @@ public class VendasEncaminhamentosServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         
-        Boolean atualizaDia = Boolean.parseBoolean(request.getParameter("manda"));
-        
         List<RelatorioEntry> relatorio = new LinkedList();
         
         List<VendaUsuario> vendas = (List<VendaUsuario>) SQL.getRegistros(VendaUsuario.class);
