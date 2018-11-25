@@ -15,7 +15,11 @@ public enum NomeProdutoEnum {
     CAFE_ROBUSTA,
     CAFE_ARABICA;
     
-        
+    /**
+     * Método para converter um objeto em NomeProdutoEnum
+     * @param id
+     * @return NomeProdutoEnum
+     */
     public static NomeProdutoEnum converter(Object id) {
         for (NomeProdutoEnum tipo : values()) {
             if (tipo.toString().equals(id)) {

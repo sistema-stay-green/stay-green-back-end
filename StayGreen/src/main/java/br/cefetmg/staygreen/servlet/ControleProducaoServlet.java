@@ -58,20 +58,21 @@ public class ControleProducaoServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String resposta = "";
         String operacao = request.getParameter("operacao");
         String tipo = request.getParameter("tipo");
         Boolean res = false;
         /**
-         * Switch que define qual operação será feita, são elas: Adicionar:
-         * Adicionar insumos ao BD. Remover: Remover produto ou insumo do BD.
+         * Switch que define qual operação será feita, são elas:
+         * Adicionar: Adicionar insumos ao BD.
+         * Remover: Remover produto ou insumo do BD.
          * RemoverTodos: Remover todos os produtos ou todos os insumos do BD.
-         * Atualizar: Atualizar produto ou insumo no BD. Buscar: Buscar produto
-         * ou insumo no BD. BuscarTodos: Buscar todos os produtos ou insumos no
-         * BD. Filtro: Buscar produto(s) ou insumo(s) específicos. Relatorio1:
-         * Relatório de histórico de mercadorias/período. Relatorio2:
-         * BUILDING...
+         * Atualizar: Atualizar produto ou insumo no BD.
+         * Buscar: Buscar produto ou insumo no BD.
+         * BuscarTodos: Buscar todos os produtos ou insumos no BD.
+         * Filtro: Buscar produto(s) ou insumo(s) específicos.
+         * Relatorio1: Relatório de histórico de mercadorias/período.
+         * Relatorio2: Relatório da produção semanal.
          *
          *
          */
@@ -178,7 +179,6 @@ public class ControleProducaoServlet extends HttpServlet {
                                         .sorted((chave1, chave2) -> -chave2.getValue().compareTo(chave1.getValue()))
                                         .forEach(chave3 -> {System.out.println(chave3.getKey() + "" + chave3.getValue()); produtos.add(ProdutoService.getProdutoPorId(String.valueOf(chave3.getKey())));});
                                 resposta = JSON.stringify(produtos);
-                                System.out.println(quantidade);
                                 res = true;
                             } else {
                                 res = false;
@@ -222,7 +222,6 @@ public class ControleProducaoServlet extends HttpServlet {
                 if (resposta != null) {
                     res = true;
                 }
-                System.out.println(resposta);
                 break;
             default:
         }
